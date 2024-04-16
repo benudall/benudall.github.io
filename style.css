@@ -1,0 +1,70 @@
+:root {
+	--color: #8000ff;
+}
+
+body {
+	background: black;
+	color: #8000ff;
+	font-weight: bold;
+	font-family: monospace;
+	font-size: 48px;
+	text-align: center;
+}
+
+.vert {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.h100 {
+	height: 100%;
+}
+
+.h100 {
+	width: 100%;
+}
+
+.hex {
+	text-decoration: none;
+	color: #8000ff;
+	position: relative;
+	border-top: 5px solid #8000ff;
+	border-bottom: 5px solid #8000ff;
+	background:#200040;
+	margin: 38px;
+	padding: 5px;
+}
+
+
+.hex:before,
+.hex:after {
+	content: "";
+	display: inline-block;
+	vertical-align: middle;
+	height: 0;
+	width: 0;
+	border-width: 38px 0px;
+	border-style: solid;
+	border-color: transparent;
+	position: absolute;
+}
+
+.hex:before {
+	border-right-color: inherit;
+	border-right-width: 38px;
+	left: -38px;
+	top: -5px;
+}
+
+.hex:after {
+	border-left-color: inherit;
+	border-left-width: 38px;
+	right: -38px;
+	top: -5px;
+}
+
+a:hover {
+	color: #a080ff;
+	border-color: #a080ff;
+}
