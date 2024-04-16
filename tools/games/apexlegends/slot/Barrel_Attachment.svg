@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 135.46666 135.46667"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="Barrel Attachment.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     units="px"
+     width="512px"
+     inkscape:zoom="0.45611672"
+     inkscape:cx="290.49582"
+     inkscape:cy="327.76698"
+     inkscape:window-width="1366"
+     inkscape:window-height="697"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#273839;fill-opacity:0.25098041;stroke:#273839;stroke-width:4.73369;stroke-linejoin:round;stroke-opacity:1"
+       id="rect846"
+       width="124.38298"
+       height="124.38298"
+       x="5.5418429"
+       y="5.5418429"
+       ry="9.9077339" />
+    <g
+       id="g12"
+       transform="matrix(0.1984381,0,0,0.1984381,16.933327,16.933162)">
+      <g
+         id="g848"
+         transform="matrix(13.189149,0,0,13.189149,12,13.319659)">
+        <path
+           class="st0"
+           d="m 2.7,14.7 2.26e-5,3.9 H 18.2 c 1,0 1.7,0.8 1.7,1.7 v 2.8 h 12.4 c 0.5,0 0.9,-0.4 0.9,-0.9 v -7.6 c 0,-0.5 -0.4,-0.9 -0.9,-0.9 H 3.6 c -0.5,0.1 -0.9,0.5 -0.9,1 z"
+           id="path4"
+           style="fill:#273839;fill-opacity:1"
+           sodipodi:nodetypes="scsscsssscs" />
+        <path
+           class="st0"
+           d="M 18.2,19.3 H 2.7000226 v 2.6 c 0,0.6 0.7999785,1.203289 1.2999677,1.2 H 19.19999 L 19.2,20.4 c 0.1,-0.6 -0.4,-1.1 -1,-1.1 z M 6.4,21.9 c -0.4,0 -0.8,-0.3 -0.8,-0.8 0,-0.4 0.3,-0.8 0.8,-0.8 0.4,0 0.8,0.3 0.8,0.8 0,0.4 -0.4,0.8 -0.8,0.8 z m 2.5,0 c -0.4,0 -0.8,-0.3 -0.8,-0.8 0,-0.4 0.3,-0.8 0.8,-0.8 0.4,0 0.8,0.3 0.8,0.8 -0.1,0.4 -0.4,0.8 -0.8,0.8 z m 2.5,0 c -0.4,0 -0.8,-0.3 -0.8,-0.8 0,-0.4 0.3,-0.8 0.8,-0.8 0.4,0 0.8,0.3 0.8,0.8 -0.1,0.4 -0.4,0.8 -0.8,0.8 z m 2.4,0 c -0.4,0 -0.8,-0.3 -0.8,-0.8 0,-0.4 0.3,-0.8 0.8,-0.8 0.4,0 0.8,0.3 0.8,0.8 0,0.4 -0.4,0.8 -0.8,0.8 z m 2.5,0 c -0.4,0 -0.8,-0.3 -0.8,-0.8 0,-0.4 0.3,-0.8 0.8,-0.8 0.4,0 0.8,0.3 0.8,0.8 0,0.4 -0.4,0.8 -0.8,0.8 z"
+           id="path6"
+           style="fill:#273839;fill-opacity:1"
+           sodipodi:nodetypes="scssccssssssssscsssscsssssssssss" />
+        <path
+           class="st0"
+           d="M 36.2,19.4 34,19.9 v -5.1 l 2.3,0.7 c 0.4,0.1 0.7,0.5 0.7,1 v 1.9 c 0,0.5 -0.3,0.9 -0.8,1 z"
+           id="path8"
+           style="fill:#273839;fill-opacity:1" />
+        <path
+           class="st0"
+           d="m 0,18.3 c 0,0.5 0.3,0.9 0.7,1.1 L 2,19.9 V 14.8 L 0.6,15.5 C 0.2,15.7 0,16.1 0,16.5 Z"
+           id="path10"
+           style="fill:#273839;fill-opacity:1" />
+      </g>
+    </g>
+  </g>
+</svg>

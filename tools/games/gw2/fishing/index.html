@@ -1,0 +1,741 @@
+<title>Fishing</title>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.js"></script>
+<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-sanitize.js'></script>
+<style>
+	body {
+		background: black;
+		color: white;
+	}
+
+	table {
+		border: 1px solid white;
+		width: 100%;
+		border-spacing: 0;
+		background: #202020;
+	}
+
+	table#time {
+		position: sticky;
+		top: 0;
+		z-index: 4;
+		box-shadow: black 0px 10px 10px;
+	}
+
+	td {
+		text-align: center;
+		height: 25px;
+	}
+
+	a {
+		text-decoration: none;
+		color: inherit;
+	}
+
+	img {
+		vertical-align: middle;
+	}
+
+	.Day {
+		background: #404000
+	}
+
+	.Night {
+		background: #400040;
+	}
+
+	.Dawn {
+		background: linear-gradient(to right, #400040, #404000);
+	}
+
+	.Dusk {
+		background: linear-gradient(to right, #404000, #400040);
+	}
+
+	.active {
+		background: white;
+		color: black;
+		position: relative;
+		height: 22px;
+	}
+
+	#local .active:after {
+		content: '';
+		display: inline-block;
+		position: absolute;
+		background: rgba(255, 0, 0, 0.5);
+		width: 2px;
+		left: var(--hour-progress);
+		transform: translate(-50%);
+		top: 0px;
+		height: 100px;
+		z-index: 2;
+	}
+
+	.locationTable th:first-child:not(:last-child) {
+		width: 200px;
+	}
+
+	#access_token {
+		width: 550px;
+		font-family: monospace;
+	}
+
+
+	#access_token {
+		width: 550px;
+		font-family: monospace;
+	}
+
+	#access_token.ATfalse {
+		background: lightgrey;
+	}
+
+	#access_token.ATtrue {
+		background: lightgreen;
+	}
+
+	.iconGrid {
+		display: inline-grid;
+		grid-template-columns: repeat(7, 1fr);
+	}
+
+	.iconGrid img {
+		margin: 2px;
+	}
+
+	img.Junk {
+		border: 3px solid #AAAAAA
+	}
+
+	img.Basic {
+		border: 3px solid #ffffff
+	}
+
+	img.Fine {
+		border: 3px solid #62A4DA
+	}
+
+	img.Masterwork {
+		border: 3px solid #1a9306
+	}
+
+	img.Rare {
+		border: 3px solid #fcd00b
+	}
+
+	img.Exotic {
+		border: 3px solid #ffa405
+	}
+
+	img.Ascended {
+		border: 3px solid #fb3e8d
+	}
+
+	img.Legendary {
+		border: 3px solid #4C139D
+	}
+
+	details {
+		text-align: center;
+	}
+
+	summary {
+		border: 1px solid white;
+		text-align: center;
+		font-size: 32px;
+	}
+
+	h2 {
+		text-align: center;
+	}
+
+	.hole {
+		font-size: 24px;
+	}
+
+	.hole img {
+		height: 24px;
+		width: 24px;
+		vertical-align: text-top;
+	}
+
+	.bait span {
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	th[colspan="5"] {
+		background: #404040;
+	}
+
+	#achievements {
+		text-align: center;
+	}
+
+	#achievementsContainer {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	.achievement {
+		border: 1px solid white;
+		margin: 2px;
+		padding: 2px;
+	}
+
+	.achievement.donetrue {
+		background: #008000;
+	}
+
+	#achievements.progresstrue .achievement:not(.donetrue) .bit:not(.donetrue) img {
+		opacity: 0.25;
+	}
+
+	.achievementProgress {
+		float: right;
+	}
+
+	div[fish] {
+		display: inline-block;
+		position: relative;
+		text-align: center;
+		margin: 1px;
+		padding: 5px;
+		border-radius: 5px;
+		text-wrap: nowrap;
+	}
+
+	div[fish] a {
+		display: none;
+		background: inherit;
+		color: inherit;
+		position: absolute;
+		left: 50%;
+		transform: translate(-50%);
+		z-index: 3;
+	}
+
+	div[fish]:hover a {
+		display: block;
+	}
+
+	div[fish].Junk {
+		background: #AAAAAA;
+		color: black;
+	}
+
+	div[fish].Basic {
+		background: #ffffff;
+		color: black;
+	}
+
+	div[fish].Fine {
+		background: #62A4DA;
+		color: white;
+	}
+
+	div[fish].Masterwork {
+		background: #1a9306;
+		color: white;
+	}
+
+	div[fish].Rare {
+		background: #fcd00b;
+		color: black;
+	}
+
+	div[fish].Exotic {
+		background: #ffa405;
+		color: black;
+	}
+
+	div[fish].Ascended {
+		background: #fb3e8d;
+		color: white;
+	}
+
+	div[fish].Legendary {
+		background: #4C139D;
+		color: white;
+	}
+
+	ul {
+		margin: 0;
+		padding-left: 0px;
+	}
+
+	li {
+		display: block;
+	}
+
+	a.fish {
+		display: block;
+		text-align: center;
+		border-radius: 5px;
+		padding: 5px;
+	}
+</style>
+<script>
+	var app = angular.module("myApp", ['ngSanitize']);
+	app
+		.filter("showDone", () => {
+			return (input, $scope) => {
+				if (input == undefined) { return }
+				return input.filter(achievement => {
+					if (!$scope.showDone && achievement.done) {
+						return false;
+					}
+					return true;
+				})
+			}
+		})
+		.filter("showRepeatable", () => {
+			return (input, $scope) => {
+				if (input == undefined) { return }
+				return input.filter(achievement => {
+					if (!$scope.showRepeatable && achievement.flags.includes('Repeatable')) {
+						return false;
+					}
+					return true;
+				})
+			}
+		})
+		.controller('MainController', ['$scope', '$http', function ($scope, $http) {
+			$scope.safeApply = function (fn) {
+				var phase = this.$root.$$phase;
+				if (phase == '$apply' || phase == '$digest') {
+					if (fn && (typeof (fn) === 'function')) { fn() }
+				} else { this.$apply(fn) }
+			};
+
+			$scope.access_token = localStorage.getItem('access_token');
+			$scope.achievementProgress = false;
+			$scope.showDone = true;
+			$scope.showRepeatable = true;
+
+			$scope.saveAccessToken = () => {
+				localStorage.setItem('access_token', $scope.access_token);
+			}
+			$scope.forgetAccessToken = () => {
+				$scope.access_token = "";
+				localStorage.removeItem('access_token');
+				$scope.resetAchievementProgress();
+			}
+
+			$scope.tyriaStates = Array(24)
+				.fill("Night", 0, 5)
+				.fill("Dawn", 5, 6)
+				.fill("Day", 6, 20)
+				.fill("Dusk", 20, 21)
+				.fill("Night", 21, 24);
+
+			$scope.canthaStates = Array(24)
+				.fill("Night", 0, 7)
+				.fill("Dawn", 7, 8)
+				.fill("Day", 8, 19)
+				.fill("Dusk", 19, 20)
+				.fill("Night", 20, 24);
+
+			$scope.time = {}
+			$scope.updateTime = () => {
+				$scope.time.now = new Date();
+
+				$scope.time.startOfDay = $scope.time.now - ($scope.time.now % 86400000);
+				$scope.time.elapsedDay = $scope.time.now - $scope.time.startOfDay;
+
+				$scope.time.startTyrianHour = $scope.time.now - ($scope.time.now % 300000);
+				$scope.time.elapsedTyrianHour = $scope.time.now - $scope.time.startTyrianHour;
+				$scope.time.tyrianHourPercent = `${($scope.time.elapsedTyrianHour / 3000).toFixed(2)}%`;
+
+				$scope.time.tyrian = $scope.time.elapsedDay % 7200000;
+				$scope.time.tyrianPercent = $scope.time.tyrian / 7200000;
+				$scope.time.tyrianHour = Math.floor($scope.time.tyrianPercent * 24);
+				$scope.time.localStart = new Date($scope.time.now - ($scope.time.now % 7200000));
+
+				$scope.time.tyriaState = $scope.tyriaStates[$scope.time.tyrianHour];
+				$scope.time.canthaState = $scope.canthaStates[$scope.time.tyrianHour];
+				$scope.safeApply();
+			}
+
+			setInterval(() => {
+				$scope.updateTime()
+			}, 1000);
+			$scope.updateTime();
+
+			$scope.formatTime = (time, addition) => {
+				var localeTimeString = new Date(time.valueOf() + addition * 300000).toLocaleTimeString();
+				return localeTimeString.substr(0, 5);
+			}
+
+			$scope.matchingFish = (fishes, hole, bait) => {
+				return fishes.filter(fish => {
+					var bool = true;
+					if (hole != undefined) {
+						bool *= fish.holes.includes(hole);
+					}
+					if (bait != undefined && (bait != -1 || $scope.legendaryOnlyStrict)) {
+						bool *= fish.bait == bait;
+					}
+					if ($scope.legendaryOnly && (hole != "Any Fishing Hole" || $scope.legendaryOnlyStrict)) {
+						bool *= fish.rarity == "Legendary";
+					}
+					return bool;
+				}).length > 0
+			}
+
+			$scope.legendaryOnlyFilter = fish => {
+				if ($scope.legendaryOnly && $scope.legendaryOnlyStrict && fish.rarity == "Legendary") { return true }
+				if ($scope.legendaryOnly && $scope.legendaryOnlyStrict && fish.rarity != "Legendary") { return false }
+				return true
+			}
+
+			$scope.rarityOrder = fish => {
+				var order = ['Junk', 'Basic', 'Fine', 'Masterwork', 'Rare', 'Exotic', 'Ascended', 'Legendary'];
+				return order.indexOf(fish.rarity);
+			}
+
+			$scope.holeOrder = hole => {
+				if (hole == "Open Water") { return 1 }
+				if (hole == "Any Fishing Hole") { return 2 }
+				return hole;
+			}
+
+			$scope.baits = [];
+			$http.get("baits.json").then(res => res.data).then(baits => {
+				$scope.baitList = baits;
+				$scope.baits = Object.fromEntries(baits.map(bait => [bait.id, bait]));
+				$scope.safeApply();
+			});
+
+			$scope.fish = [];
+			$http.get("items.json").then(res => res.data).then(fishes => {
+				$scope.fishList = fishes;
+				$scope.fishes = Object.fromEntries(fishes.map(fish => [fish.id, fish]));
+
+				$scope.locations = {};
+				fishes.forEach(fish => {
+					if ($scope.locations[fish.location] == undefined) { $scope.locations[fish.location] = { name: fish.location, fishes: [], baits: [], holes: [] } }
+					if (!$scope.locations[fish.location].fishes.includes(fish)) { $scope.locations[fish.location].fishes.push(fish) }
+					if (!$scope.locations[fish.location].baits.includes(fish.bait)) { $scope.locations[fish.location].baits.push(fish.bait) }
+					fish.holes.forEach(hole => {
+						if (!$scope.locations[fish.location].holes.includes(hole)) { $scope.locations[fish.location].holes.push(hole) }
+					})
+				})
+				$scope.locationList = Object.values($scope.locations).sort((a, b) => a.name < b.name ? -1 : 1);
+
+				$scope.safeApply();
+			});
+
+			$http.get("locations.json").then(res => res.data).then(locations => {
+				$scope.locationData = locations;
+				$scope.safeApply();
+			});
+
+			$scope.achievementOrder = achievement => {
+				var order = [
+					//	Titles
+					6201,	//	Kind of a Big Reel
+					6478,	//	Fishmongers Know Me
+					6109,	//	I'm Very Buoyant
+					6284,	//	I Have Many Lure-Bound Hooks
+					6279,	//	My Guild Hall Smells of Fish Progeny
+					//	General
+					6224,	//	World Class Fisher
+					6110,	//	Avid World Class Fisher
+					6439,	//	Aquatic Trash Collector
+					6505,	//	Aquatic Treasure Collector
+					6471,	//	Saltwater Fisher
+					6393,	//	Avid Saltwater Fisher
+					//	Core
+					6344,	//	Maguuma Fisher
+					6475,	//	Avid Maguuma Fisher
+					6068,	//	Krytan Fisher
+					6263,	//	Avid Krytan Fisher
+					6330,	//	Ascalonian Fisher
+					6484,	//	Avid Ascalonian Fisher
+					6179,	//	Shiverpeaks Fisher
+					6153,	//	Avid Shiverpeaks Fisher
+					6363,	//	Orrian Fisher
+					6227,	//	Avid Orrian Fisher
+					6489,	//	Ring of Fire Fisher
+					6339,	//	Avid Ring of Fire Fisher
+					//	Path of Fire
+					6317,	//	Desert Fisher
+					6509,	//	Avid Desert Fisher
+					6106,	//	Desert Isles Fisher
+					6250,	//	Avid Desert Isles Fisher
+					//	End of Dragons
+					6336,	//	Seitung Province Fisher
+					6264,	//	Avid Seitung Province Fisher
+					6342,	//	Kaineng Fisher
+					6192,	//	Avid Kaineng Fisher
+					6258,	//	Echovald Wilds Fisher
+					6466,	//	Avid Echovald Wilds Fisher
+					6506,	//	Dragon's End Fisher
+					6402,	//	Avid Dragon's End Fisher
+					//	Secrets of the Obscure
+					7114,	//	Horn of Maguuma Fisher
+				];
+				return order.indexOf(achievement.id);
+			}
+
+			$http.get('https://api.guildwars2.com/v2/achievements?ids=6068,6106,6109,6110,6153,6179,6192,6201,6224,6227,6250,6258,6263,6264,6279,6284,6317,6330,6336,6339,6342,6344,6363,6393,6402,6439,6466,6471,6475,6478,6484,6489,6505,6506,6509,7114')
+				.then(res => res.data).then(achievements => {
+					$scope.achievementData = achievements;
+					var itemIDs = [];
+					achievements.forEach(achievement => {
+						if (!achievement.bits) { return }
+						achievement.bits.forEach(bit => {
+							itemIDs.push(bit.id);
+						})
+					});
+
+					var itemsPage1 = itemIDs.slice(0, 200);
+					var itemsPage2 = itemIDs.slice(200, 400);
+					var itemsPage3 = itemIDs.slice(400, 600);
+
+					$http.get(`https://api.guildwars2.com/v2/items?ids=${itemsPage1}`)
+						.then(res => res.data).then(page1 => {
+							var itemList = page1;
+
+							$http.get(`https://api.guildwars2.com/v2/items?ids=${itemsPage2}`)
+								.then(res => res.data).then(page2 => {
+									itemList = itemList.concat(page2);
+
+									$http.get(`https://api.guildwars2.com/v2/items?ids=${itemsPage3}`)
+										.then(res => res.data).then(page3 => {
+											$scope.itemList = itemList.concat(page3);
+
+											$scope.items = Object.fromEntries($scope.itemList.map(item => [item.id, item]))
+
+											$scope.safeApply();
+										})
+								})
+						})
+
+				});
+
+			$scope.getAchievementProgress = () => {
+				console.log("getting progress")
+				$http.get(`https://api.guildwars2.com/v2/account/achievements?access_token=${$scope.access_token}&ids=6068,6106,6109,6110,6153,6179,6192,6201,6224,6227,6250,6258,6263,6264,6279,6284,6317,6330,6336,6339,6342,6344,6363,6393,6402,6439,6466,6471,6475,6478,6484,6489,6505,6506,6509,7114`)
+					.then(res => res.data).then(achievements => {
+						achievements.forEach(achievement => {
+							var achievementData = $scope.achievementData.find(ad => ad.id == achievement.id);
+							achievementData.current = achievement.current;
+							achievementData.done = achievement.done;
+							achievement.bits.forEach(bit => {
+								if (achievementData.bits && achievementData.bits[bit]) {
+									achievementData.bits[bit].done = true;
+								}
+							})
+						})
+						$scope.achievementProgress = true;
+						$scope.safeApply();
+					});
+			}
+
+			$scope.resetAchievementProgress = () => {
+				$scope.achievementProgress = false;
+				$scope.safeApply();
+			}
+
+			scope = $scope;
+		}])
+		.directive('fish', function () {
+			return {
+				template: function (elem, attr) {
+					return `
+						<img ng-src="{{${attr.data}.icon}}">
+						<br>
+						<a href="https://wiki.guildwars2.com/index.php?search={{${attr.data}.name}}" target="_blank" class="fish {{${attr.data}.rarity}}">
+							<b>{{${attr.data}.name}}</b>
+							<br>
+							Location: <b>{{${attr.data}.location}}</b>
+							<br>
+							Favoured Bait: <b>{{baits[${attr.data}.bait].name}}</b>
+							<br>
+							Time of day: <b>{{${attr.data}.times.join(',')}}</b>
+							<br>
+							Fishing Holes:
+							<b>
+								<ul>
+									<li ng-repeat="hole in ${attr.data}.holes">{{hole}}</li>
+								</ul>
+							</b>
+						</a>`
+				}
+			};
+		});
+</script>
+
+<body ng-app="myApp">
+	<div ng-controller="MainController" class="controller">
+		<table border id="time">
+			<tr id="local">
+				<td>Local</td>
+				<td class="{{time.tyrianHour == 0 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,0)}}</td>
+				<td class="{{time.tyrianHour == 1 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,1)}}</td>
+				<td class="{{time.tyrianHour == 2 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,2)}}</td>
+				<td class="{{time.tyrianHour == 3 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,3)}}</td>
+				<td class="{{time.tyrianHour == 4 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,4)}}</td>
+				<td class="{{time.tyrianHour == 5 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,5)}}</td>
+				<td class="{{time.tyrianHour == 6 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,6)}}</td>
+				<td class="{{time.tyrianHour == 7 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,7)}}</td>
+				<td class="{{time.tyrianHour == 8 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,8)}}</td>
+				<td class="{{time.tyrianHour == 9 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,9)}}</td>
+				<td class="{{time.tyrianHour == 10 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,10)}}</td>
+				<td class="{{time.tyrianHour == 11 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,11)}}</td>
+				<td class="{{time.tyrianHour == 12 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,12)}}</td>
+				<td class="{{time.tyrianHour == 13 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,13)}}</td>
+				<td class="{{time.tyrianHour == 14 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,14)}}</td>
+				<td class="{{time.tyrianHour == 15 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,15)}}</td>
+				<td class="{{time.tyrianHour == 16 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,16)}}</td>
+				<td class="{{time.tyrianHour == 17 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,17)}}</td>
+				<td class="{{time.tyrianHour == 18 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,18)}}</td>
+				<td class="{{time.tyrianHour == 19 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,19)}}</td>
+				<td class="{{time.tyrianHour == 20 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,20)}}</td>
+				<td class="{{time.tyrianHour == 21 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,21)}}</td>
+				<td class="{{time.tyrianHour == 22 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,22)}}</td>
+				<td class="{{time.tyrianHour == 23 ? 'active' : null}}" style="--hour-progress:{{time.tyrianHourPercent}}">{{formatTime(time.localStart,23)}}</td>
+			</tr>
+			<tr>
+				<td>Time</td>
+				<td class="{{time.tyrianHour == 0 ? 'active' : null}}">0:00</td>
+				<td class="{{time.tyrianHour == 1 ? 'active' : null}}">1:00</td>
+				<td class="{{time.tyrianHour == 2 ? 'active' : null}}">2:00</td>
+				<td class="{{time.tyrianHour == 3 ? 'active' : null}}">3:00</td>
+				<td class="{{time.tyrianHour == 4 ? 'active' : null}}">4:00</td>
+				<td class="{{time.tyrianHour == 5 ? 'active' : null}}">5:00</td>
+				<td class="{{time.tyrianHour == 6 ? 'active' : null}}">6:00</td>
+				<td class="{{time.tyrianHour == 7 ? 'active' : null}}">7:00</td>
+				<td class="{{time.tyrianHour == 8 ? 'active' : null}}">8:00</td>
+				<td class="{{time.tyrianHour == 9 ? 'active' : null}}">9:00</td>
+				<td class="{{time.tyrianHour == 10 ? 'active' : null}}">10:00</td>
+				<td class="{{time.tyrianHour == 11 ? 'active' : null}}">11:00</td>
+				<td class="{{time.tyrianHour == 12 ? 'active' : null}}">12:00</td>
+				<td class="{{time.tyrianHour == 13 ? 'active' : null}}">13:00</td>
+				<td class="{{time.tyrianHour == 14 ? 'active' : null}}">14:00</td>
+				<td class="{{time.tyrianHour == 15 ? 'active' : null}}">15:00</td>
+				<td class="{{time.tyrianHour == 16 ? 'active' : null}}">16:00</td>
+				<td class="{{time.tyrianHour == 17 ? 'active' : null}}">17:00</td>
+				<td class="{{time.tyrianHour == 18 ? 'active' : null}}">18:00</td>
+				<td class="{{time.tyrianHour == 19 ? 'active' : null}}">19:00</td>
+				<td class="{{time.tyrianHour == 20 ? 'active' : null}}">20:00</td>
+				<td class="{{time.tyrianHour == 21 ? 'active' : null}}">21:00</td>
+				<td class="{{time.tyrianHour == 22 ? 'active' : null}}">22:00</td>
+				<td class="{{time.tyrianHour == 23 ? 'active' : null}}">23:00</td>
+			</tr>
+			<tr>
+				<td>Tyria</td>
+				<td colspan="5" class="Night">Night</td>
+				<td colspan="1" class="Dawn">Dawn</td>
+				<td colspan="14" class="Day">Day</td>
+				<td colspan="1" class="Dusk">Dusk</td>
+				<td colspan="3" class="Night">Night</td>
+			</tr>
+			<tr>
+				<td>Cantha</td>
+				<td colspan="7" class="Night">Night</td>
+				<td colspan="1" class="Dawn">Dawn</td>
+				<td colspan="11" class="Day">Day</td>
+				<td colspan="1" class="Dusk">Dusk</td>
+				<td colspan="4" class="Night">Night</td>
+			</tr>
+		</table>
+		<br>
+		<details open>
+			<summary>Fish by Location</summary>
+			<label for="legendaryOnly">
+				Legendary Only
+				<input type="checkbox" id="legendaryOnly" ng-model="legendaryOnly">
+			</label>
+			<br>
+			Filters out any Fishing Holes and Bait selections that do not result in possible legendaries
+			<br>
+			<label for="legendaryOnlyStrict">
+				Still includes "Any Fishing Hole" and "No Bait" as they overlap, unless strict:
+				<input type="checkbox" id="legendaryOnlyStrict" ng-model="legendaryOnlyStrict">
+			</label>
+			<div ng-repeat="location in locationList | orderBy:'name'" ng-if="matchingFish(location.fishes) && location.name != ''">
+				<h2>{{locationData[location.name].timezone}} - {{location.name}}</h2>
+				<table border class="locationTable">
+					<tbody ng-repeat="hole in location.holes | orderBy:holeOrder" ng-if="matchingFish(location.fishes,hole)">
+						<tr>
+							<th colspan="5">
+								<span class="hole">
+									{{hole}}
+									<span ng-if="hole != 'Any Fishing Hole'" title="Recommended Fishing Power">
+										<img ng-src="https://wiki.guildwars2.com/images/e/e0/Fishing_Power.png">
+										{{locationData[location.name].holes[hole]}}
+									</span>
+								</span>
+							</th>
+						</tr>
+						<tr>
+							<th>Bait</th>
+							<th class="Dawn">Dawn</th>
+							<th class="Day">Day</th>
+							<th class="Dusk">Dusk</th>
+							<th class="Night">Night</th>
+						</tr>
+						<tr ng-repeat="bait in location.baits | orderBy:bait" ng-if="matchingFish(location.fishes,hole,bait)">
+							<td ng-switch on="bait">
+								<span ng-switch-when="-1">{{baits[bait].name}}</span>
+								<a href="https://wiki.guildwars2.com/index.php?search={{baits[bait].name}}" target="_blank" class="bait" ng-switch-default>
+									<img ng-src="{{baits[bait].icon}}" title="{{baits[bait].name}}" ng-if="bait != -1">
+									<span>
+										{{baits[bait].name}}
+										<br>
+										+{{baits[bait].fishingPower}} <img ng-src="https://wiki.guildwars2.com/images/e/e0/Fishing_Power.png">
+									</span>
+								</a>
+							</td>
+							<td>
+								<div fish data="fish" ng-repeat="fish in location.fishes | filter:{holes:hole} | filter:{bait:bait} | filter:{times:'Dawn'} | filter:legendaryOnlyFilter | orderBy:rarityOrder" class="{{fish.rarity}}"></div>
+							</td>
+							<td>
+								<div fish data="fish" ng-repeat="fish in location.fishes | filter:{holes:hole} | filter:{bait:bait} | filter:{times:'Day'} | filter:legendaryOnlyFilter | orderBy:rarityOrder" class="{{fish.rarity}}"></div>
+							</td>
+							<td>
+								<div fish data="fish" ng-repeat="fish in location.fishes | filter:{holes:hole} | filter:{bait:bait} | filter:{times:'Dusk'} | filter:legendaryOnlyFilter | orderBy:rarityOrder" class="{{fish.rarity}}"></div>
+							</td>
+							<td>
+								<div fish data="fish" ng-repeat="fish in location.fishes | filter:{holes:hole} | filter:{bait:bait} | filter:{times:'Night'} | filter:legendaryOnlyFilter | orderBy:rarityOrder" class="{{fish.rarity}}"></div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</details>
+		<details id="achievements" class="progress{{achievementProgress}}">
+			<summary>Achievements</summary>
+			<input ng-model="access_token" id="access_token" ng-change="saveAccessToken()" placeholder="API Key / Access Token" class="AT{{achievementProgress}}">
+			<button ng-click="getAchievementProgress()">Apply</button>
+			<button ng-click="resetAchievementProgress()">Reset</button>
+			<button ng-click="forgetAccessToken()">Forget</button>
+			<br>
+			<label for="showDone">Show Completed<input type="checkbox" id="showDone" ng-model="showDone"></label>
+			<br>
+			<label for="showRepeatable">Show Repeatable<input type="checkbox" id="showRepeatable" ng-model="showRepeatable"></label>
+			<div id="achievementsContainer">
+				<div ng-repeat="achievement in achievementData | showDone:this | showRepeatable:this | orderBy:achievementOrder" class="achievement done{{achievement.done}}">
+					<img ng-if="achievement.flags.includes('Repeatable')" ng-src="https://wiki.guildwars2.com/images/c/c0/Tango_repeatable_event.png" title="Repeatable">
+					<a href="https://wiki.guildwars2.com/index.php?search={{achievement.name}}" target="_blank">
+						{{achievement.name}}
+						<span class="achievementProgress">({{achievementProgress && achievement.current == undefined ? '0/' : null}}{{achievement.current != undefined ? achievement.current + '/' : null}}{{achievement.tiers[achievement.tiers.length-1].count}})</span>
+					</a>
+					<br>
+					<span>{{achievement.requirement}}</span>
+					<br>
+					<div class="iconGrid">
+						<div fish data="fishes[bit.id]" ng-repeat="bit in achievement.bits" class="bit {{items[bit.id].rarity}} done{{bit.done}}" title="{{bit}}"></div>
+						<!-- <img  ng-src="{{items[bit.id].icon}}" title="{{items[bit.id].name}}" class="{{items[bit.id].rarity}} done{{bit.done}}"> -->
+					</div>
+					<br>
+					<br>
+				</div>
+			</div>
+		</details>
+	</div>
+</body>

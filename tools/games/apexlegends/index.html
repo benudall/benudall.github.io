@@ -1,0 +1,841 @@
+<title>Apex Legends</title>
+<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.js'></script>
+<style>
+	body {
+		background: black;
+		color: white;
+	}
+
+	a {
+		text-decoration: none;
+		color: white;
+	}
+
+	.weapon {
+		display: inline-block;
+		width: 240px;
+		border: 1px solid lightgray;
+		background: #444;
+		margin: 5px;
+		position: relative;
+	}
+
+	.weapon:after {
+		content: "";
+		background: black;
+		border-left: 1px solid lightgray;
+		height: 32px;
+		width: 20px;
+		position: absolute;
+		bottom: -9px;
+		right: -12px;
+		transform: rotate(30deg);
+	}
+
+	.weapon:hover,
+	.weapon.hltrue {
+		background: #008000;
+	}
+
+	.weapon .type {
+		display: block;
+		text-align: left;
+		width: 80px;
+		color: white;
+		background: grey;
+		clip-path: polygon(0 0, 100% 0, 75px 100%, 0 100%);
+	}
+
+	.weapon .name,
+	.weapon .type {
+		padding: 0px 5px;
+	}
+
+	.weapon .name {
+		font-weight: bold;
+	}
+
+	.icon {
+		text-align: center;
+	}
+
+	.icon img {
+		height: 50px;
+		filter: grayscale(1) invert(1) hue-rotate(180deg);
+	}
+
+	.slots,
+	.bonus {
+		display: inline-block;
+		height: 40px;
+		margin-top: 2px;
+		background: #444;
+	}
+
+	.bonus {
+		float: right;
+	}
+
+	.slot.hltrue {
+		background-color: #FF80FF;
+	}
+
+	.bonus.hltrue {
+		background-color: #008000;
+	}
+
+	.slots img,
+	.bonus img,
+	.bonusitem img,
+	.ammo,
+	.attachments img {
+		height: 40px;
+		width: 40px;
+	}
+
+	.slots img,
+	.attachments img {
+		filter: invert(1);
+	}
+
+	.bonus {
+		margin-bottom: 4px;
+	}
+
+	.ammo {
+		float: right;
+	}
+
+	.attachments,
+	.bonusitems {
+		display: inline-block;
+	}
+
+	.attachment,
+	.bonusitem {
+		display: inline-block;
+		height: 75px;
+		min-width: 75px;
+		border: 5px solid;
+		border-image-slice: 1;
+		text-align: center;
+		padding: 2px;
+		margin: 5px;
+		vertical-align: middle;
+	}
+
+	.attachment span,
+	.bonusitem span {
+		white-space: pre-line;
+	}
+
+	.t1 {
+		border-color: white;
+	}
+
+	.t2 {
+		border-color: #51a8d6;
+	}
+
+	.t3 {
+		border-color: #b237c8;
+	}
+
+	.t4 {
+		border-color: #cead21;
+	}
+
+	.t123 {
+		border-image-slice: 1;
+		border-image-source: conic-gradient(#51a8d6 90deg, #b237c8 90deg, #b237c8 270deg, white 270deg);
+	}
+
+	.t1234 {
+		border-image-slice: 1;
+		border-image-source: conic-gradient(#51a8d6 90deg, #cead21 90deg, #cead21 180deg, #b237c8 180deg, #b237c8 270deg, white 270deg);
+	}
+
+	.attachment:hover,
+	.attachment.hltrue,
+	.bonusitem:hover,
+	.bonusitem.hltrue {
+		background: #008000;
+	}
+</style>
+<script>
+	var app = angular.module('app', []);
+	app.controller('Controller', ['$scope', '$http', function ($scope) {
+		$scope.ordering = "type";
+
+		$scope.ammo = {
+			energy: "ammo/Energy_Ammo.png",
+			heavy: "ammo/Heavy_Rounds.png",
+			light: "ammo/Light_Rounds.png",
+			heavylight: "ammo/HeavyLight_Rounds.png",
+			shotgun: "ammo/Shotgun_Shells.png",
+			sniper: "ammo/Sniper_Ammo.png",
+			mythic_arrows: "ammo/Mythic_Arrows.png",
+			mythic_energy: "ammo/Mythic_Energy_Ammo.png",
+			mythic_heavy: "ammo/Mythic_Heavy_Rounds.png",
+			mythic_light: "ammo/Mythic_Light_Rounds.png",
+			mythic_shotgun: "ammo/Mythic_Shotgun_Shells.png",
+			mythic_sniper: "ammo/Mythic_Sniper_Ammo.png",
+			mythic_knife: "ammo/Mythic_Throwing_Knife_Ammo.png",
+		};
+
+		$scope.slots = {
+			barrel: { img: "slot/Barrel_Attachment.svg" },
+			laser: { img: "slot/Laser_Sight_Attachment.svg" },
+			lightmag: { img: "slot/Mag_Attachment_Light.svg" },
+			heavymag: { img: "slot/Mag_Attachment_Heavy.svg" },
+			carmag: { img: "slot/Mag_Attachment_CAR.svg" },
+			energymag: { img: "slot/Mag_Attachment_Energy.svg" },
+			snipermag: { img: "slot/Mag_Attachment_Sniper.svg" },
+			bolt: { img: "slot/Mag_Attachment_Bolt.svg" },
+			optics: { img: "slot/Optics_Attachment.svg" },
+			standardstock: { img: "slot/Stock_Attachment_Standard.svg" },
+			sniperstock: { img: "slot/Stock_Attachment_Sniper.svg" },
+			boostedloader: { img: "slot/Boosted_Loader_Attachment.svg" },
+			turbocharger: { img: "slot/Turbocharger_Attachment.svg" },
+			doubletap: { img: "slot/Double_Tap_Trigger_Attachment.svg" },
+			kineticfeeder: { img: "slot/Kinetic_Feeder_Attachment.svg" },
+			skullpiercer: { img: "slot/Skullpiercer_Attachment.svg" },
+			hammerpoint: { img: "slot/Hammerpoint_Rounds_Attachment.svg" },
+			hopup: { img: "slot/Hop-Up_Attachment.svg" },
+		};
+
+		$scope.weapons = [
+			{
+				type: "AR",
+				name: "HAVOC Rifle",
+				description: "Full-auto charged energy rifle",
+				ammo: "energy",
+				img: "weapons/HAVOC_Rifle_Icon.svg",
+				slots: { "energymag": {}, "optics": {}, "standardstock": {}, "turbocharger": {} },
+				url: "https://apexlegends.fandom.com/wiki/HAVOC_Rifle",
+			},
+			{
+				type: "AR",
+				name: "VK-47 Flatline",
+				description: "Full-auto with a punch",
+				ammo: "heavy",
+				img: "weapons/VK-47_Flatline_Icon.svg",
+				slots: { "heavymag": {}, "optics": {}, "standardstock": {} },
+				url: "https://apexlegends.fandom.com/wiki/VK-47_Flatline",
+			},
+			{
+				type: "AR",
+				name: "Hemlok Burst AR",
+				description: "3-round burst assault rifle",
+				ammo: "heavy",
+				img: "weapons/Hemlok_Burst_AR_Icon.svg",
+				slots: { "barrel": {}, "heavymag": {}, "optics": {}, "standardstock": {}, "boostedloader": {} },
+				url: "https://apexlegends.fandom.com/wiki/Hemlok_Burst_AR",
+			},
+			{
+				type: "AR",
+				name: "R-301 Carbine",
+				description: "Full-auto and high accuracy",
+				ammo: "light",
+				img: "weapons/R-301_Carbine_Icon.svg",
+				slots: { "barrel": {}, "lightmag": {}, "optics": {}, "standardstock": {} },
+				url: "https://apexlegends.fandom.com/wiki/R-301_Carbine",
+			},
+			{
+				type: "SMG",
+				name: "Prowler Burst PDW",
+				description: "5-round burst SMG",
+				ammo: "heavy",
+				img: "weapons/Prowler_Burst_PDW_Icon.svg",
+				slots: { "laser": {}, "heavymag": {}, "optics": {}, "standardstock": {} },
+				url: "https://apexlegends.fandom.com/wiki/Prowler_Burst_PDW",
+			},
+			{
+				type: "SMG",
+				name: "Alternator SMG",
+				description: "Twin barrel full-auto SMG",
+				ammo: "light",
+				img: "weapons/Alternator_SMG_Icon.svg",
+				slots: { "laser": {}, "lightmag": {}, "optics": {}, "standardstock": {} },
+				url: "https://apexlegends.fandom.com/wiki/Alternator_SMG",
+			},
+			{
+				type: "SMG",
+				name: "R-99 SMG",
+				description: "Rapid-fire automatic SMG",
+				ammo: "light",
+				img: "weapons/R-99_SMG_Icon.svg",
+				slots: { "laser": {}, "lightmag": {}, "optics": {}, "standardstock": {} },
+				url: "https://apexlegends.fandom.com/wiki/R-99_SMG",
+			},
+			{
+				type: "SMG",
+				name: "Volt SMG",
+				description: "Energy actuated SMG",
+				ammo: "energy",
+				img: "weapons/Volt_SMG_Icon.svg",
+				slots: { "laser": {}, "energymag": {}, "optics": {}, "standardstock": {} },
+				url: "https://apexlegends.fandom.com/wiki/Volt_SMG",
+			},
+			{
+				type: "SMG",
+				name: "C.A.R. SMG",
+				description: "Adaptable SMG. Uses light and heavy ammo",
+				ammo: "heavylight",
+				img: "weapons/C.A.R._SMG_Icon.svg",
+				slots: { "carmag": {}, "optics": {}, "standardstock": {} },
+				url: "https://apexlegends.fandom.com/wiki/C.A.R._SMG",
+			},
+			{
+				type: "LMG",
+				name: "Devotion LMG",
+				description: "Full-auto energy LMG",
+				ammo: "energy",
+				img: "weapons/Devotion_LMG_Icon.svg",
+				slots: { "barrel": {}, "energymag": {}, "optics": {}, "standardstock": {}, "turbocharger": {} },
+				url: "https://apexlegends.fandom.com/wiki/Devotion_LMG",
+			},
+			{
+				type: "LMG",
+				name: "L-Star EMG",
+				description: "Plasma-fueled heavy MG",
+				ammo: "energy",
+				img: "weapons/L-STAR_EMG_Icon.svg",
+				slots: { "barrel": {}, "energymag": {}, "optics": {}, "standardstock": {} },
+				url: "https://apexlegends.fandom.com/wiki/L-STAR_EMG",
+			},
+			{
+				type: "LMG",
+				name: "M600 Spitfire",
+				description: "Full-auto LMG",
+				ammo: "light",
+				img: "weapons/M600_Spitfire_Icon.svg",
+				slots: { "lightmag": {}, "optics": {}, "standardstock": {} },
+				url: "https://apexlegends.fandom.com/wiki/M600_Spitfire",
+			},
+			{
+				type: "LMG",
+				name: "Rampage LMG",
+				description: "Fire Powered LMG. Charge with Thermites",
+				ammo: "mythic_heavy",
+				img: "weapons/Rampage_LMG_Icon.svg",
+				slots: { "optics": {} },
+				bonus: { "thermite": {} },
+				url: "https://apexlegends.fandom.com/wiki/Rampage_LMG",
+			},
+			{
+				type: "Marksman",
+				name: "G7 Scout",
+				description: "Semi-auto light marksman rifle",
+				ammo: "light",
+				img: "weapons/G7_Scout_Icon.svg",
+				slots: { "barrel": {}, "lightmag": {}, "optics": {}, "sniperstock": {}, "doubletap": {} },
+				url: "https://apexlegends.fandom.com/wiki/G7_Scout",
+			},
+			{
+				type: "Marksman",
+				name: "Triple Take",
+				description: "Triple-barrel marksman rifle",
+				ammo: "energy",
+				img: "weapons/Triple_Take_Icon.svg",
+				slots: { "energymag": {}, "optics": {}, "sniperstock": {}, "kineticfeeder": {} },
+				url: "https://apexlegends.fandom.com/wiki/Triple_Take",
+			},
+			{
+				type: "Marksman",
+				name: "30-30 Repeater",
+				description: "Semi-auto heavy repeater",
+				ammo: "heavy",
+				img: "weapons/30-30_Repeater_Icon.svg",
+				slots: { "heavymag": {}, "optics": {}, "sniperstock": {}, "skullpiercer": {} },
+				url: "https://apexlegends.fandom.com/wiki/30-30_Repeater",
+			},
+			{
+				type: "Marksman",
+				name: "Bocek Compound Bow",
+				description: "Hold fire to increase power",
+				ammo: "mythic_arrows",
+				img: "weapons/Bocek_Compound_Bow_Icon.svg",
+				slots: { "optics": {} },
+				url: "https://apexlegends.fandom.com/wiki/Bocek_Compound_Bow",
+			},
+			{
+				type: "Sniper",
+				name: "Charge Rifle",
+				description: "Charged beam sniper rifle",
+				ammo: "sniper",
+				img: "weapons/Charge_Rifle_Icon.svg",
+				slots: { "optics": {}, "sniperstock": {} },
+				url: "https://apexlegends.fandom.com/wiki/Charge_Rifle",
+			},
+			{
+				type: "Sniper",
+				name: "Longbow DMR",
+				description: "Semi-auto sniper rifle",
+				ammo: "sniper",
+				img: "weapons/Longbow_DMR_Icon.svg",
+				slots: { "barrel": {}, "snipermag": {}, "optics": {}, "sniperstock": {}, "skullpiercer": {} },
+				url: "https://apexlegends.fandom.com/wiki/Longbow_DMR",
+			},
+			{
+				type: "Sniper",
+				name: "Sentinel",
+				description: "Bolt-action sniper rifle",
+				ammo: "sniper",
+				img: "weapons/Sentinel_Icon.svg",
+				slots: { "snipermag": {}, "optics": {}, "sniperstock": {} },
+				bonus: { "shieldcell": {} },
+				url: "https://apexlegends.fandom.com/wiki/Sentinel",
+			},
+			{
+				type: "Sniper",
+				name: "Kraber .50 Cal Sniper",
+				description: "Powerful bolt-action sniper rifle",
+				ammo: "mythic_sniper",
+				img: "weapons/Kraber_.50-Cal_Sniper_Icon.svg",
+				slots: {},
+				url: "https://apexlegends.fandom.com/wiki/Kraber_.50-Cal_Sniper",
+			},
+			{
+				type: "Shotgun",
+				name: "Mozambique Shotgun",
+				description: "Triple-barrel shotgun pistol",
+				ammo: "shotgun",
+				img: "weapons/Mozambique_Shotgun_Icon.svg",
+				slots: { "bolt": {}, "optics": {}, "hammerpoint": {} },
+				url: "https://apexlegends.fandom.com/wiki/Mozambique_Shotgun",
+			},
+			{
+				type: "Shotgun",
+				name: "EVA-8 Auto",
+				description: "Full-auto shotgun",
+				ammo: "shotgun",
+				img: "weapons/EVA-8_Auto_Icon.svg",
+				slots: { "bolt": {}, "optics": {}, "standardstock": {}, "doubletap": {} },
+				url: "https://apexlegends.fandom.com/wiki/EVA-8_Auto",
+			},
+			{
+				type: "Shotgun",
+				name: "Peacekeeper",
+				description: "Lever-action shotgun",
+				ammo: "shotgun",
+				img: "weapons/Peacekeeper_Icon.svg",
+				slots: { "bolt": {}, "optics": {}, "kineticfeeder": {} },
+				url: "https://apexlegends.fandom.com/wiki/Peacekeeper",
+			},
+			{
+				type: "Shotgun",
+				name: "Mastiff Shotgun",
+				description: "Powerful semi-auto shotgun",
+				ammo: "mythic_shotgun",
+				img: "weapons/Mastiff_Shotgun_Icon.svg",
+				slots: { "optics": {} },
+				url: "https://apexlegends.fandom.com/wiki/Mastiff_Shotgun",
+			},
+			{
+				type: "Pistol",
+				name: "P2020",
+				description: "Semi-auto pistol",
+				ammo: "light",
+				img: "weapons/P2020_Icon.svg",
+				slots: { "laser": {}, "lightmag": {}, "optics": {}, "hammerpoint": {} },
+				url: "https://apexlegends.fandom.com/wiki/P2020",
+			},
+			{
+				type: "Pistol",
+				name: "RE-45 Auto",
+				description: "Full-auto pistol",
+				ammo: "light",
+				img: "weapons/RE-45_Auto_Icon.svg",
+				slots: { "laser": {}, "lightmag": {}, "optics": {}, "hammerpoint": {} },
+				url: "https://apexlegends.fandom.com/wiki/RE-45_Auto",
+			},
+			{
+				type: "Pistol",
+				name: "Wingman",
+				description: "High powered revolver",
+				ammo: "sniper",
+				img: "weapons/Wingman_Icon.svg",
+				slots: { "snipermag": {}, "optics": {}, "hopup": {} },
+				url: "https://apexlegends.fandom.com/wiki/Wingman",
+			}
+		]
+
+		$scope.attachments = {
+			general: {
+
+				barrel: {
+					name: "Barrel\nStabilizer",
+					img: "attachments/Barrel_Stabilizer.svg",
+					description: "Less recoil\nLess pitch randomness\nLess yaw randomness",
+					tier: "t123",
+					url: "https://apexlegends.fandom.com/wiki/Attachment#Barrel_attachments,_Mags,_and_Stocks",
+				},
+				laser: {
+					name: "Laser\nSight",
+					img: "attachments/Laser_Sight.svg",
+					description: "Less hipfire spread\nLess moving spread increase rate\nHigher moving spread decay rate\nHigher firing spread decay rate\nLess firing spread decay delay",
+					tier: "t123",
+					url: "https://apexlegends.fandom.com/wiki/Attachment#Barrel_attachments,_Mags,_and_Stocks",
+				},
+				energymag: {
+					name: "Extended\nEnergy Mag",
+					img: "attachments/Extended_Energy_Mag.svg",
+					description: "Magazine capacity increase\nLess reload time",
+					tier: "t1234",
+					url: "https://apexlegends.fandom.com/wiki/Attachment#Barrel_attachments,_Mags,_and_Stocks",
+				},
+				heavymag: {
+					name: "Extended\nHeavy Mag",
+					img: "attachments/Extended_Heavy_Mag.svg",
+					description: "Magazine capacity increase\nLess reload time",
+					tier: "t1234",
+					url: "https://apexlegends.fandom.com/wiki/Attachment#Barrel_attachments,_Mags,_and_Stocks",
+				},
+				lightmag: {
+					name: "Extended\nLight Mag",
+					img: "attachments/Extended_Light_Mag.svg",
+					description: "Magazine capacity increase\nLess reload time",
+					tier: "t1234",
+					url: "https://apexlegends.fandom.com/wiki/Attachment#Barrel_attachments,_Mags,_and_Stocks",
+				},
+				snipermag: {
+					name: "Extended\nSniper Mag",
+					img: "attachments/Extended_Sniper_Mag.svg",
+					description: "Magazine capacity increase\nLess reload time",
+					tier: "t1234",
+					url: "https://apexlegends.fandom.com/wiki/Attachment#Barrel_attachments,_Mags,_and_Stocks",
+				},
+				bolt: {
+					name: "Shotgun\nBolt",
+					img: "attachments/Shotgun_Bolt.svg",
+					description: "Higher fire rate\nLess rechamber time",
+					tier: "t123",
+					url: "https://apexlegends.fandom.com/wiki/Attachment#Barrel_attachments,_Mags,_and_Stocks",
+				},
+				standardstock: {
+					name: "Standard\nStock",
+					img: "attachments/Standard_Stock.svg",
+					description: "Less ADS time\nLess deploy/holster time\nLess raise/lower time\nLess aim drift",
+					tier: "t123",
+					url: "https://apexlegends.fandom.com/wiki/Attachment#Barrel_attachments,_Mags,_and_Stocks",
+				},
+				sniperstock: {
+					name: "Sniper\nStock",
+					img: "attachments/Sniper_Stock.svg",
+					description: "Less ADS time\n less deploy/holser time\nLess raise/lower time\n less aim drift\nSlower drift speed",
+					tier: "t123",
+					url: "https://apexlegends.fandom.com/wiki/Attachment#Barrel_attachments,_Mags,_and_Stocks",
+				},
+			},
+			optics: {
+				holo: {
+					name: "1x\nHolo",
+					img: "attachments/1x_Holo.svg",
+					description: "Close range",
+					tier: "t1",
+					url: "https://apexlegends.fandom.com/wiki/1x_Holo",
+				},
+				hcogclassic: {
+					name: "1x\nHCOG \"Classic\"",
+					img: "attachments/1x_HCOG_Classic.svg",
+					description: "Close range",
+					tier: "t1",
+					url: "https://apexlegends.fandom.com/wiki/1x_HCOG_%22Classic%22",
+				},
+				variableholo: {
+					name: "1x-2x\nVariable Holo",
+					img: "attachments/1x-2x_Variable_Holo.svg",
+					description: "Close range",
+					tier: "t2",
+					url: "https://apexlegends.fandom.com/wiki/1x-2x_Variable_Holo",
+				},
+				hcogbruiser: {
+					name: "2x\nHCOG Bruiser",
+					img: "attachments/2x_HCOG_Bruiser.svg",
+					description: "Close range",
+					tier: "t2",
+					url: "https://apexlegends.fandom.com/wiki/2x_HCOG_%22Bruiser%22",
+				},
+				digithreat: {
+					name: "1x\nDigital Threat",
+					img: "attachments/1x_Digital_Threat.svg",
+					description: "Close range",
+					tier: "t4",
+					url: "https://apexlegends.fandom.com/wiki/1x_Digital_Threat",
+				},
+				hcogranger: {
+					name: "3x\nHCOG \"Ranger\"",
+					img: "attachments/3x_HCOG__Ranger_.svg",
+					description: "Mid range",
+					tier: "t3",
+					url: "https://apexlegends.fandom.com/wiki/3x_HCOG_%22Ranger%22",
+				},
+				variableaog: {
+					name: "2x-4x\nVariable AOG",
+					img: "attachments/2x-4x_Variable_AOG.svg",
+					description: "Mid range",
+					tier: "t3",
+					url: "https://apexlegends.fandom.com/wiki/2x-4x_Variable_AOG",
+				},
+				sniper: {
+					name: "6x\nSniper",
+					img: "attachments/6x_Sniper.svg",
+					description: "Long range",
+					tier: "t2",
+					url: "https://apexlegends.fandom.com/wiki/6x_Sniper",
+				},
+				variablesniper: {
+					name: "4x-8x\nVariable Sniper",
+					img: "attachments/4x-8x_Variable_Sniper.svg",
+					description: "Long range",
+					tier: "t3",
+					url: "https://apexlegends.fandom.com/wiki/4x-8x_Variable_Sniper",
+				},
+				digisniperthreat: {
+					name: "4x-10x\nDigital Sniper Threat",
+					img: "attachments/4x-10x_Digital_Sniper_Threat.svg",
+					description: "Long range",
+					tier: "t4",
+					url: "https://apexlegends.fandom.com/wiki/4x-10x_Digital_Sniper_Threat",
+				},
+			},
+			hopup: {
+				boostedloader: {
+					name: "Boosted\nLoader",
+					img: "attachments/Boosted_Loader.svg",
+					description: "Boosts reload time and overloads weapon when the magazine is almost empty",
+					tier: "t3",
+					url: "https://apexlegends.fandom.com/wiki/Hop-Up#Boosted_Loader",
+				},
+				doubletap: {
+					name: "Double Tap\nTrigger",
+					img: "attachments/Double_Tap_Trigger.svg",
+					description: "Unlocks alternate firemode that fires two shots per trigger pull",
+					tier: "t3",
+					url: "https://apexlegends.fandom.com/wiki/Hop-Up#Double_Tap_Trigger",
+				},
+				hammerpoint: {
+					name: "Hammerpoint\nRounds",
+					img: "attachments/Hammerpoint_Rounds.svg",
+					description: "Increases unshielded damage",
+					tier: "t3",
+					url: "https://apexlegends.fandom.com/wiki/Hop-Up#Hammerpoint_Rounds",
+				},
+				kineticfeeder: {
+					name: "Kinetic\nFeeder",
+					img: "attachments/Kinetic_Feeder.svg",
+					description: "Faster choke and automatic gradual reload while sliding",
+					tier: "t3",
+					url: "https://apexlegends.fandom.com/wiki/Hop-Up#Kinetic_Feeder",
+				},
+				skullpiercer: {
+					name: "Skullpiercer\nRifling",
+					img: "attachments/Skullpiercer_Rifling.svg",
+					description: "Increases headshot damage by 35%",
+					tier: "t4",
+					url: "https://apexlegends.fandom.com/wiki/Hop-Up#Skullpiercer_Rifling",
+				},
+				turbocharger: {
+					name: "Turbocharger",
+					img: "attachments/Turbocharger.svg",
+					description: "Removes or reduces weapon charge-up times",
+					tier: "t4",
+					url: "https://apexlegends.fandom.com/wiki/Hop-Up#Turbocharger",
+				},
+			}
+		}
+
+		$scope.bonus = {
+			shieldcell: {
+				name: "Shield\nCell",
+				img: "bonus/Shield_Cell.svg",
+				description: "Charge Sentinel to increase damage by 25% for 120 seconds",
+				url: "https://apexlegends.fandom.com/wiki/Regen#Shield_Cell",
+			},
+			thermite: {
+				name: "Thermite\nGrenade",
+				img: "bonus/Thermite_Grenade.svg",
+				description: "Increase Rampage LMG fire rate by 30% for 90 seconds",
+				url: "https://apexlegends.fandom.com/wiki/Grenade#Thermite_Grenade",
+			}
+		}
+
+		$scope.hlattach = weapon => {
+			Object.keys($scope.attachments).forEach(category => {
+				Object.keys($scope.attachments[category]).forEach(attachment => {
+					if (weapon == '') {
+						$scope.attachments[category][attachment].highlight = false;
+					} else if (category == "optics" && Object.keys(weapon.slots).includes("optics")) {
+						switch (attachment) {
+							case "hcogclassic":
+							case "holo":
+							case "variableholo":
+							case "hcogbruiser":
+								$scope.attachments[category][attachment].highlight = true;
+								break;
+							case "digithreat":
+								if (["SMG", "Shotgun", "Pistol"].includes(weapon.type)) {
+									$scope.attachments[category][attachment].highlight = true;
+								}
+								break;
+							case "variableaog":
+								if (["AR", "LMG", "Marksman", "Sniper"].includes(weapon.type) && weapon.name != "Bocek Compound Bow") {
+									$scope.attachments[category][attachment].highlight = true;
+								}
+								break;
+							case "hcogranger":
+								if (["AR", "LMG", "Marksman", "Sniper"].includes(weapon.type)) {
+									$scope.attachments[category][attachment].highlight = true;
+								}
+								break;
+							case "variablesniper":
+							case "sniper":
+							case "digisniperthreat":
+								if ("Sniper" == weapon.type) {
+									$scope.attachments[category][attachment].highlight = true;
+								}
+								break;
+						}
+					} else if (weapon.name == "Wingman" && ["skullpiercer", "boostedloader"].includes(attachment)) {
+						$scope.attachments[category][attachment].highlight = true;
+					} else if (weapon.name == "C.A.R. SMG" && ["lightmag", "heavymag"].includes(attachment)) {
+						$scope.attachments[category][attachment].highlight = true;
+					} else if (Object.keys(weapon.slots).includes(attachment)) {
+						$scope.attachments[category][attachment].highlight = true;
+					} else if ($scope.attachments[category][attachment].highlight) {
+						$scope.attachments[category][attachment].highlight = false;
+					}
+
+				})
+			});
+			if (weapon.name == "Sentinel") {
+				$scope.bonus.shieldcell.highlight = true;
+			} else if (weapon.name == "Rampage LMG") {
+				$scope.bonus.thermite.highlight = true;
+			} else {
+				$scope.bonus.shieldcell.highlight = false;
+				$scope.bonus.thermite.highlight = false;
+			}
+		}
+
+		$scope.hlweapona = (category, attachment) => {
+			$scope.weapons.forEach(weapon => {
+				if (category == "optics" && Object.keys(weapon.slots).includes("optics")) {
+					switch (attachment) {
+						case "hcogclassic":
+						case "holo":
+						case "variableholo":
+						case "hcogbruiser":
+							weapon.highlight = true;
+							weapon.slots.optics.highlight = true;
+							break;
+						case "digithreat":
+							if (["SMG", "Shotgun", "Pistol"].includes(weapon.type)) {
+								weapon.highlight = true;
+								weapon.slots.optics.highlight = true;
+							}
+							break;
+						case "variableaog":
+							if (["AR", "LMG", "Marksman", "Sniper"].includes(weapon.type) && weapon.name != "Bocek Compound Bow") {
+								weapon.highlight = true;
+								weapon.slots.optics.highlight = true;
+							}
+							break;
+						case "hcogranger":
+							if (["AR", "LMG", "Marksman", "Sniper"].includes(weapon.type)) {
+								weapon.highlight = true;
+								weapon.slots.optics.highlight = true;
+							}
+							break;
+						case "variablesniper":
+						case "sniper":
+						case "digisniperthreat":
+							if ("Sniper" == weapon.type) {
+								weapon.highlight = true;
+								weapon.slots.optics.highlight = true;
+							}
+							break;
+					}
+				} else if (weapon.name == "Wingman" && ["skullpiercer", "boostedloader"].includes(attachment)) {
+					weapon.highlight = true;
+					weapon.slots.hopup.highlight = true;
+				} else if (weapon.name == "C.A.R. SMG" && ["lightmag", "heavymag"].includes(attachment)) {
+					weapon.highlight = true;
+					weapon.slots.carmag.highlight = true;
+				} else if (Object.keys(weapon.slots).includes(attachment)) {
+					weapon.highlight = true;
+					weapon.slots[attachment].highlight = true;
+				} else if (weapon.highlight) {
+					weapon.highlight = false;
+					Object.keys(weapon.slots).forEach(slot => {
+						weapon.slots[slot].highlight = false;
+					})
+				}
+			})
+		}
+
+		$scope.hlweaponb = (bonus) => {
+			if (bonus) {
+				switch (bonus) {
+					case "shieldcell":
+						$scope.weapons.filter(w => w.name == "Sentinel")[0].highlight = true;
+						$scope.weapons.filter(w => w.name == "Sentinel")[0].bonus.shieldcell.highlight = true;
+						break;
+					case "thermite":
+						$scope.weapons.filter(w => w.name == "Rampage LMG")[0].highlight = true;
+						$scope.weapons.filter(w => w.name == "Rampage LMG")[0].bonus.thermite.highlight = true;
+						break;
+				}
+			} else {
+				$scope.weapons.filter(w => w.name == "Sentinel")[0].highlight = false;
+				$scope.weapons.filter(w => w.name == "Sentinel")[0].bonus.shieldcell.highlight = false;
+				$scope.weapons.filter(w => w.name == "Rampage LMG")[0].highlight = false;
+				$scope.weapons.filter(w => w.name == "Rampage LMG")[0].bonus.thermite.highlight = false;
+			}
+		}
+	}]);
+</script>
+<body>
+	<div ng-app='app'>
+		<div ng-controller='Controller' class='container'>
+			Sort by:
+			<label for="radio_type"><input type="radio" ng-model="ordering" value="type" id="radio_type">Type</label>
+			<label for="radio_ammo"><input type="radio" ng-model="ordering" value="ammo" id="radio_ammo">Ammo</label>
+			<label for="radio_name"><input type="radio" ng-model="ordering" value="name" id="radio_name">Name</label>
+			<br>
+			<br>
+			<a ng-repeat="weapon in weapons | orderBy:ordering" class="weapon hl{{weapon.highlight}}" title="{{weapon.description}}" href="{{weapon.url}}" target="_blank" ng-mouseover="hlattach(weapon)" ng-mouseleave="hlattach('')">
+				<span class="type">{{weapon.type}}</span>
+				<div class="icon">
+					<img ng-src="{{weapon.img}}">
+				</div>
+				<span class="name">{{weapon.name}}</span>
+				<br>
+				<div class="slots">
+					<img ng-repeat="(s,slot) in weapon.slots" ng-src="{{slots[s].img}}" class="slot hl{{slot.highlight}}">
+				</div>
+				<img ng-src="{{ammo[weapon.ammo]}}" class="ammo">
+				<div ng-repeat="(b,bon) in weapon.bonus" class="bonus hl{{bon.highlight}}">
+					<img ng-src="{{bonus[b].img}}">
+				</div>
+			</a>
+			<br>
+			<br>
+			<div class="attachments" ng-repeat="(c,category) in attachments">
+				<a ng-repeat="(a,attachment) in category" class="attachment {{attachment.tier}} hl{{attachment.highlight}}" title="{{attachment.description}}" href="{{attachment.url}}" target="_blank" ng-mouseover="hlweapona(c,a)" ng-mouseleave="hlweapona('')">
+					<img ng-src="{{attachment.img}}">
+					<br>
+					<span>{{attachment.name}}</span>
+				</a>
+			</div>
+			<div class="bonusitems">
+				<a ng-repeat="(b,bonus) in bonus" class="bonusitem t1 hl{{bonus.highlight}}" title="{{bonus.description}}" href="{{bonus.url}}" target="_blank" ng-mouseover="hlweaponb(b)" ng-mouseleave="hlweaponb('')">
+					<img ng-src="{{bonus.img}}">
+					<br>
+					<span>{{bonus.name}}</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</body>

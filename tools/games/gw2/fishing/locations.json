@@ -1,0 +1,134 @@
+{
+	"Amnytas": {
+		"timezone": "Tyria",
+		"holes": {
+			"Open Water": 650,
+			"Astral Fish": 700,
+			"Spire Fish": 750
+		}
+	},
+	"Ascalon": {
+		"timezone": "Tyria",
+		"holes": {
+			"Open Water": 400,
+			"Lake Fish": 450,
+			"Noxious Water Fish": 500
+		}
+	},
+	"Draconis Mons": {
+		"timezone": "Tyria",
+		"holes": {
+			"Open Water": 700,
+			"Volcanic Fish": 750
+		}
+	},
+	"Dragon's End": {
+		"timezone": "Cantha",
+		"holes": {
+			"Open Water": 250,
+			"Quarry Fish": 300,
+			"Cavern Fish": 350
+		}
+	},
+	"Echovald Wilds": {
+		"timezone": "Cantha",
+		"holes": {
+			"Open Water": 200,
+			"Deep Fishing Hole": 250,
+			"Lake Fish": 250,
+			"Rare Fish": 250,
+			"Grotto Fish": 300
+		}
+	},
+	"Elonian Mainland": {
+		"timezone": "Tyria",
+		"holes": {
+			"Open Water": 500,
+			"Desert Fish": 550
+		}
+	},
+	"Ember Bay": {
+		"timezone": "Tyria",
+		"holes": {
+			"Open Water": 650,
+			"Coastal Fish": 700
+		}
+	},
+	"Everywhere": {
+		"timezone": "Tyria",
+		"holes": {}
+	},
+	"Isles of Elona": {
+		"timezone": "Tyria",
+		"holes": {
+			"Open Water": 550,
+			"Shore Fish": 600,
+			"Offshore Fish": 650
+		}
+	},
+	"Kryta": {
+		"timezone": "Tyria",
+		"holes": {
+			"Open Water": 300,
+			"River Fish": 350,
+			"Lake Fish": 400,
+			"Coastal Fish": 450,
+			"Polluted Lake Fish": 500
+		}
+	},
+	"Maguuma Jungle": {
+		"timezone": "Tyria",
+		"holes": {
+			"Open Water": 450,
+			"Open Water (Rata Sum": 500,
+			"Freshwater Fish": 500,
+			"Saltwater Fish": 550
+		}
+	},
+	"New Kaineng City": {
+		"timezone": "Cantha",
+		"holes": {
+			"Open Water": 150,
+			"Coastal Fish": 200,
+			"Channel Fish": 250,
+			"Rare Fish": 250
+		}
+	},
+	"Ruins of Orr": {
+		"timezone": "Tyria",
+		"holes": {
+			"Open Water": 600,
+			"Shore Fish": 650,
+			"Offshore Fish": 700
+		}
+	},
+	"Seitung Province": {
+		"timezone": "Cantha",
+		"holes": {
+			"Shinota Blackfin": 0,
+			"Wreckage Site": 0,
+			"Open Water": 50,
+			"Rare Fish": 150,
+			"Shore Fish": 150,
+			"Offshore Fish": 200
+		}
+	},
+	"Shiverpeak Mountains": {
+		"timezone": "Tyria",
+		"holes": {
+			"Open Water": 350,
+			"Lake Fish": 400,
+			"Boreal Fish": 450
+		}
+	},
+	"Skywatch Archipelago": {
+		"timezone": "Tyria",
+		"holes": {
+			"Open Water": 500,
+			"Fractured Lake Fish": 550,
+			"Fractured Freshwater Fish": 600,
+			"Fractured Desert Fish": 600,
+			"Fractured Channel Fish": 650
+		}
+	}
+}

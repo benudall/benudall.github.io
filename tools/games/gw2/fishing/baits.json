@@ -1,0 +1,114 @@
+[
+	{
+		"name": "No Bait",
+		"fishingPower": 0,
+		"rarity": "",
+		"id": -1,
+		"chat_link": "",
+		"icon": ""
+	},
+	{
+		"name": "Fish Egg",
+		"fishingPower": 100,
+		"rarity": "Fine",
+		"id": 95886,
+		"chat_link": "[&AgGOdgEA]",
+		"icon": "https://render.guildwars2.com/file/D05006FE08960BB6C76E0D57D7D1D30DFE675DC4/2594404.png"
+	},
+	{
+		"name": "Glow Worm",
+		"fishingPower": 100,
+		"rarity": "Fine",
+		"id": 95622,
+		"chat_link": "[&AgGGdQEA]",
+		"icon": "https://render.guildwars2.com/file/532C57B5CD575D58F1782F46065ECD71B248D8B2/2594418.png"
+	},
+	{
+		"name": "Freshwater Minnow",
+		"fishingPower": 100,
+		"rarity": "Fine",
+		"id": 97064,
+		"chat_link": "[&AgEoewEA]",
+		"icon": "https://render.guildwars2.com/file/C702B61330B41F99B9FBE1CFD4666CD1C94F67D8/2594410.png"
+	},
+	{
+		"name": "Lava Beetle",
+		"fishingPower": 100,
+		"rarity": "Fine",
+		"id": 97872,
+		"chat_link": "[&AgFQfgEA]",
+		"icon": "https://render.guildwars2.com/file/FB9DA7C7D29CFCBA54060AC32245BB41FFD701A4/2594420.png"
+	},
+	{
+		"name": "Leech",
+		"fishingPower": 100,
+		"rarity": "Fine",
+		"id": 97880,
+		"chat_link": "[&AgFYfgEA]",
+		"icon": "https://render.guildwars2.com/file/2DF16CCF0520C6163E255197F1FF2E929FD2377E/2594406.png"
+	},
+	{
+		"name": "Lightning Bug",
+		"fishingPower": 100,
+		"rarity": "Fine",
+		"id": 95993,
+		"chat_link": "[&AgH5dgEA]",
+		"icon": "https://render.guildwars2.com/file/FFA7F31F9368353350029760BBCFDA234CFCB296/2594408.png"
+	},
+	{
+		"name": "Mackerel",
+		"fishingPower": 150,
+		"rarity": "Fine",
+		"id": 95943,
+		"chat_link": "[&AgHHdgEA]",
+		"icon": "https://render.guildwars2.com/file/E2467CC80F1F601EBCF6E4E54FB3939A6F016A9F/2594639.png"
+	},
+	{
+		"name": "Nightcrawler",
+		"fishingPower": 100,
+		"rarity": "Fine",
+		"id": 96475,
+		"chat_link": "[&AgHbeAEA]",
+		"icon": "https://render.guildwars2.com/file/2733D543CD3F13DB0AFE0925F97664050400D8D1/2594426.png"
+	},
+	{
+		"name": "Ramshorn Snail",
+		"fishingPower": 100,
+		"rarity": "Fine",
+		"id": 96186,
+		"chat_link": "[&AgG6dwEA]",
+		"icon": "https://render.guildwars2.com/file/6F57394B6E0474709E46E408495EB5E37CAC1BF7/2594412.png"
+	},
+	{
+		"name": "Sardine",
+		"fishingPower": 100,
+		"rarity": "Fine",
+		"id": 96984,
+		"chat_link": "[&AgHYegEA]",
+		"icon": "https://render.guildwars2.com/file/EF3C70047DE52598C0D13AFA98E4F6AD306B9968/2594422.png"
+	},
+	{
+		"name": "Scorpion",
+		"fishingPower": 100,
+		"rarity": "Fine",
+		"id": 97569,
+		"chat_link": "[&AgEhfQEA]",
+		"icon": "https://render.guildwars2.com/file/69FBAF9FEB15081730C8BA301C9E4AC3DB0208AF/2594424.png"
+	},
+	{
+		"name": "Shrimpling",
+		"fishingPower": 100,
+		"rarity": "Fine",
+		"id": 96319,
+		"chat_link": "[&AgE/eAEA]",
+		"icon": "https://render.guildwars2.com/file/361639FF68035375792CC59BCB535760E1671AF1/2594414.png"
+	},
+	{
+		"name": "Sparkfly Larva",
+		"fishingPower": 100,
+		"rarity": "Fine",
+		"id": 97745,
+		"chat_link": "[&AgHRfQEA]",
+		"icon": "https://render.guildwars2.com/file/5FE12904F1483BEA257CFE28041405340C20BE5E/2594416.png"
+	}
+]
