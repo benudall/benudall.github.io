@@ -1,0 +1,79 @@
+<style>
+body{
+    background: black;
+    color: white;
+}
+.flex > div{
+    display: flex;
+}
+.flex > div > div{
+    border: 1px solid white;
+    text-align: center;
+    position: relative;
+    padding: 5px;
+}
+.bold{
+    font-weight: bold;
+}
+</style>
+<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js'></script>
+<script>
+var app = angular.module('myApp', []);
+app.controller('MainController', ['$scope','$http', function($scope,$http) {
+    $http.get('https://api.warframestat.us/pc')
+        .then(res => {
+            $scope.json = res.data;
+        })
+}]);
+</script>
+
+<body ng-app='myApp'>
+	<div ng-controller='MainController'>
+        <div>
+            Simaris target:
+            <a href='https://warframe.fandom.com/wiki/{{json.simaris.target}}'>{{json.simaris.target}}</a>
+        </div>
+        <div class='nightwave flex'>
+            Nightwave
+            <br>
+            Daily
+            <div>
+                <div ng-repeat='challenge in json.nightwave.activeChallenges | filter:{isDaily:true}' class='challenge'>
+                    {{challenge.title}}<br><br>
+                    {{challenge.desc}}<br><br>
+                    {{challenge.reputation}}
+                </div>
+            </div>
+            Weekly
+            <div>
+                <div ng-repeat='challenge in json.nightwave.activeChallenges | filter:{isDaily:"!",isElite:false}' class='challenge'>
+                    {{challenge.title}}<br><br>
+                    {{challenge.desc}}<br><br>
+                    {{challenge.reputation}}
+                </div>
+            </div>
+            Weekly Elite
+            <div>
+                <div ng-repeat='challenge in json.nightwave.activeChallenges | filter:{isElite:true}' class='challenge'>
+                    {{challenge.title}}<br><br>
+                    {{challenge.desc}}<br><br>
+                    {{challenge.reputation}}
+                </div>
+            </div>
+        </div>
+        <div class='bounties'>
+            Bounties
+            <div ng-repeat='syndicate in json.syndicateMissions | filter:{jobs:[]}' class='flex'>
+                <span class='bold'>{{syndicate.syndicate}}</span>
+                <div>
+                    <div ng-repeat='job in syndicate.jobs'>
+                        {{job.enemyLevels[0]}}-{{job.enemyLevels[1]}}<br>
+                        {{job.standingStages}}<br>
+                        {{job.type}}<br><br>
+                        <span ng-repeat='reward in job.rewardPool'>{{reward}}<br></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
