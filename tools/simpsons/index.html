@@ -1,0 +1,171 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.0/angular.min.js"></script>
+<title>The Simpsons</title>
+<style>
+	body {
+		margin: 0;
+		background-color: #b6e0f9;
+		text-align: center;
+	}
+
+	span {
+		color: #fcde0e;
+		text-shadow:
+			-2px 2px 0px black,
+			1px 1px 0px black,
+			1px -1px 0px black,
+			-1px -1px 0px black;
+		font-family: "Comic Sans MS", sans-serif;
+		font-weight: bold;
+	}
+
+	span,
+	button {
+		font-size: 30px;
+	}
+
+	#background {
+		height: 100%;
+		width: 100%;
+		background-image: url("background.jpg");
+		background-attachment: fixed;
+		background-size: 100%;
+		position: fixed;
+		z-index: -1;
+		/* filter: blur(10px) opacity(0.5); */
+	}
+
+	#seasons,
+	#episodes,
+	#random {
+		margin-bottom: 15px;
+	}
+
+	button {
+		-webkit-text-stroke-width: 0px;
+		cursor: pointer;
+		border: 1px solid black;
+		background: white;
+	}
+
+	button:first-child {
+		border-top-left-radius: 10px;
+		border-bottom-left-radius: 10px;
+	}
+
+	button:last-child {
+		border-top-right-radius: 10px;
+		border-bottom-right-radius: 10px;
+	}
+
+	button.active {
+		background: #fcde0e;
+	}
+
+	.imgContainer {
+		display: inline-block;
+		position: relative;
+		border: 5px solid;
+		border-color: #fcde0e;
+		box-sizing: border-box;
+	}
+
+	.imgContainer:hover:after {
+		content: "▶";
+		display: block;
+		font-size: 100px;
+		color: white;
+		text-shadow:
+			-2px 2px 0px black,
+			1px 1px 0px black,
+			1px -1px 0px black,
+			-1px -1px 0px black;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+	button.toh,
+	.toh * {
+		color: red !important;
+		border-color: red;
+	}
+</style>
+<script>
+	var app = angular.module('app', []);
+	app.controller('mainCtrl', ['$scope', '$http', function ($scope, $http) {
+
+		$scope.safeApply = function (fn) {
+			var phase = this.$root.$$phase;
+			if (phase == '$apply' || phase == '$digest') {
+				if (fn && (typeof (fn) === 'function')) { fn(); }
+			} else { this.$apply(fn); }
+		};
+
+		$scope.randBetween = (a, b) => {
+			var mult = b - a + 1;
+			var min = a - 1
+			return Math.ceil(Math.random() * mult + min);
+		}
+
+		$scope.selectSeason = (s) => {
+			$scope.s = s;
+			$scope.season = $scope.seasons[s];
+			$scope.e = 0;
+			$scope.episode = $scope.season.episodes[$scope.e];
+			$scope.safeApply();
+		}
+
+		$scope.selectEpisode = (e) => {
+			$scope.e = e;
+			$scope.episode = $scope.season.episodes[e];
+			$scope.safeApply();
+		}
+
+		$scope.randomEpisode = () => {
+			$scope.s = $scope.randBetween(0, $scope.seasons.length - 1);
+			$scope.season = $scope.seasons[$scope.s];
+			$scope.e = $scope.randBetween(0, $scope.season.episodes.length - 1);
+			$scope.episode = $scope.season.episodes[$scope.e];
+		}
+		$scope.safeApply();
+
+		$http.get("data.json").then(res => {
+			$scope.seasons = res.data;
+		});
+
+		window.$scope = $scope;
+	}])
+</script>
+
+<body ng-app="app">
+	<div ng-controller="mainCtrl" class="mainCtrl">
+		<div id="background"></div>
+		<br>
+		<a href="https://www.disneyplus.com/en-gb/browse/entity-cac75c8f-a9e2-4d95-ac73-1cf1cc7b9568" target="_blank">
+			<img src="https://disney.images.edge.bamgrid.com/ripcut-delivery/v1/variant/disney/f03ab6e5-1ca2-441a-8b4a-3b755951b717/trim?format=webp&max=800%7C300">
+		</a>
+		<br>
+		<br>
+		<div id="seasons">
+			<button ng-repeat="(_s,season) in seasons" class="{{_s==s?'active':null}}" ng-click="selectSeason(_s)">S{{_s+1}}</button>
+		</div>
+		<div id="episodes">
+			<button ng-repeat="(_e,episode) in season.episodes" class="{{_e==e?'active':null}} {{episode.title.match('Treehouse of Horror') ? 'toh' : null}}" ng-click="selectEpisode(_e)">E{{_e+1}}</button>
+		</div>
+		<div id="random">
+			<button ng-click="randomEpisode()">Random</button>
+		</div>
+		<div ng-if="episode" class="{{episode.title.match('Treehouse of Horror') ? 'toh' : null}}">
+			<span>S{{s+1}}:E{{e+1}}</span>
+			<br>
+			<span>{{episode.title}}</span>
+			<br>
+			<a class="imgContainer" href="https://www.disneyplus.com{{episode.href}}" target="_blank">
+				<img ng-src="{{episode.img}}">
+			</a>
+			<br>
+			<span>{{episode.description}}</span>
+		</div>
+	</div>
+</body>

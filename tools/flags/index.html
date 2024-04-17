@@ -1,0 +1,261 @@
+﻿<meta name="description" content="Flags list with search filter">
+
+<style>
+td{
+	background:#eeeeee;
+	margin:5px;
+	text-align:center;
+}
+
+</style>
+
+Search/Filter: <input id="search" style="width:400px" onkeyup=filter()><br>
+Search for colors and shapes and "device" if it has a unique shape<br>
+Examples: stripes, cross, diagonal, canton, bicolor, triband, triangle...<br>
+<table border bgcolor="#eeeeee" cellspacing="10">
+<tr><td>Country</td><td>Flag</td></tr>
+<tr class="afghanistan black red green white device"><td>Afghanistan</td><td><img src="images/Afghanistan.png"></td></tr>
+<tr class="albania red black device"><td>Albania</td><td><img src="images/Albania.png"></td></tr>
+<tr class="algeria green red white moon device"><td>Algeria</td><td><img src="images/Algeria.png"></td></tr>
+<tr class="american samoa blue red white triangle device"><td>American Samoa</td><td><img src="images/American_Samoa.png"></td></tr>
+<tr class="andorra blue yellow red triband device"><td>Andorra</td><td><img src="images/Andorra.png"></td></tr>
+<tr class="angola red black yellow bicolor device"><td>Angola</td><td><img src="images/Angola.png"></td></tr>
+<tr class="anguilla canton blue red white device cross"><td>Anguilla</td><td><img src="images/Anguilla.png"></td></tr>
+<tr class="antigua and barbuda red black yellow blue white"><td>Antigua and Barbuda</td><td><img src="images/Antigua_and_Barbuda.png"></td></tr>
+<tr class="argentina blue white device triband"><td>Argentina</td><td><img src="images/Argentina.png"></td></tr>
+<tr class="armenia red blue yellow triband"><td>Armenia</td><td><img src="images/Armenia.png"></td></tr>
+<tr class="aruba blue yellow stripe star"><td>Aruba</td><td><img src="images/Aruba.png"></td></tr>
+<tr class="australia canton blue red white stars cross"><td>Australia</td><td><img src="images/Australia.png"></td></tr>
+<tr class="austria red white triband"><td>Austria</td><td><img src="images/Austria.png"></td></tr>
+<tr class="azerbaijan blue red green white moon device triband"><td>Azerbaijan</td><td><img src="images/Azerbaijan.png"></td></tr>
+<tr class="bahamas black blue yellor triangle stripes triband"><td>Bahamas</td><td><img src="images/Bahamas.png"></td></tr>
+<tr class="bahrain white red"><td>Bahrain</td><td><img src="images/Bahrain.png"></td></tr>
+<tr class="bangladesh green red circle"><td>Bangladesh</td><td><img src="images/Bangladesh.png"></td></tr>
+<tr class="barbados blue yellow device trident triband"><td>Barbados</td><td><img src="images/Barbados.png"></td></tr>
+<tr class="belarus red green stripes device"><td>Belarus</td><td><img src="images/Belarus.png"></td></tr>
+<tr class="belgium black yellow red triband"><td>Belgium</td><td><img src="images/Belgium.png"></td></tr>
+<tr class="belize red blue stripes device"><td>Belize</td><td><img src="images/Belize.png"></td></tr>
+<tr class="benin green yellow red stripes triband"><td>Benin</td><td><img src="images/Benin.png"></td></tr>
+<tr class="bermuda canton red white blue device cross"><td>Bermuda</td><td><img src="images/Bermuda.png"></td></tr>
+<tr class="bhutan yellow orange diagonal dragon device"><td>Bhutan</td><td><img src="images/Bhutan.png"></td></tr>
+<tr class="bolivia red yellow green device triband"><td>Bolivia</td><td><img src="images/Bolivia.png"></td></tr>
+<tr class="bosnia blue yellow stars"><td>Bosnia</td><td><img src="images/Bosnia.png"></td></tr>
+<tr class="botswana blue white black stripes"><td>Botswana</td><td><img src="images/Botswana.png"></td></tr>
+<tr class="brazil green yellow blue device"><td>Brazil</td><td><img src="images/Brazil.png"></td></tr>
+<tr class="british virgin islands canton blue red white device cross"><td>British Virgin Islands</td><td><img src="images/British_Virgin_Islands.png"></td></tr>
+<tr class="brunei yellow white black red stripes diagonal"><td>Brunei</td><td><img src="images/Brunei.png"></td></tr>
+<tr class="bulgaria white green red triband"><td>Bulgaria</td><td><img src="images/Bulgaria.png"></td></tr>
+<tr class="burkina faso red green yellow star bicolor"><td>Burkina Faso</td><td><img src="images/Burkina_Faso.png"></td></tr>
+<tr class="burundi red green white cross stars x"><td>Burundi</td><td><img src="images/Burundi.png"></td></tr>
+<tr class="cambodia blue red device stripes triband"><td>Cambodia</td><td><img src="images/Cambodia.png"></td></tr>
+<tr class="cameroon green red yellow star triband"><td>Cameroon</td><td><img src="images/Cameroon.png"></td></tr>
+<tr class="canada red white triband device"><td>Canada</td><td><img src="images/Canada.png"></td></tr>
+<tr class="cape verde blue white red stars stripes"><td>Cape Verde</td><td><img src="images/Cape_Verde.png"></td></tr>
+<tr class="cayman islands canton blue red white device cross"><td>Cayman Islands</td><td><img src="images/Cayman_Islands.png"></td></tr>
+<tr class="central african republic blue white green yellow red star stripes"><td>Central African Republic</td><td><img src="images/Central_African_Republic.png"></td></tr>
+<tr class="chad blue yellow red triband"><td>Chad</td><td><img src="images/Chad.png"></td></tr>
+<tr class="chile blue white red star stripes triband"><td>Chile</td><td><img src="images/Chile.png"></td></tr>
+<tr class="china red yellow stars"><td>China</td><td><img src="images/China.png"></td></tr>
+<tr class="christmas island blue green yellow stars device"><td>Christmas Island</td><td><img src="images/Christmas_Island.png"></td></tr>
+<tr class="colombia yellow blue red stripes triband"><td>Colombia</td><td><img src="images/Colombia.png"></td></tr>
+<tr class="comoros green yellow white red blue stars moon device stripes"><td>Comoros</td><td><img src="images/Comoros.png"></td></tr>
+<tr class="cook islands canton red white blue cross stars"><td>Cook Islands</td><td><img src="images/Cook_Islands.png"></td></tr>
+<tr class="costa rica blue white red stripes"><td>Costa Rica</td><td><img src="images/Costa_Rica.png"></td></tr>
+<tr class="croatia red white blue device tricolor"><td>Croatia</td><td><img src="images/Croatia.png"></td></tr>
+<tr class="cuba red blue white star triangle stripes"><td>Cuba</td><td><img src="images/Cuba.png"></td></tr>
+<tr class="cyprus white yellow green device"><td>Cyprus</td><td><img src="images/Cyprus.png"></td></tr>
+<tr class="northern cyprus white red moon star device"><td>Northern Cyprus</td><td><img src="images/Cyprus_Northern.png"></td></tr>
+<tr class="czech republic blue white red triangle"><td>Czech Republic</td><td><img src="images/Czech_Republic.png"></td></tr>
+<tr class="côte d'ivoire cote divoire orange white green triband"><td>Côte d'Ivoire</td><td><img src="Cote_d'Ivoire.png"></td></tr>
+<tr class="democratic republic of the congo blue yellow stars"><td>Democratic Republic of the Congo</td><td><img src="images/Democratic_Republic_of_the_Congo.png"></td></tr>
+<tr class="denmark red white cross"><td>Denmark</td><td><img src="images/Denmark.png"></td></tr>
+<tr class="djibouti white red blue green triangle star"><td>Djibouti</td><td><img src="images/Djibouti.png"></td></tr>
+<tr class="dominica green yellow black white red cross stripes device"><td>Dominica</td><td><img src="images/Dominica.png"></td></tr>
+<tr class="dominican republic blue white red cross"><td>Dominican Republic</td><td><img src="images/Dominican_Republic.png"></td></tr>
+<tr class="ecuador yellow blue red device stripes"><td>Ecuador</td><td><img src="images/Ecuador.png"></td></tr>
+<tr class="egypt red white black yellow device triband"><td>Egypt</td><td><img src="images/Egypt.png"></td></tr>
+<tr class="el salvador blue white device triband"><td>El Salvador</td><td><img src="images/El_Salvador.png"></td></tr>
+<tr class="equatorial guinea blue green white red triangle device"><td>Equatorial Guinea</td><td><img src="images/Equatorial_Guinea.png"></td></tr>
+<tr class="eritrea red green blue yellow device triangle"><td>Eritrea</td><td><img src="images/Eritrea.png"></td></tr>
+<tr class="estonia blue black white triband"><td>Estonia</td><td><img src="images/Estonia.png"></td></tr>
+<tr class="ethiopia green yellow red blue star device triband"><td>Ethiopia</td><td><img src="images/Ethiopia.png"></td></tr>
+<tr class="falkland islands canton red white blue cross device"><td>Falkland Islands</td><td><img src="images/Falkland_Islands.png"></td></tr>
+<tr class="faroe islands white blue red cross"><td>Faroe Islands</td><td><img src="images/Faroe_Islands.png"></td></tr>
+<tr class="fiji canton red white blue cross device"><td>Fiji</td><td><img src="images/Fiji.png"></td></tr>
+<tr class="finland white blue cross"><td>Finland</td><td><img src="images/Finland.png"></td></tr>
+<tr class="france blue white red triband"><td>France</td><td><img src="images/France.png"></td></tr>
+<tr class="french polynesia red white device stripes"><td>French Polynesia</td><td><img src="images/French_Polynesia.png"></td></tr>
+<tr class="gabon green yellow blue triband"><td>Gabon</td><td><img src="images/Gabon.png"></td></tr>
+<tr class="gambia red white blue green stripes triband"><td>Gambia</td><td><img src="images/Gambia.png"></td></tr>
+<tr class="georgia red white crosses"><td>Georgia</td><td><img src="images/Georgia.png"></td></tr>
+<tr class="germany black red yellow triband"><td>Germany</td><td><img src="images/Germany.png"></td></tr>
+<tr class="ghana red yellow green black star triband"><td>Ghana</td><td><img src="images/Ghana.png"></td></tr>
+<tr class="gibraltar white red device stripe"><td>Gibraltar</td><td><img src="images/Gibraltar.png"></td></tr>
+<tr class="greece canton blue white stripes cross"><td>Greece</td><td><img src="images/Greece.png"></td></tr>
+<tr class="greenland white red circle bicolor"><td>Greenland</td><td><img src="images/Greenland.png"></td></tr>
+<tr class="grenada red green yellow stars device"><td>Grenada</td><td><img src="images/Grenada.png"></td></tr>
+<tr class="guam red blue device"><td>Guam</td><td><img src="images/Guam.png"></td></tr>
+<tr class="guatemala blue white triband device"><td>Guatemala</td><td><img src="images/Guatemala.png"></td></tr>
+<tr class="guinea red yellow green triband"><td>Guinea</td><td><img src="images/Guinea.png"></td></tr>
+<tr class="guinea bissau red yellow green black star triband"><td>Guinea Bissau</td><td><img src="images/Guinea_Bissau.png"></td></tr>
+<tr class="guyana red yellow green black white triangles"><td>Guyana</td><td><img src="images/Guyana.png"></td></tr>
+<tr class="haiti blue red bicolor"><td>Haiti</td><td><img src="images/Haiti.png"></td></tr>
+<tr class="honduras blue white stars triband"><td>Honduras</td><td><img src="images/Honduras.png"></td></tr>
+<tr class="hong kong red white device"><td>Hong Kong</td><td><img src="images/Hong_Kong.png"></td></tr>
+<tr class="hungary red white green triband"><td>Hungary</td><td><img src="images/Hungary.png"></td></tr>
+<tr class="iceland blue white red cross"><td>Iceland</td><td><img src="images/Iceland.png"></td></tr>
+<tr class="india orange white green device triband"><td>India</td><td><img src="images/India.png"></td></tr>
+<tr class="indonesia red white bicolor"><td>Indonesia</td><td><img src="images/Indonesia.png"></td></tr>
+<tr class="iran green white red device triband"><td>Iran</td><td><img src="images/Iran.png"></td></tr>
+<tr class="iraq red white black green stars device triband"><td>Iraq</td><td><img src="images/Iraq.png"></td></tr>
+<tr class="ireland green white orange triband"><td>Ireland</td><td><img src="images/Ireland.png"></td></tr>
+<tr class="israel blue white star device stripes"><td>Israel</td><td><img src="images/Israel.png"></td></tr>
+<tr class="italy green white red triband"><td>Italy</td><td><img src="images/Italy.png"></td></tr>
+<tr class="jamaica green yellow black cross triangles"><td>Jamaica</td><td><img src="images/Jamaica.png"></td></tr>
+<tr class="japan white red circle"><td>Japan</td><td><img src="images/Japan.png"></td></tr>
+<tr class="jordan red black white green star triangle device triband"><td>Jordan</td><td><img src="images/Jordan.png"></td></tr>
+<tr class="kazakhstan blue orange device"><td>Kazakhstan</td><td><img src="images/Kazakhstan.png"></td></tr>
+<tr class="kenya black red green white stripes device"><td>Kenya</td><td><img src="images/Kenya.png"></td></tr>
+<tr class="kiribati red white blue yellow waves device"><td>Kiribati</td><td><img src="images/Kiribati.png"></td></tr>
+<tr class="kuwait black green white red triband"><td>Kuwait</td><td><img src="images/Kuwait.png"></td></tr>
+<tr class="kyrgyzstan red yellow device"><td>Kyrgyzstan</td><td><img src="images/Kyrgyzstan.png"></td></tr>
+<tr class="laos red blue white circle stripes"><td>Laos</td><td><img src="images/Laos.png"></td></tr>
+<tr class="latvia red white stripes"><td>Latvia</td><td><img src="images/Latvia.png"></td></tr>
+<tr class="lebanon orange white green device"><td>Lebanon</td><td><img src="images/Lebanon.png"></td></tr>
+<tr class="lesotho orange white blue green device diagonal"><td>Lesotho</td><td><img src="images/Lesotho.png"></td></tr>
+<tr class="liberia blue red white star stripes"><td>Liberia</td><td><img src="images/Liberia.png"></td></tr>
+<tr class="libya green plain"><td>Libya</td><td><img src="images/Libya.png"></td></tr>
+<tr class="liechtenstein blue red bicolor device crown"><td>Liechtenstein</td><td><img src="images/Liechtenstein.png"></td></tr>
+<tr class="lithuania yellow green red triband"><td>Lithuania</td><td><img src="images/Lithuania.png"></td></tr>
+<tr class="luxembourg red white blue triband"><td>Luxembourg</td><td><img src="images/Luxembourg.png"></td></tr>
+<tr class="macao green white yellow stars device"><td>Macao</td><td><img src="images/Macao.png"></td></tr>
+<tr class="macedonia yellow red device rays"><td>Macedonia</td><td><img src="images/Macedonia.png"></td></tr>
+<tr class="madagascar white red green triband"><td>Madagascar</td><td><img src="images/Madagascar.png"></td></tr>
+<tr class="malawi black red green device"><td>Malawi</td><td><img src="images/Malawi.png"></td></tr>
+<tr class="malaysia canton yellow blue red white stripes moon device"><td>Malaysia</td><td><img src="images/Malaysia.png"></td></tr>
+<tr class="maldives red green white moon device"><td>Maldives</td><td><img src="images/Maldives.png"></td></tr>
+<tr class="mali green yellow red triband"><td>Mali</td><td><img src="images/Mali.png"></td></tr>
+<tr class="malta white red device bicolor"><td>Malta</td><td><img src="images/Malta.png"></td></tr>
+<tr class="marshall islands blue orange white star diagonal device"><td>Marshall Islands</td><td><img src="images/Marshall_Islands.png"></td></tr>
+<tr class="martinique blue white cross devices snakes"><td>Martinique</td><td><img src="images/Martinique.png"></td></tr>
+<tr class="mauritania green yellow star moon"><td>Mauritania</td><td><img src="images/Mauritania.png"></td></tr>
+<tr class="mauritius red blue yellow green stripes"><td>Mauritius</td><td><img src="images/Mauritius.png"></td></tr>
+<tr class="mexico green white red device triband"><td>Mexico</td><td><img src="images/Mexico.png"></td></tr>
+<tr class="micronesia blue white stars"><td>Micronesia</td><td><img src="images/Micronesia.png"></td></tr>
+<tr class="moldova blue yellow red device triband"><td>Moldova</td><td><img src="images/Moldova.png"></td></tr>
+<tr class="monaco red white bicolor"><td>Monaco</td><td><img src="images/Monaco.png"></td></tr>
+<tr class="mongolia red blue yellow device"><td>Mongolia</td><td><img src="images/Mongolia.png"></td></tr>
+<tr class="montserrat canton red white blue cross device"><td>Montserrat</td><td><img src="images/Montserrat.png"></td></tr>
+<tr class="morocco red green star device"><td>Morocco</td><td><img src="images/Morocco.png"></td></tr>
+<tr class="mozambique red green black white yellow stripes triangle device"><td>Mozambique</td><td><img src="images/Mozambique.png"></td></tr>
+<tr class="myanmar canton blue red white device stars"><td>Myanmar</td><td><img src="images/Myanmar.png"></td></tr>
+<tr class="namibia blue white red green yellow stripes device diagonal"><td>Namibia</td><td><img src="images/Namibia.png"></td></tr>
+<tr class="nauru blue yellow star device stripe"><td>Nauru</td><td><img src="images/Nauru.png"></td></tr>
+<tr class="nepal triangle blue red devices white"><td>Nepal</td><td><img src="images/Nepal.png"></td></tr>
+<tr class="netherlands red white blue triband"><td>Netherlands</td><td><img src="images/Netherlands.png"></td></tr>
+<tr class="netherlands antilles white red blue stars"><td>Netherlands Antilles</td><td><img src="images/Netherlands_Antilles.png"></td></tr>
+<tr class="new zealand canton red white blue stars"><td>New Zealand</td><td><img src="images/New_Zealand.png"></td></tr>
+<tr class="nicaragua blue white triband device"><td>Nicaragua</td><td><img src="images/Nicaragua.png"></td></tr>
+<tr class="niger orange white green circle triband"><td>Niger</td><td><img src="images/Niger.png"></td></tr>
+<tr class="nigeria green white triband"><td>Nigeria</td><td><img src="images/Nigeria.png"></td></tr>
+<tr class="niue canton red white blue yellow stars"><td>Niue</td><td><img src="images/Niue.png"></td></tr>
+<tr class="norfolk island green white tree device"><td>Norfolk Island</td><td><img src="images/Norfolk_Island.png"></td></tr>
+<tr class="north korea blue white red circle star device stripes"><td>North Korea</td><td><img src="images/North_Korea.png"></td></tr>
+<tr class="norway red white blue cross"><td>Norway</td><td><img src="images/Norway.png"></td></tr>
+<tr class="oman red white green device"><td>Oman</td><td><img src="images/Oman.png"></td></tr>
+<tr class="pakistan white green moon star device"><td>Pakistan</td><td><img src="images/Pakistan.png"></td></tr>
+<tr class="palau blue yellow circle"><td>Palau</td><td><img src="images/Palau.png"></td></tr>
+<tr class="panama white red blue stars"><td>Panama</td><td><img src="images/Panama.png"></td></tr>
+<tr class="papua new guinea orange yellow white black diagonal device"><td>Papua New Guinea</td><td><img src="images/Papua_New_Guinea.png"></td></tr>
+<tr class="paraguay red white blue triband device"><td>Paraguay</td><td><img src="images/Paraguay.png"></td></tr>
+<tr class="peru red white triband"><td>Peru</td><td><img src="images/Peru.png"></td></tr>
+<tr class="philippines white yellow red blue triangle device"><td>Philippines</td><td><img src="images/Philippines.png"></td></tr>
+<tr class="pitcairn islands canton red white blue device"><td>Pitcairn Islands</td><td><img src="images/Pitcairn_Islands.png"></td></tr>
+<tr class="poland white red bicolor"><td>Poland</td><td><img src="images/Poland.png"></td></tr>
+<tr class="portugal green red device"><td>Portugal</td><td><img src="images/Portugal.png"></td></tr>
+<tr class="puerto rico blue red white star triangle stripes"><td>Puerto Rico</td><td><img src="images/Puerto_Rico.png"></td></tr>
+<tr class="qatar white red"><td>Qatar</td><td><img src="images/Qatar.png"></td></tr>
+<tr class="republic of the congo green yellow red diagonal stripe"><td>Republic of the Congo</td><td><img src="images/Republic_of_the_Congo.png"></td></tr>
+<tr class="romania blue yellow red triband"><td>Romania</td><td><img src="images/Romania.png"></td></tr>
+<tr class="russian federation white blue red triband"><td>Russian Federation</td><td><img src="images/Russian_Federation.png"></td></tr>
+<tr class="rwanda blue yellow green device stripes"><td>Rwanda</td><td><img src="images/Rwanda.png"></td></tr>
+<tr class="saint kitts and nevis green yelow black white red diagonal stripes stars"><td>Saint Kitts and Nevis</td><td><img src="images/Saint_Kitts_and_Nevis.png"></td></tr>
+<tr class="saint lucia blue white bvlack yellow triangles"><td>Saint Lucia</td><td><img src="images/Saint_Lucia.png"></td></tr>
+<tr class="saint pierre blue red white black yellow green devices boat"><td>Saint Pierre</td><td><img src="images/Saint_Pierre.png"></td></tr>
+<tr class="saint vicent and the grenadines blue yellow green device diamonds"><td>Saint Vicent and the Grenadines</td><td><img src="images/Saint_Vicent_and_the_Grenadines.png"></td></tr>
+<tr class="samoa canton blue white red stars"><td>Samoa</td><td><img src="images/Samoa.png"></td></tr>
+<tr class="san marino white blue bicolor"><td>San Marino</td><td><img src="images/San_Marino.png"></td></tr>
+<tr class="sao tomé and príncipe tome red green yellow black stars trianble stripes"><td>Sao Tomé and Príncipe</td><td><img src="images/Sao_Tome_and_Principe.png"></td></tr>
+<tr class="saudi arabia green white sword device"><td>Saudi Arabia</td><td><img src="images/Saudi_Arabia.png"></td></tr>
+<tr class="senegal green yellow red star triband"><td>Senegal</td><td><img src="images/Senegal.png"></td></tr>
+<tr class="serbia and montenegro blue white red triband"><td>Serbia and Montenegro</td><td><img src="images/Serbia_and_Montenegro.png"></td></tr>
+<tr class="seychelles blue yellow reed white green"><td>Seychelles</td><td><img src="images/Seychelles.png"></td></tr>
+<tr class="sierra leone green white blue triband"><td>Sierra Leone</td><td><img src="images/Sierra_Leone.png"></td></tr>
+<tr class="singapore red white moon stars device"><td>Singapore</td><td><img src="images/Singapore.png"></td></tr>
+<tr class="slovakia white blue red device triband"><td>Slovakia</td><td><img src="images/Slovakia.png"></td></tr>
+<tr class="slovenia white blue red device triband"><td>Slovenia</td><td><img src="images/Slovenia.png"></td></tr>
+<tr class="soloman islands blue yellow green stars diagonal stripe"><td>Soloman Islands</td><td><img src="images/Soloman_Islands.png"></td></tr>
+<tr class="somalia blue white star"><td>Somalia</td><td><img src="images/Somalia.png"></td></tr>
+<tr class="south africa black yellow green white red blue triangle"><td>South Africa</td><td><img src="images/South_Africa.png"></td></tr>
+<tr class="south georgia canton red white blue device"><td>South Georgia</td><td><img src="images/South_Georgia.png"></td></tr>
+<tr class="south korea white black red blue devices"><td>South Korea</td><td><img src="images/South_Korea.png"></td></tr>
+<tr class="soviet union red yellow device star"><td>Soviet Union</td><td><img src="images/Soviet_Union.png"></td></tr>
+<tr class="spain red yellow stripes"><td>Spain</td><td><img src="images/Spain.png"></td></tr>
+<tr class="sri lanka yellow green orange red device"><td>Sri Lanka</td><td><img src="images/Sri_Lanka.png"></td></tr>
+<tr class="sudan green red white black triangle"><td>Sudan</td><td><img src="images/Sudan.png"></td></tr>
+<tr class="suriname green white red yellow star stripes triband"><td>Suriname</td><td><img src="images/Suriname.png"></td></tr>
+<tr class="swaziland blue yellow red device stripes"><td>Swaziland</td><td><img src="images/Swaziland.png"></td></tr>
+<tr class="sweden blue yellow cross"><td>Sweden</td><td><img src="images/Sweden.png"></td></tr>
+<tr class="switzerland red white cross square"><td>Switzerland</td><td><img src="images/Switzerland.png"></td></tr>
+<tr class="syria red white green black stars triband"><td>Syria</td><td><img src="images/Syria.png"></td></tr>
+<tr class="taiwan canton blue red white device"><td>Taiwan</td><td><img src="images/Taiwan.png"></td></tr>
+<tr class="tajikistan red white green yellow device triband"><td>Tajikistan</td><td><img src="images/Tajikistan.png"></td></tr>
+<tr class="tanzania green yellow black blue diagonal stripes"><td>Tanzania</td><td><img src="images/Tanzania.png"></td></tr>
+<tr class="thailand red white blue stripes"><td>Thailand</td><td><img src="images/Thailand.png"></td></tr>
+<tr class="tibet yellow red blue device"><td>Tibet</td><td><img src="images/Tibet.png"></td></tr>
+<tr class="timor-leste black white yellow red triangles star"><td>Timor-Leste</td><td><img src="images/Timor-Leste.png"></td></tr>
+<tr class="togo canton red white green yellow star stripes"><td>Togo</td><td><img src="images/Togo.png"></td></tr>
+<tr class="tonga canton red white cross"><td>Tonga</td><td><img src="images/Tonga.png"></td></tr>
+<tr class="trinidad and tobago red white black diagonal stripes"><td>Trinidad and Tobago</td><td><img src="images/Trinidad_and_Tobago.png"></td></tr>
+<tr class="tunisia red white moon star device circle"><td>Tunisia</td><td><img src="images/Tunisia.png"></td></tr>
+<tr class="turkey red white moon star device"><td>Turkey</td><td><img src="images/Turkey.png"></td></tr>
+<tr class="turkmenistan green stars moon device"><td>Turkmenistan</td><td><img src="images/Turkmenistan.png"></td></tr>
+<tr class="turks and caicos islands canton red white blue device"><td>Turks and Caicos Islands</td><td><img src="images/Turks_and_Caicos_Islands.png"></td></tr>
+<tr class="tuvalu canton red white blue yellow stars"><td>Tuvalu</td><td><img src="images/Tuvalu.png"></td></tr>
+<tr class="uae red green white black stripes"><td>UAE</td><td><img src="images/UAE.png"></td></tr>
+<tr class="uganda black yellow orange stripes device"><td>Uganda</td><td><img src="images/Uganda.png"></td></tr>
+<tr class="united kingdom red white blue cross"><td>United Kingdom</td><td><img src="images/United_Kingdom.png"></td></tr>
+<tr class="ukraine blue yellow bicolor"><td>Ukraine</td><td><img src="images/Ukraine.png"></td></tr>
+<tr class="uruguay canton white blue yellow device stripes"><td>Uruguay</td><td><img src="images/Uruguay.png"></td></tr>
+<tr class="united states of america usa canton red white blue stars stripes"><td>United States of America</td><td><img src="images/United_States_of_America.png"></td></tr>
+<tr class="us virgin islands white yellow red blue devices"><td>US Virgin Islands</td><td><img src="images/US_Virgin_Islands.png"></td></tr>
+<tr class="uzbekistan blue white green red moon stars stripes triband"><td>Uzbekistan</td><td><img src="images/Uzbekistan.png"></td></tr>
+<tr class="vanuatu black yellow red green device"><td>Vanuatu</td><td><img src="images/Vanuatu.png"></td></tr>
+<tr class="vatican city yellow white device square bicolor"><td>Vatican City</td><td><img src="images/Vatican_City.png"></td></tr>
+<tr class="venezuela yellow blue red white stars triband"><td>Venezuela</td><td><img src="images/Venezuela.png"></td></tr>
+<tr class="vietnam red yellow star"><td>Vietnam</td><td><img src="images/Vietnam.png"></td></tr>
+<tr class="wallis and futuna canton red white blue cross"><td>Wallis and Futuna</td><td><img src="images/Wallis_and_Futuna.png"></td></tr>
+<tr class="yemen red white black triband"><td>Yemen</td><td><img src="images/Yemen.png"></td></tr>
+<tr class="zambia green red black orange stripes device"><td>Zambia</td><td><img src="images/Zambia.png"></td></tr>
+<tr class="zimbabwe white black green yellow red stripes device triangle"><td>Zimbabwe</td><td><img src="images/Zimbabwe.png"></td></tr>
+</table>
+
+<script>
+var rows=document.getElementsByTagName('tr');
+function filter(){
+	var s=document.getElementById('search').value;
+	var sa=s.split(" ");
+	for(x=1;x<rows.length;x++){
+		for(y=0;y<sa.length;y++){
+			if(rows[x].className.indexOf(sa[y])==-1){
+				rows[x].hidden=true;
+				break;
+			}
+			else{
+				rows[x].hidden=false;
+			}
+		}
+	}
+}
+
+</script>

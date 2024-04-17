@@ -1,0 +1,157 @@
+<style>
+body{
+	margin: 0;
+}
+table{
+	height: 100%;
+	width: 100%;
+	text-align: center;
+}
+span{
+	display: inline-block;
+	width: 100%;
+}
+input{
+	width: 100%;
+	margin: 0;
+	text-align: center;
+}
+input[type=checkbox]:not(checked):after{
+	content:"0";
+	position: relative;
+	left: 20px;
+}
+input[type=checkbox]:checked:after{
+	content:"1";
+	position: relative;
+	left: 20px;
+}
+</style>
+<table>
+	<tr>
+		<td>
+		</td>
+		<td>
+			<span style=color:green>Elliptical Arc</span>
+			<br>
+			<input id=ev disabled value="M 15 15 A 50 50 0 0 1 85 15">
+			<br>
+			<span>rx</span>
+			<br>
+			<input type=range id=ex oninput=e() value=50 min=0 max=100>
+			<br>
+			<input id=exv disabled value=50>
+			<br>
+			<span>ry</span>
+			<br>
+			<input type=range id=ey oninput=e() value=50 min=0 max=100>
+			<br>
+			<input id=eyv disabled value=50>
+			<br>
+			<span>large-arc-flag</span>
+			<br>
+			<input type=checkbox onchange=e() id=elaf>
+			<br>
+			<span>sweep-flag</span>
+			<br>
+			<input type=checkbox onchange=e() id=esf>
+		</td>
+		<td>
+		</td>
+	</tr>
+	<tr>
+		<td width=25%>
+			<span style=color:red>Quadratic Bézier Curve</span>
+			<br>
+			<input id=qv disabled value="M 15 15 Q 0 50 15 85">
+			<br>
+			<span>x</span>
+			<br>
+			<input type=range id=qx oninput=q() value=0 min=-100 max=100>
+			<br>
+			<input id=qxv disabled value=0>
+			<br>
+			<span>y</span>
+			<br>
+			<input type=range id=qy oninput=q() value=50 min=0 max=100>
+			<br>
+			<input id=qyv disabled value=50>
+		</td>
+		<td width=50%>
+			<svg viewBox="-20 -20 140 140" version="1.1" xmlns="http://www.w3.org/2000/svg">
+				<circle cx="50" cy="50" r="50" fill="black" />
+				<g fill="none">
+					<path id=q d="M 15 15 Q 0 50 15 85" stroke="red" stroke-width="1" />
+					<circle id=qc cx="0" cy="50" r="1" fill="red"/>
+					<path id=e d="M 15 15 A 50 50 0 0 1 85 15" stroke="green" stroke-width="1" />
+					<circle id=ec cx="50" cy="50" r="1" fill="green"/>
+					<path id=c d="M 85 15 C 100 15 100 85 85 85" stroke="blue" stroke-width="1" />
+					<circle id=c1 cx="100" cy="15" r="1" fill="blue"/>
+					<circle id=c2 cx="100" cy="85" r="1" fill="blue"/>
+					
+				</g>
+			</svg>
+		</td>
+		<td width=25%>
+			<span style=color:blue>Cubic Bézier Curve</span>
+			<br>
+			<input id=cv disabled value="M 85 15 C 100 15 100 85 85 85">
+			<br>
+			<span>x1</span>
+			<br>
+			<input type=range id=cx1 oninput=c() value=100 min=0 max=200>
+			<br>
+			<input id=cx1v disabled value=100>
+			<br>
+			<span>y1</span>
+			<br>
+			<input type=range id=cy1 oninput=c() value=15 min=0 max=100>
+			<br>
+			<input id=cy1v disabled value=15>
+			<br>
+			<span>x2</span>
+			<br>
+			<input type=range id=cx2 oninput=c() value=100 min=0 max=200>
+			<br>
+			<input id=cx2v disabled value=100>
+			<br>
+			<span>y2</span>
+			<br>
+			<input type=range id=cy2 oninput=c() value=85 min=0 max=100>
+			<br>
+			<input id=cy2v disabled value=85>
+		</td>
+	</tr>
+</table>
+<script>
+function q(){
+	qx=document.getElementById("qxv").value=document.getElementById("qx").value;
+	qy=document.getElementById("qyv").value=document.getElementById("qy").value;
+	document.getElementById("qc").setAttribute("cx",document.getElementById("qx").value);
+	document.getElementById("qc").setAttribute("cy",document.getElementById("qy").value);
+	document.getElementById("q").setAttribute("d","M 15 15 Q "+qx+" "+qy+" 15 85");
+	document.getElementById("qv").value=("M 15 15 Q "+qx+" "+qy+" 15 85");
+}
+function e(){
+	ex=document.getElementById("exv").value=document.getElementById("ex").value;
+	ey=document.getElementById("eyv").value=document.getElementById("ey").value;
+	elaf=document.getElementById("elaf").checked?1:0;
+	esf=document.getElementById("esf").checked?1:0;
+	document.getElementById("ec").setAttribute("cx",document.getElementById("ex").value);
+	document.getElementById("ec").setAttribute("cy",document.getElementById("ey").value);
+	document.getElementById("e").setAttribute("d","M 15 15 A "+ex+" "+ey+" "+elaf+" "+esf+" 1 85 15");
+	document.getElementById("ev").value=("M 15 15 A "+ex+" "+ey+" "+elaf+" "+esf+" 1 85 15");
+}
+function c(){
+	cx1=document.getElementById("cx1v").value=document.getElementById("cx1").value;
+	cy1=document.getElementById("cy1v").value=document.getElementById("cy1").value;
+	cx2=document.getElementById("cx2v").value=document.getElementById("cx2").value;
+	cy2=document.getElementById("cy2v").value=document.getElementById("cy2").value;
+	document.getElementById("c1").setAttribute("cx",document.getElementById("cx1").value);
+	document.getElementById("c1").setAttribute("cy",document.getElementById("cy1").value);
+	document.getElementById("c2").setAttribute("cx",document.getElementById("cx2").value);
+	document.getElementById("c2").setAttribute("cy",document.getElementById("cy2").value);
+	document.getElementById("c").setAttribute("d","M 85 15 C "+cx1+" "+cy1+" "+cx2+" "+cy2+" 85 85");
+	document.getElementById("cv").value=("M 85 15 C "+cx1+" "+cy1+" "+cx2+" "+cy2+" 85 85");
+}
+</script>
