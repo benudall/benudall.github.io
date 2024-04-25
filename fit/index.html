@@ -56,6 +56,11 @@
 	table td#getData {
 		text-align: center;
 	}
+
+	select,
+	input[type=number] {
+		width: 100%;
+	}
 </style>
 <script>
 	var app = angular.module('app', []);
@@ -121,9 +126,11 @@
 			{ label: "week", value: 7 * 24 * 60 * 60 * 1000 },
 		]
 		$scope.interval = 60 * 60 * 1000;
+		$scope.target = 6000;
 
 		$scope.changeStart = (val) => { $scope.start = val }
 		$scope.changeEnd = (val) => { $scope.end = val }
+		$scope.changeTarget = (val) => { $scope.target = val }
 
 		$scope.adjustDay = (delta) => {
 			var start = new Date($scope.start);
@@ -178,7 +185,6 @@
 		}
 		$scope.setDate("today");
 
-
 		$scope.formatData = (bucket) => {
 			var datasets = [[], []];
 			var totals = [0, 0];
@@ -209,10 +215,8 @@
 			).then(res => {
 				$scope.rawSteps = res.data;
 				var chartData = $scope.formatData(res.data.bucket);
-				$scope.totalSteps = 0;
-				chartData[0].forEach(x => $scope.totalSteps += x.y);
-				$scope.totalCalories = 0;
-				chartData[1].forEach(x => $scope.totalCalories += x.y);
+				$scope.totalSteps = chartData[0][chartData[0].length - 1].y
+				$scope.totalCalories = chartData[1][chartData[1].length - 1].y
 
 				$scope.addDataset({
 					label: `Steps (${$scope.totalSteps.toLocaleString()})`,
@@ -221,7 +225,7 @@
 					showLine: true,
 					pointHitRadius: 100,
 					data: chartData[0]
-				})
+				});
 				$scope.addDataset({
 					label: `Calories Expended (${Math.round($scope.totalCalories).toLocaleString()})`,
 					backgroundColor: '#FF000080',
@@ -230,7 +234,18 @@
 					pointHitRadius: 100,
 					data: chartData[1],
 					yAxisID: "right"
-				})
+				});
+				$scope.addDataset({
+					label: `Target (${$scope.target.toLocaleString()})`,
+					backgroundColor: '#00FF0080',
+					borderColor: "#00FF0080",
+					showLine: true,
+					pointHitRadius: 100,
+					data: [
+						{ x: chartData[0][0].x, y: $scope.target },
+						{ x: chartData[0][chartData[0].length - 1].x, y: $scope.target }
+					]
+				});
 				$scope.safeApply();
 			}).catch(err => {
 				console.error(err);
@@ -362,12 +377,20 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="3">Interval:</td>
-					<td>
+					<td>Interval:</td>
+					<td colspan="2">
 						<select ng-model="interval" ng-options="item.value as item.label for item in intervals"></select>
 					</td>
-					<td id="getData" colspan="3">
+					<td id="getData" colspan="4" rowspan="2">
 						<button ng-click="getData()" class="max">Get Data</button>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Target
+					</td>
+					<td colspan="2">
+						<input type="number" ng-model="target" ng-change="changeTarget(target)">
 					</td>
 				</tr>
 			</table>
