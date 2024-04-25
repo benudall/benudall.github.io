@@ -34,6 +34,10 @@
 		width: 50px;
 	}
 
+	#main{
+		display: inline-block;
+	}
+
 	table {
 		display: inline-block;
 	}
@@ -48,7 +52,7 @@
 		display: inline-block;
 	}
 
-	button.max {
+	.max {
 		height: 100%;
 		width: 100%;
 	}
@@ -237,8 +241,8 @@
 				});
 				$scope.addDataset({
 					label: `Target (${$scope.target.toLocaleString()})`,
-					backgroundColor: '#00FF0080',
-					borderColor: "#00FF0080",
+					backgroundColor: '#00800080',
+					borderColor: "#00800080",
 					showLine: true,
 					pointHitRadius: 100,
 					data: [
@@ -334,7 +338,7 @@
 				</button>
 			</a>
 		</div>
-		<div ng-if="signedIn">
+		<div ng-if="signedIn" id="main">
 			<table>
 				<tr>
 					<td colspan="7" class="center">
@@ -395,7 +399,7 @@
 				</tr>
 			</table>
 			<br>
-			<canvas id="chart" style="display:inline-block"></canvas>
+			<canvas id="chart"></canvas>
 		</div>
 	</div>
 </body>
