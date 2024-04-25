@@ -34,7 +34,7 @@
 		width: 50px;
 	}
 
-	#main{
+	#main {
 		display: inline-block;
 	}
 
@@ -132,10 +132,6 @@
 		$scope.interval = 60 * 60 * 1000;
 		$scope.target = 6000;
 
-		$scope.changeStart = (val) => { $scope.start = val }
-		$scope.changeEnd = (val) => { $scope.end = val }
-		$scope.changeTarget = (val) => { $scope.target = val }
-
 		$scope.adjustDay = (delta) => {
 			var start = new Date($scope.start);
 			var end = new Date($scope.end);
@@ -182,10 +178,9 @@
 					$scope.interval = $scope.intervals.find(x => x.label == "day").value;
 					break;
 			}
-
-
 			$scope.start = start;
 			$scope.end = end;
+			$scope.safeApply();
 		}
 		$scope.setDate("today");
 
@@ -196,7 +191,7 @@
 				entry.dataset.forEach((dataPoint, ds) => {
 					var val = dataPoint.point[0]?.value[0].intVal || dataPoint.point[0]?.value[0].fpVal || 0;
 					datasets[ds].push({
-						x: new Date(Number(entry.startTimeMillis)),
+						x: new Date(Number(entry.endTimeMillis)),
 						y: totals[ds] + val
 					})
 					totals[ds] += val;
@@ -338,7 +333,7 @@
 				</button>
 			</a>
 		</div>
-		<div ng-if="signedIn" id="main">
+		<div id="main" style="display:{{signedIn ? 'inline-block' : 'none'}}">
 			<table>
 				<tr>
 					<td colspan="7" class="center">
@@ -361,7 +356,7 @@
 						</button>
 					</td>
 					<td colspan="2">
-						<input type="datetime-local" ng-model="start" ng-change="changeStart(start)">
+						<input type="datetime-local" ng-model="start">
 					</td>
 					<td rowspan="2">
 						<button ng-click="adjustDay(1)" class="max">
@@ -377,7 +372,7 @@
 				<tr>
 					<td>End:</td>
 					<td colspan="2">
-						<input type="datetime-local" ng-model="end" ng-change="changeEnd(end)">
+						<input type="datetime-local" ng-model="end">
 					</td>
 				</tr>
 				<tr>
@@ -394,7 +389,7 @@
 						Target
 					</td>
 					<td colspan="2">
-						<input type="number" ng-model="target" ng-change="changeTarget(target)">
+						<input type="number" ng-model="target">
 					</td>
 				</tr>
 			</table>
