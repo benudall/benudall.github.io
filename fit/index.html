@@ -73,7 +73,7 @@
 			"&response_type=code" +
 			"&state=state_parameter_passthrough_value" +
 			"&scope=https://www.googleapis.com/auth/fitness.activity.read" +
-			`&redirect_uri=${window.location.origin}` +
+			`&redirect_uri=${window.location.origin}${window.location.pathname}` +
 			"&prompt=consent" +
 			"&include_granted_scopes=true";
 
@@ -100,7 +100,7 @@
 				`&client_secret=${atob("R09DU1BYLWtjZmZBZzhvZ2NodGpuX1VvMHQ3ekF6TmRqbVo=")}` +
 				`&code=${params.code}` +
 				"&grant_type=authorization_code" +
-				`&redirect_uri=${window.location.origin}`)
+				`&redirect_uri=${window.location.origin}${window.location.pathname}`)
 				.then(res => {
 					console.log(res);
 					$scope.access_token = res.data.access_token;
@@ -181,14 +181,15 @@
 
 		$scope.formatData = (bucket) => {
 			var datasets = [[], []];
+			var totals = [0, 0];
 			bucket.forEach(entry => {
 				entry.dataset.forEach((dataPoint, ds) => {
-					datasets[ds].push(
-						{
-							x: new Date(Number(entry.startTimeMillis)),
-							y: dataPoint.point[0]?.value[0].intVal || dataPoint.point[0]?.value[0].fpVal || 0
-						}
-					)
+					var val = dataPoint.point[0]?.value[0].intVal || dataPoint.point[0]?.value[0].fpVal || 0;
+					datasets[ds].push({
+						x: new Date(Number(entry.startTimeMillis)),
+						y: totals[ds] + val
+					})
+					totals[ds] += val;
 				})
 			});
 			return datasets;
