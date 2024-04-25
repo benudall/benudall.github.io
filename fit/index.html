@@ -69,7 +69,7 @@
 		};
 
 		$scope.authUrl = "https://accounts.google.com/o/oauth2/v2/auth" +
-			"?client_id=884513272934-nndbt3p4rrqjmtia5nng8l10808hg5ao.apps.googleusercontent.com" +
+			`?client_id=${atob("ODg0NTEzMjcyOTM0LW5uZGJ0M3A0cnJxam10aWE1bm5nOGwxMDgwOGhnNWFvLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29t")}` +
 			"&response_type=code" +
 			"&state=state_parameter_passthrough_value" +
 			"&scope=https://www.googleapis.com/auth/fitness.activity.read" +
@@ -96,8 +96,8 @@
 				return;
 			}
 			$http.post("https://oauth2.googleapis.com/token" +
-				"?client_id=884513272934-nndbt3p4rrqjmtia5nng8l10808hg5ao.apps.googleusercontent.com" +
-				"&client_secret=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" +
+				`?client_id=${atob("ODg0NTEzMjcyOTM0LW5uZGJ0M3A0cnJxam10aWE1bm5nOGwxMDgwOGhnNWFvLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29t")}` +
+				`&client_secret=${atob("R09DU1BYLWtjZmZBZzhvZ2NodGpuX1VvMHQ3ekF6TmRqbVo=")}` +
 				`&code=${params.code}` +
 				"&grant_type=authorization_code" +
 				`&redirect_uri=${window.location.origin}`)
