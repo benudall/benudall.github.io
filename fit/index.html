@@ -1,0 +1,377 @@
+<title>Google Fit</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.0/angular.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
+<style>
+	* {
+		font-size: 50px;
+	}
+
+	div,
+	.center {
+		text-align: center;
+	}
+
+	#signIn>button {
+		border-radius: 1em;
+		line-height: 24px;
+		background: white;
+		border: 1px solid black;
+		cursor: pointer;
+	}
+
+	#signIn>button>div {
+		height: 60px;
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	#signIn button>div>div {
+		display: flex;
+		align-items: center;
+		height: 60px;
+		width: 50px;
+	}
+
+	table {
+		display: inline-block;
+	}
+
+	td {
+		height: 0;
+		width: 0;
+	}
+
+	table button {
+		cursor: pointer;
+		display: inline-block;
+	}
+
+	button.max {
+		height: 100%;
+		width: 100%;
+	}
+
+	table td#getData {
+		text-align: center;
+	}
+</style>
+<script>
+	var app = angular.module('app', []);
+	app.controller('mainCtrl', ['$scope', '$http', function ($scope, $http) {
+
+		$scope.safeApply = function (fn) {
+			var phase = this.$root.$$phase;
+			if (phase == '$apply' || phase == '$digest') {
+				if (fn && (typeof (fn) === 'function')) { fn() }
+			} else { this.$apply(fn) }
+		};
+
+		$scope.authUrl = "https://accounts.google.com/o/oauth2/v2/auth" +
+			"?client_id=884513272934-nndbt3p4rrqjmtia5nng8l10808hg5ao.apps.googleusercontent.com" +
+			"&response_type=code" +
+			"&state=state_parameter_passthrough_value" +
+			"&scope=https://www.googleapis.com/auth/fitness.activity.read" +
+			`&redirect_uri=${window.location.origin}` +
+			"&prompt=consent" +
+			"&include_granted_scopes=true";
+
+		$scope.getUrlParams = () => {
+			if (window.location.search == "") { return {} }
+			var params = {};
+			window.location.search.match(/[\?&]([^=]+=[^&]+)/g).forEach(param => {
+				var kv = param.match(/[\?&]([^=]+)=([^&]+)/);
+				params[kv[1]] = decodeURI(kv[2]);
+			});
+			$scope.urlParams = params;
+			return params;
+		}
+
+		$scope.refreshToken = () => {
+			var params = $scope.getUrlParams();
+			if (window.location.hash != "") {
+				$scope.access_token = window.location.hash.substr(1);
+				$scope.signedIn = true;
+				return;
+			}
+			$http.post("https://oauth2.googleapis.com/token" +
+				"?client_id=884513272934-nndbt3p4rrqjmtia5nng8l10808hg5ao.apps.googleusercontent.com" +
+				"&client_secret=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" +
+				`&code=${params.code}` +
+				"&grant_type=authorization_code" +
+				`&redirect_uri=${window.location.origin}`)
+				.then(res => {
+					console.log(res);
+					$scope.access_token = res.data.access_token;
+					window.location.hash = res.data.access_token;
+					$scope.signedIn = true;
+					$scope.safeApply();
+				}).catch(err => {
+					$scope.signedIn = false;
+					$scope.safeApply();
+				})
+		}
+
+		if ($scope.getUrlParams().code) { $scope.refreshToken() }
+
+		$scope.intervals = [
+			{ label: "hour", value: 60 * 60 * 1000 },
+			{ label: "day", value: 24 * 60 * 60 * 1000 },
+			{ label: "week", value: 7 * 24 * 60 * 60 * 1000 },
+		]
+		$scope.interval = 60 * 60 * 1000;
+
+		$scope.changeStart = (val) => { $scope.start = val }
+		$scope.changeEnd = (val) => { $scope.end = val }
+
+		$scope.adjustDay = (delta) => {
+			var start = new Date($scope.start);
+			var end = new Date($scope.end);
+			start.setDate($scope.start.getDate() + delta);
+			end.setDate($scope.end.getDate() + delta);
+			$scope.start = start;
+			$scope.end = end;
+			$scope.safeApply();
+		}
+
+		$scope.setDate = (mode) => {
+			var start = new Date();
+			start.setHours(0);
+			start.setMinutes(0);
+			start.setSeconds(0);
+			start.setMilliseconds(0);
+			var end = new Date();
+			end.setDate(start.getDate() + 1);
+			end.setHours(0);
+			end.setMinutes(0);
+			end.setSeconds(0);
+			end.setMilliseconds(0);
+			switch (mode) {
+				case "today":
+					$scope.interval = $scope.intervals.find(x => x.label == "hour").value;
+					break;
+				case "yesterday":
+					start.setDate($scope.start.getDate() - 1);
+					end.setDate($scope.end.getDate() - 1);
+					$scope.interval = $scope.intervals.find(x => x.label == "hour").value;
+					break;
+				case "thisweek":
+					var day = start.getDay();
+					var diff = start.getDate() - day + (day == 0 ? -6 : 1);
+					start.setDate(diff);
+					end.setDate(diff + 7);
+					$scope.interval = $scope.intervals.find(x => x.label == "day").value;
+					break;
+				case "lastweek":
+					var day = start.getDay();
+					var diff = start.getDate() - day + (day == 0 ? -6 : 1);
+					start.setDate(diff - 7);
+					end.setDate(diff);
+					$scope.interval = $scope.intervals.find(x => x.label == "day").value;
+					break;
+			}
+
+
+			$scope.start = start;
+			$scope.end = end;
+		}
+		$scope.setDate("today");
+
+
+		$scope.formatData = (bucket) => {
+			var datasets = [[], []];
+			bucket.forEach(entry => {
+				entry.dataset.forEach((dataPoint, ds) => {
+					datasets[ds].push(
+						{
+							x: new Date(Number(entry.startTimeMillis)),
+							y: dataPoint.point[0]?.value[0].intVal || dataPoint.point[0]?.value[0].fpVal || 0
+						}
+					)
+				})
+			});
+			return datasets;
+		}
+
+		$scope.getData = async () => {
+			if ($scope.chart) { $scope.chart.data.datasets = [] }
+			await $http.post("https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate", {
+				"aggregateBy": [
+					{ "dataSourceId": "derived:com.google.step_count.delta:com.google.android.gms:estimated_steps" },
+					{ "dataSourceId": "derived:com.google.calories.expended:com.google.android.gms:merge_calories_expended" }
+				],
+				"bucketByTime": { "durationMillis": $scope.interval },
+				"startTimeMillis": new Date($scope.start).valueOf(),
+				"endTimeMillis": new Date($scope.end).valueOf()
+			}, { headers: { "Authorization": `Bearer ${$scope.access_token}` } }
+			).then(res => {
+				$scope.rawSteps = res.data;
+				var chartData = $scope.formatData(res.data.bucket);
+				$scope.totalSteps = 0;
+				chartData[0].forEach(x => $scope.totalSteps += x.y);
+				$scope.totalCalories = 0;
+				chartData[1].forEach(x => $scope.totalCalories += x.y);
+
+				$scope.addDataset({
+					label: `Steps (${$scope.totalSteps.toLocaleString()})`,
+					backgroundColor: '#0000FF80',
+					borderColor: "#0000FF80",
+					showLine: true,
+					pointHitRadius: 100,
+					data: chartData[0]
+				})
+				$scope.addDataset({
+					label: `Calories Expended (${Math.round($scope.totalCalories).toLocaleString()})`,
+					backgroundColor: '#FF000080',
+					borderColor: "#FF000080",
+					showLine: true,
+					pointHitRadius: 100,
+					data: chartData[1],
+					yAxisID: "right"
+				})
+				$scope.safeApply();
+			}).catch(err => {
+				console.error(err);
+				$scope.signedIn = false;
+			})
+		}
+
+		$scope.draw = () => {
+			var chart = {
+				type: 'scatter',
+				options: {
+					scales: {
+						x: {
+							type: "time",
+							ticks: { color: "#000000" },
+							title: {
+								display: true,
+								text: "Time",
+								color: "#000000",
+								font: { size: 24 }
+							}
+						},
+						y: {
+							beginAtZero: true,
+							ticks: { color: "#000000" },
+							title: {
+								display: true,
+								text: "Steps",
+								color: "#0000FF",
+								font: { size: 24 }
+							}
+						},
+						right: {
+							beginAtZero: true,
+							position: "right",
+							ticks: { color: "#000000" },
+							title: {
+								display: true,
+								text: "kcal",
+								color: "#FF0000",
+								font: { size: 24 }
+							},
+							grid: { display: false }
+						}
+					},
+					elements: { line: { tension: 0 } },
+					plugins: {
+						legend: { labels: { color: "#000000", font: { size: 24 } } }
+					}
+				}
+			}
+
+			var ctx = document.querySelector("canvas#chart").getContext('2d');
+
+			$scope.chart = new Chart(ctx, chart);
+			$scope.chart.update();
+		}
+
+		$scope.addDataset = (dataset) => {
+			if (!$scope.chart) { $scope.draw() }
+			$scope.chart.data.datasets.push(dataset);
+			$scope.chart.update();
+		}
+
+		window.$scope = $scope;
+	}]);
+</script>
+
+<body ng-app="app">
+	<div ng-controller="mainCtrl" class="mainCtrl">
+		<div id="header" ng-if="!signedIn">
+			<a href="{{authUrl}}" id="signIn">
+				<button>
+					Connect
+					<div>
+						<div>
+							<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+								<path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+								<path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
+								<path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
+								<path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+								<path fill="none" d="M0 0h48v48H0z"></path>
+							</svg>
+						</div>
+					</div>
+				</button>
+			</a>
+		</div>
+		<div ng-if="signedIn">
+			<table>
+				<tr>
+					<td colspan="7" class="center">
+						<button ng-click="setDate('lastweek')">Last Week</button>
+						<button ng-click="setDate('thisweek')">This Week</button>
+						<button ng-click="setDate('yesterday')">Yesterday</button>
+						<button ng-click="setDate('today')">Today</button>
+					</td>
+				</tr>
+				<tr>
+					<td>Start:</td>
+					<td rowspan="2">
+						<button ng-click="adjustDay(-7)" class="max">
+							-1w
+						</button>
+					</td>
+					<td rowspan="2">
+						<button ng-click="adjustDay(-1)" class="max">
+							-1d
+						</button>
+					</td>
+					<td colspan="2">
+						<input type="datetime-local" ng-model="start" ng-change="changeStart(start)">
+					</td>
+					<td rowspan="2">
+						<button ng-click="adjustDay(1)" class="max">
+							+1d
+						</button>
+					</td>
+					<td rowspan="2">
+						<button ng-click="adjustDay(7)" class="max">
+							+1w
+						</button>
+					</td>
+				</tr>
+				<tr>
+					<td>End:</td>
+					<td colspan="2">
+						<input type="datetime-local" ng-model="end" ng-change="changeEnd(end)">
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">Interval:</td>
+					<td>
+						<select ng-model="interval" ng-options="item.value as item.label for item in intervals"></select>
+					</td>
+					<td id="getData" colspan="3">
+						<button ng-click="getData()" class="max">Get Data</button>
+					</td>
+				</tr>
+			</table>
+			<br>
+			<canvas id="chart" style="display:inline-block"></canvas>
+		</div>
+	</div>
+</body>
