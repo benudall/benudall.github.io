@@ -231,7 +231,7 @@
 					x: dp.x,
 					y: totals.BMR += $scope.hourlyBMR
 				});
-				if (!chartData.totalCalories[i] || !chartData.calories[i].y || chartData.calories[i].y < $scope.hourlyBMR) {
+				if (!chartData.totalCalories[i] || chartData.calories[i].y == undefined || chartData.calories[i].y < $scope.hourlyBMR) {
 					chartData.totalCalories[i] = {
 						x: dp.x,
 						y: totals.calories += $scope.hourlyBMR
@@ -376,7 +376,18 @@
 					},
 					elements: { line: { tension: 0 } },
 					plugins: {
-						legend: { labels: { color: "#000000", font: { size: 24 } } }
+						legend: { labels: { color: "#000000", font: { size: 24 } } },
+						tooltip: {
+							callbacks: {
+								label: (context) => {
+									var name = context.dataset.label.match(/^(\w+(\s\w+(\s\w+)?)?)/)[1];
+									return name;
+								},
+								afterLabel: (context) => {
+									return `${context.parsed.y?.toLocaleString()}`;
+								}
+							}
+						}
 					},
 					interaction: { mode: "index" }
 				}
@@ -480,8 +491,6 @@
 			</table>
 			<br>
 			<canvas id="chart"></canvas>
-			<br>
-			{{hourlyBMR}}
 		</div>
 	</div>
 </body>
