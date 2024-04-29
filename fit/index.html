@@ -185,19 +185,61 @@
 		$scope.setDate("today");
 
 		$scope.formatData = (bucket) => {
-			var datasets = [[], []];
-			var totals = [0, 0];
+			var chartData = { steps: [], totalSteps: [], calories: [], totalCalories: [], BMR: [], totalBMR: [] };
+			var totals = { steps: 0, calories: 0, BMR: 0 };
+			var now = new Date().valueOf();
 			bucket.forEach(entry => {
 				entry.dataset.forEach((dataPoint, ds) => {
-					var val = dataPoint.point[0]?.value[0].intVal || dataPoint.point[0]?.value[0].fpVal || 0;
-					datasets[ds].push({
-						x: new Date(Number(entry.endTimeMillis)),
-						y: totals[ds] + val
-					})
-					totals[ds] += val;
+					var x = new Date(Number(entry.endTimeMillis));
+					if (dataPoint.dataSourceId == "derived:com.google.step_count.delta:com.google.android.gms:aggregated") {
+						chartData.steps.push({
+							x: x,
+							y: dataPoint.point[0]?.value[0].intVal
+						})
+						if (Number(entry.endTimeMillis) < now + 60 * 60 * 1000) {
+							chartData.totalSteps.push({
+								x: x,
+								y: totals.steps += (dataPoint.point[0]?.value[0].intVal || 0)
+							})
+						}
+					}
+					else if (dataPoint.dataSourceId == "derived:com.google.calories.expended:com.google.android.gms:aggregated") {
+						chartData.calories.push({
+							x: x,
+							y: dataPoint.point[0]?.value[0].fpVal
+						})
+
+						if (Number(entry.endTimeMillis) < now + 60 * 60 * 1000) {
+							chartData.totalCalories.push({
+								x: x,
+								y: totals.calories += (dataPoint.point[0]?.value[0].fpVal || 0)
+							})
+						}
+					}
 				})
 			});
-			return datasets;
+
+			$scope.hourlyBMR = chartData.calories[0].y;
+			$scope.totalBMR = $scope.hourlyBMR * chartData.calories.length;
+
+			chartData.calories.forEach((dp, i) => {
+				chartData.BMR.push({
+					x: dp.x,
+					y: $scope.hourlyBMR
+				});
+				chartData.totalBMR.push({
+					x: dp.x,
+					y: totals.BMR += $scope.hourlyBMR
+				});
+				if (!chartData.totalCalories[i] || !chartData.calories[i].y || chartData.calories[i].y < $scope.hourlyBMR) {
+					chartData.totalCalories[i] = {
+						x: dp.x,
+						y: totals.calories += $scope.hourlyBMR
+					}
+				}
+			})
+
+			return chartData;
 		}
 
 		$scope.getData = async () => {
@@ -214,36 +256,73 @@
 			).then(res => {
 				$scope.rawSteps = res.data;
 				var chartData = $scope.formatData(res.data.bucket);
-				$scope.totalSteps = chartData[0][chartData[0].length - 1].y
-				$scope.totalCalories = chartData[1][chartData[1].length - 1].y
+				$scope.chartData = chartData;
+				$scope.totalSteps = chartData.totalSteps.findLast(() => true)?.y
+				$scope.totalCalories = chartData.totalCalories.findLast(() => true)?.y
 
 				$scope.addDataset({
-					label: `Steps (${$scope.totalSteps.toLocaleString()})`,
+					label: `Steps`,
+					type: "bar",
 					backgroundColor: '#0000FF80',
 					borderColor: "#0000FF80",
-					showLine: true,
-					pointHitRadius: 100,
-					data: chartData[0]
+					pointHitRadius: 25,
+					data: chartData.steps
 				});
 				$scope.addDataset({
-					label: `Calories Expended (${Math.round($scope.totalCalories).toLocaleString()})`,
+					label: `Total Steps (${$scope.totalSteps?.toLocaleString()})`,
+					showLine: true,
+					backgroundColor: '#0000FF80',
+					borderColor: "#0000FF80",
+					pointHitRadius: 25,
+					data: chartData.totalSteps
+				});
+				$scope.addDataset({
+					label: `Calories Expended `,
+					type: "bar",
 					backgroundColor: '#FF000080',
 					borderColor: "#FF000080",
+					pointHitRadius: 25,
+					data: chartData.calories,
+					yAxisID: "right",
+				});
+				$scope.addDataset({
+					label: `Total Calories Expended (${Math.round($scope.totalCalories)?.toLocaleString()})`,
 					showLine: true,
-					pointHitRadius: 100,
-					data: chartData[1],
+					backgroundColor: '#FF000080',
+					borderColor: "#FF000080",
+					pointHitRadius: 25,
+					data: chartData.totalCalories,
 					yAxisID: "right"
+				});
+				$scope.addDataset({
+					label: `BMR (${Math.round($scope.chartData.BMR[0].y * 24).toLocaleString()})`,
+					type: "bar",
+					backgroundColor: '#FF00FF80',
+					borderColor: "#FF00FF80",
+					pointHitRadius: 25,
+					data: chartData.BMR,
+					yAxisID: "right",
 				});
 				$scope.addDataset({
 					label: `Target (${$scope.target.toLocaleString()})`,
 					backgroundColor: '#00800080',
 					borderColor: "#00800080",
 					showLine: true,
-					pointHitRadius: 100,
+					pointHitRadius: 25,
 					data: [
-						{ x: chartData[0][0].x, y: $scope.target },
-						{ x: chartData[0][chartData[0].length - 1].x, y: $scope.target }
+						{ x: chartData.steps[0].x, y: $scope.target },
+						{ x: chartData.steps.findLast(() => true).x, y: $scope.target }
 					]
+				});
+				var now = new Date();
+				$scope.addDataset({
+					label: `Now`,
+					backgroundColor: '#80800080',
+					borderColor: "#80800080",
+					showLine: true,
+					pointHitRadius: 100,
+					data: [{ x: now, y: 0 }, { x: now, y: 1 }],
+					yAxisID: "hidden",
 				});
 				$scope.safeApply();
 			}).catch(err => {
@@ -288,12 +367,18 @@
 								font: { size: 24 }
 							},
 							grid: { display: false }
+						},
+						hidden: {
+							beginAtZero: true,
+							display: false,
+							position: "right"
 						}
 					},
 					elements: { line: { tension: 0 } },
 					plugins: {
 						legend: { labels: { color: "#000000", font: { size: 24 } } }
-					}
+					},
+					interaction: { mode: "index" }
 				}
 			}
 
@@ -395,6 +480,8 @@
 			</table>
 			<br>
 			<canvas id="chart"></canvas>
+			<br>
+			{{hourlyBMR}}
 		</div>
 	</div>
 </body>
