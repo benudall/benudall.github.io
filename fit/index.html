@@ -192,34 +192,39 @@
 				entry.dataset.forEach((dataPoint, ds) => {
 					var x = new Date(Number(entry.endTimeMillis));
 					if (dataPoint.dataSourceId == "derived:com.google.step_count.delta:com.google.android.gms:aggregated") {
+						var steps = (dataPoint.point[0]?.value[0].intVal || 0);
 						chartData.steps.push({
 							x: x,
-							y: dataPoint.point[0]?.value[0].intVal
+							y: steps
 						})
 						if (Number(entry.endTimeMillis) < now + 60 * 60 * 1000) {
 							chartData.totalSteps.push({
 								x: x,
-								y: totals.steps += (dataPoint.point[0]?.value[0].intVal || 0)
+								y: totals.steps += steps
 							})
 						}
 					}
 					else if (dataPoint.dataSourceId == "derived:com.google.calories.expended:com.google.android.gms:aggregated") {
+						var calories = (dataPoint.point[0]?.value[0].fpVal || 0);
 						chartData.calories.push({
 							x: x,
-							y: dataPoint.point[0]?.value[0].fpVal
+							y: calories
 						})
 
 						if (Number(entry.endTimeMillis) < now + 60 * 60 * 1000) {
 							chartData.totalCalories.push({
 								x: x,
-								y: totals.calories += (dataPoint.point[0]?.value[0].fpVal || 0)
+								y: totals.calories += calories
 							})
 						}
 					}
 				})
 			});
 
-			$scope.hourlyBMR = chartData.calories[0].y;
+			$scope.hourlyBMR = chartData.calories
+				.filter(data => data.x < new Date().valueOf() - 2 * 60 * 60 * 1000)
+				.reduce((a, b) => a.y < b.y ? a : b)
+				.y;
 			$scope.totalBMR = $scope.hourlyBMR * chartData.calories.length;
 
 			chartData.calories.forEach((dp, i) => {
