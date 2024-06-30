@@ -1,0 +1,215 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.0/angular.min.js"></script>
+<style>
+	* {
+		font-size: 64px;
+	}
+</style>
+<script>
+	var app = angular.module('app', []);
+	app.controller('mainCtrl', ['$scope', '$http', function ($scope, $http) {
+
+		$scope.safeApply = function (fn) {
+			var phase = this.$root.$$phase;
+			if (phase == '$apply' || phase == '$digest') {
+				if (fn && (typeof (fn) === 'function')) { fn() }
+			} else { this.$apply(fn) }
+		};
+
+		$scope.input = "Good luck";
+
+		$scope.convert = () => {
+			$scope.letters = $scope.input.toLowerCase().split("");
+		}
+		$scope.convert();
+
+		window.$scope = $scope;
+	}]);
+</script>
+
+<body ng-app="app">
+	<div ng-controller="mainCtrl" class="mainCtrl">
+		<input ng-model="input" ng-change="convert()">
+		<br>
+		<div>
+			<svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg" ng-repeat="letter in letters track by $index">
+				<use href="#{{letter}}" fill="black">
+			</svg>
+		</div>
+		<br>
+		<table>
+			<tr>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">A</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">B</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">C</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">D</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">E</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">F</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">G</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">H</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">I</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">J</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">K</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">L</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">M</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">N</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">O</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">P</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">Q</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">R</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">S</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">T</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">U</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">V</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">W</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">X</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">Y</text></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">Z</text></svg></td>
+			</tr>
+			<tr>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#a" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#b" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#c" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#d" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#e" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#f" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#g" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#h" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#i" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#j" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#k" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#l" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#m" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#n" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#o" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#p" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#q" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#r" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#s" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#t" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#u" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#v" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#w" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#x" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#y" fill="black">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
+						<use href="#z" fill="black">
+					</svg></td>
+			</tr>
+		</table>
+		<svg height="185px" width="202.5px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg" style="display:none">
+			<defs>
+				<g id="a"></g>
+				<g id="b"></g>
+				<g id="c">
+					<polygon points="0 0 15.05 0 18 3.23 18 9.14 13.08 9.14 13.08 5.06 5.2 5.06 5.06 9.14 0 9.14 0 0" />
+					<polygon points="0 14.77 7.45 14.77 5.63 11.39 10.41 9.14 13.5 14.77 18 14.77 18 20.25 0 20.25 0 14.77" />
+				</g>
+				<g id="d">
+					<polygon points="18.42 0 9.21 0 0 0 0 5.41 5.98 5.41 0.12 14.67 0 20.25 4.34 20.25 9.21 11.6 14.09 20.25 18.42 20.25 18.3 14.67 12.45 5.41 18.42 5.41 18.42 0" />
+				</g>
+				<g id="e">
+					<path d="M18.19,0H0V10l4.31,3.28L0,16.69v3.56H4.31l4.78-3.56,4.79,3.56h4.31V16.69l-4.31-3.38L18.19,10Zm-5,7.42L9.09,10.16,5,7.42V5.06h8.25Z" />
+				</g>
+				<g id="f"></g>
+				<g id="g">
+					<polygon points="18.13 5 18.13 0 9.07 0 0 0 0 5 6.44 5 6.44 15.51 0 15.51 0 20.25 9.07 20.25 18.13 20.25 18.13 15.51 11.69 15.51 11.69 5 18.13 5" />
+				</g>
+				<g id="h"></g>
+				<g id="i">
+					<polygon points="18.52 5.06 18.52 0 0 0 0 4.83 6.61 4.83 6.47 20.25 18.52 20.25 18.52 15.09 11.91 15.09 11.91 5.06 18.52 5.06" />
+				</g>
+				<g id="j"></g>
+				<g id="k">
+					<polygon points="0 6.87 0 0 18.38 0 18.38 4.93 13.75 15.24 18.38 15.24 18.38 19.88 0 19.88 0 15.09 7.92 15.09 13 4.78 5.23 4.78 5.23 6.87 0 6.87" />
+				</g>
+				<g id="l">
+					<rect width="18.19" height="5.06" />
+					<polygon points="0 7.5 18.19 7.5 18.19 13.13 5.63 20.25 0 20.25 0 16.31 6 12.75 0 12.75 0 7.5" />
+				</g>
+				<g id="m">
+					<path d="M0,0V20.25H18.56V0ZM13.78,14.7h-9V5.06h9Z" />
+					<rect class="cls-2" x="5.85" y="7.71" width="6.26" height="4.91" transform="translate(10.37 -3.33) rotate(47.35)" />
+				</g>
+				<g id="n">
+					<rect width="18.35" height="5.7" />
+					<path d="M10.31,7.1H8L0,10.78v9.75H18.35V10.78Zm3.12,8.23H4.92v-1.2l4.26-1.38,4.25,1.38Z" />
+				</g>
+				<g id="o">
+					<polygon points="0 0 0 5.06 7.88 5.06 13.22 12.38 18 12.38 18 7.5 11.81 0 0 0" />
+					<rect y="14.7" width="18" height="5.55" />
+				</g>
+				<g id="p"></g>
+				<g id="q"></g>
+				<g id="r">
+					<polygon points="13.55 10.73 18.38 15.56 18.38 20.25 13.27 20.25 9.09 15.75 4.5 20.25 0 20.25 0 15.56 10.69 5.02 0 5.02 0 0 18.38 0 18.38 5.86 13.55 10.73" />
+				</g>
+				<g id="s"></g>
+				<g id="t">
+					<polygon points="11.81 0 9.12 0 6.42 0 0 6.66 0 12.75 5.91 12.75 5.91 9.28 9.12 6.26 12.33 9.28 12.33 12.75 18.23 12.75 18.23 6.66 11.81 0" />
+					<rect y="15.26" width="18.23" height="4.9" />
+				</g>
+				<g id="u">
+					<polygon points="0 0 5.03 0 8.93 4.37 10.48 4.37 14.23 0 17.81 0 17.81 4.99 11.73 10.76 7.83 10.76 5.96 8.42 4.79 8.42 4.79 15.17 18.08 15.17 18.08 20.16 0 20.16 0 0" />
+				</g>
+				<g id="v"></g>
+				<g id="w">
+					<polygon points="18.25 8.61 18.25 3.73 13.61 3.73 13.61 0 8.65 0 7.8 3.73 0 3.73 0 8.61 6.7 8.61 6.04 11.5 0 11.5 0 16.38 4.93 16.38 4.93 20.26 9.81 20.26 10.7 16.38 18.25 16.38 18.25 11.5 11.82 11.5 12.48 8.61 18.25 8.61" />
+				</g>
+				<g id="x"></g>
+				<g id="y"></g>
+				<g id="z"></g>
+			</defs>
+		</svg>
+
+	</div>
+</body>
