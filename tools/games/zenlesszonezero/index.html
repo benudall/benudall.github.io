@@ -1,7 +1,29 @@
+<title>Zenless Zone Zero Cypher</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.0/angular.min.js"></script>
 <style>
 	* {
 		font-size: 64px;
+	}
+
+	#input {
+		width: 100%;
+	}
+
+	#types input {
+		height: 64px;
+		width: 64px;
+	}
+
+	.type1 {
+		color: blue;
+	}
+
+	.type2 {
+		color: red;
+	}
+
+	.type3 {
+		color: green;
 	}
 
 	#output svg {
@@ -16,7 +38,7 @@
 		border: 1px solid #DDDDDD;
 	}
 
-	svg text{
+	svg text {
 		font-family: impact;
 	}
 </style>
@@ -32,6 +54,10 @@
 		};
 
 		$scope.input = "zenless zone zero";
+
+		$scope.type1 = true;
+		$scope.type2 = true;
+		$scope.type3 = true;
 
 		$scope.convert = () => {
 			$scope.letters = $scope.input.toLowerCase().split("");
@@ -51,40 +77,43 @@
 
 <body ng-app="app">
 	<div ng-controller="mainCtrl" class="mainCtrl">
-		<input ng-model="input" ng-change="convert()">
+		<input ng-model="input" id="input" ng-change="convert()">
+		<div id="types">
+			<label class="type1" for="type1"><input type="checkbox" ng-model="type1" id="type1">Type 1</label>
+			<label class="type2" for="type2"><input type="checkbox" ng-model="type2" id="type2">Type 2</label>
+			<label class="type3" for="type3"><input type="checkbox" ng-model="type3" id="type3">Type 3</label>
+		</div>
 		<br>
 		<table id="output">
 			<tr>
 				<td ng-repeat="letter in letters track by $index">
-					<svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" >
+					<svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
 						<text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">{{letter.toUpperCase()}}</text>
 					</svg>
 				</td>
 			</tr>
-			<tr>
+			<tr ng-if="type1">
 				<td ng-repeat="letter in letters track by $index">
-					<svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg" >
-						<use href="#{{letter}}" fill="black">
+					<svg height="64px" width="{{letterSize(letter)}}" viewBox="{{letterViewbox(letter)}}" xmlns="http://www.w3.org/2000/svg">
+						<use href="#{{letter}}1">
 					</svg>
 				</td>
 			</tr>
-			<tr>
+			<tr ng-if="type2">
 				<td ng-repeat="letter in letters track by $index">
-					<svg height="64px" width="{{letterSize(letter)}}" viewBox="{{letterViewbox(letter)}}" xmlns="http://www.w3.org/2000/svg" >
-						<use href="#{{letter}}2" fill="black">
+					<svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+						<use href="#{{letter}}2">
+					</svg>
+				</td>
+			</tr>
+			<tr ng-if="type3">
+				<td ng-repeat="letter in letters track by $index">
+					<svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+						<use href="#{{letter}}3">
 					</svg>
 				</td>
 			</tr>
 		</table>
-		<div class="output">
-			
-		</div>
-		<div class="output">
-			
-		</div>
-		<div class="output">
-			
-		</div>
 		<br>
 		<table>
 			<tr>
@@ -115,308 +144,90 @@
 				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">Y</text></svg></td>
 				<td><svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">Z</text></svg></td>
 			</tr>
-			<tr>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#a" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#b" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#c" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#d" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#e" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#f" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#g" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#h" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#i" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#j" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#k" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#l" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#m" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#n" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#o" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#p" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#q" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#r" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#s" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#t" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#u" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#v" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#w" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#x" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#y" fill="black">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg">
-						<use href="#z" fill="black">
-					</svg></td>
+			<tr ng-if="type1">
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="a1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 90 L 10 10 L 90 10 L 90 90 L 10 10"/></g></defs><use href="#a1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="b1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 50 50 L 10 50 L 10 10 L 90 10 L 90 90 L 10 90 L 10 50"/></g></defs><use href="#b1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="c1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 10 L 90 10 L 90 90 L 10 90"/></g></defs><use href="#c1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="d1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 10 L 90 50 L 10 90 Z"/></g></defs><use href="#d1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="e1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 10 L 90 10 L 90 90 L 10 90 M 10 50 L 50 50"/></g></defs><use href="#e1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="f1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 10 L 90 10 M 10 50 L 90 50 L 90 90"/></g></defs><use href="#f1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="g1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 90 L 10 10 L 90 10 M 90 90 Z"/></g></defs><use href="#g1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="h1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 90 L 10 50 L 90 50 L 90 10 M 90 50 L 90 90 M 10 10 Z"/></g></defs><use href="#h1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="i1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 10 L 90 10 L 10 90 L 90 90 Z"/></g></defs><use href="#i1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="j1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M "/></g></defs><use href="#j1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="k1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 10 L 10 90 M 90 10 L 10 50 L 90 90 Z"/></g></defs><use href="#k1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="l1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 90 10 L 10 10 L 10 90"/></g></defs><use href="#l1"/></svg></td>
+				<td><svg height="64px" width="128px" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="m1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 90 L 10 10 L 90 90 L 90 10 L 170 90 L 170 10"/></g></defs><use href="#m1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="n1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 10 L 10 90 L 90 10 L 90 90"/></g></defs><use href="#n1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="o1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 90 L 10 10 L 90 10 L 90 90 L 10 90 L 90 10"/></g></defs><use href="#o1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="p1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 10 L 10 90 M 10 50 L 90 50 L 90 10"/></g></defs><use href="#p1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="q1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 50 50 L 90 90 L 10 90 L 10 10 L 90 10 L 90 90"/></g></defs><use href="#q1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="r1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 10 L 90 10 L 10 90 Z M 90 90 Z"/></g></defs><use href="#r1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="s1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 10 L 90 10 M 10 50 L 90 50 L 90 90 L 10 90"/></g></defs><use href="#s1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="t1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 90 L 90 90 M 50 90 L 50 10"/></g></defs><use href="#t1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="u1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 10 L 10 90 L 90 90 L 90 10"/></g></defs><use href="#u1"/></svg></td>
+				<td><svg height="64px" width="128px" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="v1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 25 90 L 25 10 L 105 90 M 65 10 L 155 90 L 155 10"/></g></defs><use href="#v1"/></svg></td>
+				<td><svg height="64px" width="128px" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="w1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 10 L 10 90 L 90 10 L 90 90 L 170 10 L 170 90"/></g></defs><use href="#w1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="x1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 10 10 L 90 90 M 10 90 L 90 10"/></g></defs><use href="#x1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="y1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 50 50 L 10 10 L 90 10 L 50 50 L 50 90"/></g></defs><use href="#y1"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><g id="z1" stroke="blue" stroke-width="20" fill="none" stroke-linecap="square"><path d="M 90 10 L 10 10 L 90 90 L 10 90"/></g></defs><use href="#z1"/></svg></td>
 			</tr>
-			<tr>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#a2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#b2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#c2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#d2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#e2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#f2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#g2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#h2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#i2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#j2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#k2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#l2">
-					</svg></td>
-				<td><svg height="64px" width="128px" viewBox="0 0 180 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#m2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#n2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#o2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#p2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#q2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#r2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#s2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#t2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#u2">
-					</svg></td>
-				<td><svg height="64px" width="128px" viewBox="0 0 180 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#v2">
-					</svg></td>
-				<td><svg height="64px" width="128px" viewBox="0 0 180 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#w2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#x2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#y2">
-					</svg></td>
-				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-						<use href="#z2">
-					</svg></td>
+			<tr ng-if="type2">
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="a2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 60 L 105 60 L 105 105 L 15 105 M 55 20 L 65 30"/></g></defs><use href="#a2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="b2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 60 L 60 15 L 105 60 M 15 105 L 105 105 M 60 65 L 70 75"/></g></defs><use href="#b2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="c2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 40 L 15 15 L 95 15 L 105 25 L 105 40 M 15 105 L 105 105 M 80 105 L 60 80"/></g></defs><use href="#c2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="d2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 105 15 M 15 105 L 60 30 L 105 105"/></g></defs><use href="#d2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="e2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 105 L 105 60 L 105 15 L 15 15 L 15 60 L 105 105"/></g></defs><use href="#e2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="f2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 40 L 105 40 M 60 15 L 15 105 M 105 80 L 90 105"/></g></defs><use href="#f2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="g2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 105 15 M 60 15 L 60 105 M 15 105 L 105 105"/></g></defs><use href="#g2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="h2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 105 L 15 15 L 105 15 L 105 105 L 80 90"/></g></defs><use href="#h2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="i2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 105 15 M 60 15 L 60 105 L 105 105"/></g></defs><use href="#i2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="j2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 105 15 M 15 60 L 15 105 L 105 105 L 105 60"/></g></defs><use href="#j2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="k2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 30 L 15 15 L 105 15 L 60 105 M 15 105 L 105 105"/></g></defs><use href="#k2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="l2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 105 15 M 15 60 L 105 60 L 15 105"/></g></defs><use href="#l2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="m2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 105 15 L 105 105 L 15 105 Z M 50 50 L 70 70"/></g></defs><use href="#m2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="n2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 105 15 M 60 50 L 105 80 L 105 105 L 15 105 L 15 80 Z"/></g></defs><use href="#n2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="o2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 60 15 L 105 60 M 15 105 L 105 105"/></g></defs><use href="#o2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="p2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 105 15 L 105 105 L 60 70 L 15 105"/></g></defs><use href="#p2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="q2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 105 15 M 60 15 L 60 60 M 15 105 L 15 60 L 105 60 L 105 105"/></g></defs><use href="#q2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="r2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 105 15 L 15 105 M 60 60 L 105 105"/></g></defs><use href="#r2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="s2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 105 15 L 15 15 L 15 105 L 105 105 L 80 80"/></g></defs><use href="#s2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="t2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 60 L 15 40 L 60 15 L 105 40 L 105 60 M 15 105 L 105 105"/></g></defs><use href="#t2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="u2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 105 15 L 60 60 L 15 15 L 15 105 L 105 105"/></g></defs><use href="#u2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="v2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 60 L 15 15 L 105 15 L 105 60 M 15 105 L 105 105"/></g></defs><use href="#v2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="w2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 40 L 105 40 M 15 80 L 105 80 M 80 15 L 40 105"/></g></defs><use href="#w2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="x2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 15 105 M 105 15 L 105 105 M 50 50 L 70 70"/></g></defs><use href="#x2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="y2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 105 105 L 15 105 M 60 60 L 105 15"/></g></defs><use href="#y2"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="z2" stroke="red" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 105 15 M 60 15 L 15 105 L 105 105"/></g></defs><use href="#z2"/></svg></td>
+			</tr>
+			<tr ng-if="type3">
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="a3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M "/></g></defs><use href="#a3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="b3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M "/></g></defs><use href="#b3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="c3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 105 15 L 15 15 L 15 105 L 105 105 M 60 105 L 105 60"/></g></defs><use href="#c3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="d3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 105 15 L 105 60 L 80 60 L 15 15 L 15 80 Q 15 105 40 105 L 105 105"/></g></defs><use href="#d3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="e3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 60 L 15 15 L 105 15 L 105 60 M 15 105 L 105 105"/></g></defs><use href="#e3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="f3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M "/></g></defs><use href="#f3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="g3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M "/></g></defs><use href="#g3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="h3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M "/></g></defs><use href="#h3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="i3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 15 60 M 15 105 L 105 105 M 60 105 L 60 15 L 105 15"/></g></defs><use href="#i3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="j3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M "/></g></defs><use href="#j3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="k3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M "/></g></defs><use href="#k3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="l3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 15 80 Q 15 105 40 105 L 80 105 M 80 15 L 80 60"/></g></defs><use href="#l3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="m3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 40 L 105 40 M 15 80 L 105 80 M 60 40 L 60 15 M 60 80 L 60 105"/></g></defs><use href="#m3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="n3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 60 L 105 60 L 60 15 M 15 105 L 105 105"/></g></defs><use href="#n3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="o3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 105 15 M 15 105 L 60 30 L 105 105"/></g></defs><use href="#o3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="p3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M "/></g></defs><use href="#p3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="q3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M "/></g></defs><use href="#q3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="r3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 15 60 L 105 60 L 105 15 M 15 105 L 105 105"/></g></defs><use href="#r3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="s3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 40 L 105 40 M 60 15 L 15 105 M 105 80 L 90 105"/></g></defs><use href="#s3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="t3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 105 15 M 60 15 L 60 105 L 105 105"/></g></defs><use href="#t3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="u3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 105 15 M 15 60 L 105 60 M 60 60 L 60 105"/></g></defs><use href="#u3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="v3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M "/></g></defs><use href="#v3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="w3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 40 L 15 15 L 95 15 L 105 25 L 105 40 M 15 105 L 105 105 M 80 105 L 60 80"/></g></defs><use href="#w3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="x3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M "/></g></defs><use href="#x3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="y3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M "/></g></defs><use href="#y3"/></svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><g id="z3" stroke="green" stroke-width="30" fill="none" stroke-linecap="square"><path d="M 15 15 L 15 80 Q 15 105 40 105 L 80 105 M 80 15 L 80 60"/></g></defs><use href="#z3"/></svg></td>
 			</tr>
 		</table>
-		<svg height="185px" width="202.5px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg" style="display:none">
-			<defs>
-				<g id="a"></g>
-				<g id="b"></g>
-				<g id="c">
-					<polygon points="0 0 15.05 0 18 3.23 18 9.14 13.08 9.14 13.08 5.06 5.2 5.06 5.06 9.14 0 9.14 0 0" />
-					<polygon points="0 14.77 7.45 14.77 5.63 11.39 10.41 9.14 13.5 14.77 18 14.77 18 20.25 0 20.25 0 14.77" />
-				</g>
-				<g id="d">
-					<polygon points="18.42 0 9.21 0 0 0 0 5.41 5.98 5.41 0.12 14.67 0 20.25 4.34 20.25 9.21 11.6 14.09 20.25 18.42 20.25 18.3 14.67 12.45 5.41 18.42 5.41 18.42 0" />
-				</g>
-				<g id="e">
-					<path d="M18.19,0H0V10l4.31,3.28L0,16.69v3.56H4.31l4.78-3.56,4.79,3.56h4.31V16.69l-4.31-3.38L18.19,10Zm-5,7.42L9.09,10.16,5,7.42V5.06h8.25Z" />
-				</g>
-				<g id="f"></g>
-				<g id="g">
-					<polygon points="18.13 5 18.13 0 9.07 0 0 0 0 5 6.44 5 6.44 15.51 0 15.51 0 20.25 9.07 20.25 18.13 20.25 18.13 15.51 11.69 15.51 11.69 5 18.13 5" />
-				</g>
-				<g id="h"></g>
-				<g id="i">
-					<polygon points="18.52 5.06 18.52 0 0 0 0 4.83 6.61 4.83 6.47 20.25 18.52 20.25 18.52 15.09 11.91 15.09 11.91 5.06 18.52 5.06" />
-				</g>
-				<g id="j"></g>
-				<g id="k">
-					<polygon points="0 6.87 0 0 18.38 0 18.38 4.93 13.75 15.24 18.38 15.24 18.38 19.88 0 19.88 0 15.09 7.92 15.09 13 4.78 5.23 4.78 5.23 6.87 0 6.87" />
-				</g>
-				<g id="l">
-					<rect width="18.19" height="5.06" />
-					<polygon points="0 7.5 18.19 7.5 18.19 13.13 5.63 20.25 0 20.25 0 16.31 6 12.75 0 12.75 0 7.5" />
-				</g>
-				<g id="m">
-					<path d="M0,0V20.25H18.56V0ZM13.78,14.7h-9V5.06h9Z" />
-					<rect class="cls-2" x="5.85" y="7.71" width="6.26" height="4.91" transform="translate(10.37 -3.33) rotate(47.35)" />
-				</g>
-				<g id="n">
-					<rect width="18.35" height="5.7" />
-					<path d="M10.31,7.1H8L0,10.78v9.75H18.35V10.78Zm3.12,8.23H4.92v-1.2l4.26-1.38,4.25,1.38Z" />
-				</g>
-				<g id="o">
-					<polygon points="0 0 0 5.06 7.88 5.06 13.22 12.38 18 12.38 18 7.5 11.81 0 0 0" />
-					<rect y="14.7" width="18" height="5.55" />
-				</g>
-				<g id="p"></g>
-				<g id="q"></g>
-				<g id="r">
-					<polygon points="13.55 10.73 18.38 15.56 18.38 20.25 13.27 20.25 9.09 15.75 4.5 20.25 0 20.25 0 15.56 10.69 5.02 0 5.02 0 0 18.38 0 18.38 5.86 13.55 10.73" />
-				</g>
-				<g id="s"></g>
-				<g id="t">
-					<polygon points="11.81 0 9.12 0 6.42 0 0 6.66 0 12.75 5.91 12.75 5.91 9.28 9.12 6.26 12.33 9.28 12.33 12.75 18.23 12.75 18.23 6.66 11.81 0" />
-					<rect y="15.26" width="18.23" height="4.9" />
-				</g>
-				<g id="u">
-					<polygon points="0 0 5.03 0 8.93 4.37 10.48 4.37 14.23 0 17.81 0 17.81 4.99 11.73 10.76 7.83 10.76 5.96 8.42 4.79 8.42 4.79 15.17 18.08 15.17 18.08 20.16 0 20.16 0 0" />
-				</g>
-				<g id="v"></g>
-				<g id="w">
-					<polygon points="18.25 8.61 18.25 3.73 13.61 3.73 13.61 0 8.65 0 7.8 3.73 0 3.73 0 8.61 6.7 8.61 6.04 11.5 0 11.5 0 16.38 4.93 16.38 4.93 20.26 9.81 20.26 10.7 16.38 18.25 16.38 18.25 11.5 11.82 11.5 12.48 8.61 18.25 8.61" />
-				</g>
-				<g id="x"></g>
-				<g id="y"></g>
-				<g id="z"></g>
-
-				<g id="a2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 90 L 10 10 L 90 10 L 90 90 L 10 10" />
-				</g>
-				<g id="b2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 50 50 L 10 50 L 10 10 L 90 10 L 90 90 L 10 90 L 10 50" />
-				</g>
-				<g id="c2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 10 L 90 10 L 90 90 L 10 90" />
-				</g>
-				<g id="d2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 10 L 90 50 L 10 90 Z" />
-				</g>
-				<g id="e2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 10 L 90 10 L 90 90 L 10 90 M 10 50 L 50 50" />
-				</g>
-				<g id="f2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 10 L 90 10 M 10 50 L 90 50 L 90 90" />
-				</g>
-				<g id="g2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 90 L 10 10 L 90 10 M 90 90 Z" />
-				</g>
-				<g id="h2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 90 L 10 50 L 90 50 L 90 10 M 90 50 L 90 90 M 10 10 Z" />
-				</g>
-				<g id="i2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 10 L 90 10 L 10 90 L 90 90 Z" />
-				</g>
-				<g id="j2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square"></g>
-				<g id="k2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 10 L 10 90 M 90 10 L 10 50 L 90 90 Z" />
-				</g>
-				<g id="l2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 90 10 L 10 10 L 10 90" />
-				</g>
-				<g id="m2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 90 L 10 10 L 90 90 L 90 10 L 170 90 L 170 10" />
-				</g>
-				<g id="n2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 10 L 10 90 L 90 10 L 90 90" />
-				</g>
-				<g id="o2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 90 L 10 10 L 90 10 L 90 90 L 10 90 L 90 10" />
-				</g>
-				<g id="p2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 10 L 10 90 M 10 50 L 90 50 L 90 10" />
-				</g>
-				<g id="q2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 50 50 L 90 90 L 10 90 L 10 10 L 90 10 L 90 90" />
-				</g>
-				<g id="r2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 10 L 90 10 L 10 90 Z M 90 90 Z" />
-				</g>
-				<g id="s2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 10 L 90 10 M 10 50 L 90 50 L 90 90 L 10 90" />
-				</g>
-				<g id="t2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 90 L 90 90 M 50 90 L 50 10" />
-				</g>
-				<g id="u2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 10 L 10 90 L 90 90 L 90 10" />
-				</g>
-				<g id="v2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 25 90 L 25 10 L 105 90 M 65 10 L 155 90 L 155 10" />
-				</g>
-				<g id="w2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 10 L 10 90 L 90 10 L 90 90 L 170 10 L 170 90" />
-				</g>
-				<g id="x2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 10 10 L 90 90 M 10 90 L 90 10" />
-				</g>
-				<g id="y2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 50 50 L 10 10 L 90 10 L 50 50 L 50 90" />
-				</g>
-				<g id="z2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
-					<path d="M 90 10 L 10 10 L 90 90 L 10 90" />
-				</g>
-			</defs>
-		</svg>
-
 	</div>
 </body>
