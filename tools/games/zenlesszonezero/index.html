@@ -3,6 +3,22 @@
 	* {
 		font-size: 64px;
 	}
+
+	#output svg {
+		margin: 5px;
+	}
+
+	td {
+		text-align: center;
+	}
+
+	svg {
+		border: 1px solid #DDDDDD;
+	}
+
+	svg text{
+		font-family: impact;
+	}
 </style>
 <script>
 	var app = angular.module('app', []);
@@ -15,12 +31,19 @@
 			} else { this.$apply(fn) }
 		};
 
-		$scope.input = "Good luck";
+		$scope.input = "zenless zone zero";
 
 		$scope.convert = () => {
 			$scope.letters = $scope.input.toLowerCase().split("");
 		}
 		$scope.convert();
+
+		$scope.letterSize = (letter) => {
+			return ["m", "w", "v"].includes(letter) ? "128px" : "64px";
+		}
+		$scope.letterViewbox = (letter) => {
+			return ["m", "w", "v"].includes(letter) ? "0 0 200 100" : "0 0 100 100";
+		}
 
 		window.$scope = $scope;
 	}]);
@@ -30,10 +53,37 @@
 	<div ng-controller="mainCtrl" class="mainCtrl">
 		<input ng-model="input" ng-change="convert()">
 		<br>
-		<div>
-			<svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg" ng-repeat="letter in letters track by $index">
-				<use href="#{{letter}}" fill="black">
-			</svg>
+		<table id="output">
+			<tr>
+				<td ng-repeat="letter in letters track by $index">
+					<svg height="64px" width="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" >
+						<text x="32" y="32" font-size="64" text-anchor="middle" alignment-baseline="central">{{letter.toUpperCase()}}</text>
+					</svg>
+				</td>
+			</tr>
+			<tr>
+				<td ng-repeat="letter in letters track by $index">
+					<svg height="64px" width="64px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg" >
+						<use href="#{{letter}}" fill="black">
+					</svg>
+				</td>
+			</tr>
+			<tr>
+				<td ng-repeat="letter in letters track by $index">
+					<svg height="64px" width="{{letterSize(letter)}}" viewBox="{{letterViewbox(letter)}}" xmlns="http://www.w3.org/2000/svg" >
+						<use href="#{{letter}}2" fill="black">
+					</svg>
+				</td>
+			</tr>
+		</table>
+		<div class="output">
+			
+		</div>
+		<div class="output">
+			
+		</div>
+		<div class="output">
+			
 		</div>
 		<br>
 		<table>
@@ -145,6 +195,86 @@
 						<use href="#z" fill="black">
 					</svg></td>
 			</tr>
+			<tr>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#a2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#b2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#c2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#d2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#e2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#f2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#g2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#h2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#i2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#j2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#k2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#l2">
+					</svg></td>
+				<td><svg height="64px" width="128px" viewBox="0 0 180 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#m2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#n2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#o2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#p2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#q2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#r2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#s2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#t2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#u2">
+					</svg></td>
+				<td><svg height="64px" width="128px" viewBox="0 0 180 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#v2">
+					</svg></td>
+				<td><svg height="64px" width="128px" viewBox="0 0 180 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#w2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#x2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#y2">
+					</svg></td>
+				<td><svg height="64px" width="64px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<use href="#z2">
+					</svg></td>
+			</tr>
 		</table>
 		<svg height="185px" width="202.5px" viewBox="0 0 18.5 20.25" xmlns="http://www.w3.org/2000/svg" style="display:none">
 			<defs>
@@ -208,6 +338,83 @@
 				<g id="x"></g>
 				<g id="y"></g>
 				<g id="z"></g>
+
+				<g id="a2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 90 L 10 10 L 90 10 L 90 90 L 10 10" />
+				</g>
+				<g id="b2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 50 50 L 10 50 L 10 10 L 90 10 L 90 90 L 10 90 L 10 50" />
+				</g>
+				<g id="c2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 10 L 90 10 L 90 90 L 10 90" />
+				</g>
+				<g id="d2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 10 L 90 50 L 10 90 Z" />
+				</g>
+				<g id="e2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 10 L 90 10 L 90 90 L 10 90 M 10 50 L 50 50" />
+				</g>
+				<g id="f2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 10 L 90 10 M 10 50 L 90 50 L 90 90" />
+				</g>
+				<g id="g2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 90 L 10 10 L 90 10 M 90 90 Z" />
+				</g>
+				<g id="h2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 90 L 10 50 L 90 50 L 90 10 M 90 50 L 90 90 M 10 10 Z" />
+				</g>
+				<g id="i2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 10 L 90 10 L 10 90 L 90 90 Z" />
+				</g>
+				<g id="j2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square"></g>
+				<g id="k2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 10 L 10 90 M 90 10 L 10 50 L 90 90 Z" />
+				</g>
+				<g id="l2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 90 10 L 10 10 L 10 90" />
+				</g>
+				<g id="m2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 90 L 10 10 L 90 90 L 90 10 L 170 90 L 170 10" />
+				</g>
+				<g id="n2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 10 L 10 90 L 90 10 L 90 90" />
+				</g>
+				<g id="o2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 90 L 10 10 L 90 10 L 90 90 L 10 90 L 90 10" />
+				</g>
+				<g id="p2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 10 L 10 90 M 10 50 L 90 50 L 90 10" />
+				</g>
+				<g id="q2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 50 50 L 90 90 L 10 90 L 10 10 L 90 10 L 90 90" />
+				</g>
+				<g id="r2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 10 L 90 10 L 10 90 Z M 90 90 Z" />
+				</g>
+				<g id="s2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 10 L 90 10 M 10 50 L 90 50 L 90 90 L 10 90" />
+				</g>
+				<g id="t2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 90 L 90 90 M 50 90 L 50 10" />
+				</g>
+				<g id="u2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 10 L 10 90 L 90 90 L 90 10" />
+				</g>
+				<g id="v2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 25 90 L 25 10 L 105 90 M 65 10 L 155 90 L 155 10" />
+				</g>
+				<g id="w2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 10 L 10 90 L 90 10 L 90 90 L 170 10 L 170 90" />
+				</g>
+				<g id="x2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 10 10 L 90 90 M 10 90 L 90 10" />
+				</g>
+				<g id="y2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 50 50 L 10 10 L 90 10 L 50 50 L 50 90" />
+				</g>
+				<g id="z2" stroke="black" stroke-width="20" fill="none" stroke-linecap="square">
+					<path d="M 90 10 L 10 10 L 90 90 L 10 90" />
+				</g>
 			</defs>
 		</svg>
 
