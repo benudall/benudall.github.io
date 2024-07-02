@@ -210,33 +210,33 @@
 		<table cellpadding="0" cellspacing="0">
 			<tr class="Warmup">
 				<td>Warmup</td>
-				<td><button ng-click="increment('Warmup',-30)">⮜</button></td>
+				<td><button ng-click="increment('Warmup',-30)">◂</button></td>
 				<td><input ng-model="Warmup" type="number" min="0" ng-change="calc()"></td>
-				<td><button ng-click="increment('Warmup',30)">⮞</button></td>
+				<td><button ng-click="increment('Warmup',30)">▸</button></td>
 			</tr>
 			<tr class="Run">
 				<td>Run</td>
-				<td><button ng-click="increment('Run',-30)">⮜</button></td>
+				<td><button ng-click="increment('Run',-30)">◂</button></td>
 				<td><input ng-model="Run" type="number" min="0" ng-change="calc()"></td>
-				<td><button ng-click="increment('Run',30)">⮞</button></td>
+				<td><button ng-click="increment('Run',30)">▸</button></td>
 			</tr>
 			<tr class="Walk">
 				<td>Walk</td>
-				<td><button ng-click="increment('Walk',-30)">⮜</button></td>
+				<td><button ng-click="increment('Walk',-30)">◂</button></td>
 				<td><input ng-model="Walk" type="number" min="0" ng-change="calc()"></td>
-				<td><button ng-click="increment('Walk',30)">⮞</button></td>
+				<td><button ng-click="increment('Walk',30)">▸</button></td>
 			</tr>
 			<tr>
-				<td>Cycle Count</td>
-				<td><button ng-click="increment('Count',-1)">⮜</button></td>
+				<td>Count</td>
+				<td><button ng-click="increment('Count',-1)">◂</button></td>
 				<td><input ng-model="Count" type="number" min="0" ng-change="calc()"></td>
-				<td><button ng-click="increment('Count',1)">⮞</button></td>
+				<td><button ng-click="increment('Count',1)">▸</button></td>
 			</tr>
 			<tr class="Cooldown">
 				<td>Cooldown</td>
-				<td><button ng-click="increment('Cooldown',-30)">⮜</button></td>
+				<td><button ng-click="increment('Cooldown',-30)">◂</button></td>
 				<td><input ng-model="Cooldown" type="number" min="0" ng-change="calc()"></td>
-				<td><button ng-click="increment('Cooldown',30)">⮞</button></td>
+				<td><button ng-click="increment('Cooldown',30)">▸</button></td>
 			</tr>
 		</table>
 		<button ng-click="start()" id="start">Start</button>
