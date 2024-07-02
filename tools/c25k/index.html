@@ -3,18 +3,36 @@
 <style>
 	body {
 		text-align: center;
+
 	}
 
-	table{
+	table,
+	input,
+	button,
+	#currentStats,
+	#totalStats {
+		font-size: 100px;
+
+	}
+
+	table {
 		display: inline-block;
+	}
+
+	input {
+		width: 200px;
+	}
+
+	button {
+		width: 100%;
 	}
 
 	#outer {
 		display: inline-block;
 		border: 1px solid black;
 		border-radius: 50%;
-		height: 320px;
-		width: 320px;
+		height: 800px;
+		width: 800px;
 		/* background: conic-gradient(red, blue); */
 		position: relative;
 	}
@@ -22,8 +40,8 @@
 	#inner {
 		border: 1px solid black;
 		border-radius: 50%;
-		height: 240px;
-		width: 240px;
+		height: 600px;
+		width: 600px;
 		position: absolute;
 		left: 50%;
 		top: 50%;
@@ -35,12 +53,12 @@
 		position: absolute;
 		left: 50%;
 		top: 50%;
-		height: 330px;
+		height: 850px;
 		width: 0px;
 		box-sizing: border-box;
-		border-top: 30px solid black;
-		border-left: 20px solid transparent;
-		border-right: 20px solid transparent;
+		border-top: 50px solid black;
+		border-left: 25px solid transparent;
+		border-right: 25px solid transparent;
 		border-bottom: 0px solid transparent;
 	}
 
@@ -48,16 +66,10 @@
 		position: absolute;
 		left: 50%;
 		top: 50%;
-		width: 240px;
+		width: 600px;
 		transform: translate(-50%, -50%);
 		text-align: center;
 		vertical-align: middle;
-		font-size: 40px;
-	}
-
-	#totalStats {
-		text-align: center;
-		font-size: 40px;
 	}
 </style>
 <script>
@@ -94,7 +106,7 @@
 			$scope.stages = [{ type: "Warmup", length: $scope.Warmup }];
 			for (var x = 0; x <= $scope.Count - 1; x++) {
 				$scope.stages.push({ type: "Run", length: $scope.Run });
-				if (x != $scope.count - 1) {
+				if (x != $scope.Count - 1) {
 					$scope.stages.push({ type: "Walk", length: $scope.Walk });
 				}
 			}
@@ -152,7 +164,7 @@
 
 <body ng-app="app">
 	<div ng-controller="mainCtrl" class="mainCtrl">
-		<table>
+		<table cellspacing="10px">
 			<tr>
 				<td>Warmup</td>
 				<td> <input ng-model="Warmup" type="number" min="0" step="30" ng-change="calc()"> s</td>
@@ -178,7 +190,11 @@
 			</tr>
 		</table>
 		<br>
+		<br>
+		<br>
 		<button ng-click="start()">Start</button>
+		<br>
+		<br>
 		<br>
 		<br>
 		<div id="outer" style="background: conic-gradient({{conicGradient}});">
@@ -194,8 +210,11 @@
 			</div>
 		</div>
 		<br>
+		<br>
 		<div id="totalStats">
-			{{progress | time}} / {{total | time}} {{progress / total | percent}}
+			{{progress | time}} / {{total | time}}
+			<br>
+			{{progress / total | percent}}
 		</div>
 	</div>
 </body>
