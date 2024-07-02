@@ -1,0 +1,201 @@
+<title>C25K</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.0/angular.min.js"></script>
+<style>
+	body {
+		text-align: center;
+	}
+
+	table{
+		display: inline-block;
+	}
+
+	#outer {
+		display: inline-block;
+		border: 1px solid black;
+		border-radius: 50%;
+		height: 320px;
+		width: 320px;
+		/* background: conic-gradient(red, blue); */
+		position: relative;
+	}
+
+	#inner {
+		border: 1px solid black;
+		border-radius: 50%;
+		height: 240px;
+		width: 240px;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		background: white;
+	}
+
+	#marker {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		height: 330px;
+		width: 0px;
+		box-sizing: border-box;
+		border-top: 30px solid black;
+		border-left: 20px solid transparent;
+		border-right: 20px solid transparent;
+		border-bottom: 0px solid transparent;
+	}
+
+	#currentStats {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: 240px;
+		transform: translate(-50%, -50%);
+		text-align: center;
+		vertical-align: middle;
+		font-size: 40px;
+	}
+
+	#totalStats {
+		text-align: center;
+		font-size: 40px;
+	}
+</style>
+<script>
+	var app = angular.module('app', []);
+	app.controller('mainCtrl', ['$scope', '$http', function ($scope, $http) {
+
+		$scope.safeApply = function (fn) {
+			var phase = this.$root.$$phase;
+			if (phase == '$apply' || phase == '$digest') {
+				if (fn && (typeof (fn) === 'function')) { fn() }
+			} else { this.$apply(fn) }
+		};
+
+		$scope.colors = {
+			Warmup: "#ff8080",
+			Run: "#ffff80",
+			Walk: "#80ff80",
+			Cooldown: "#8080ff",
+		}
+
+		$scope.Warmup = 300;
+		$scope.Run = 60;
+		$scope.Walk = 90;
+		$scope.Count = 8;
+		$scope.Cooldown = 300;
+
+		$scope.progress = 0;
+		$scope.stageProgress = 0;
+
+		$scope.calc = () => {
+			var cycle = $scope.Run + $scope.Walk;
+			$scope.total = ($scope.Warmup) + (cycle * $scope.Count) + ($scope.Cooldown) - $scope.Walk;
+
+			$scope.stages = [{ type: "Warmup", length: $scope.Warmup }];
+			for (var x = 0; x <= $scope.Count - 1; x++) {
+				$scope.stages.push({ type: "Run", length: $scope.Run });
+				if (x != $scope.count - 1) {
+					$scope.stages.push({ type: "Walk", length: $scope.Walk });
+				}
+			}
+			$scope.stages.push({ type: "Cooldown", length: $scope.Cooldown });
+			$scope.currentStage = $scope.stages[0];
+
+			$scope.conicGradient = "";
+			var progress = 0;
+			$scope.stages.forEach((stage, s) => {
+				stage.start = progress;
+				stage.end = progress + stage.length;
+				var startAngle = (progress / $scope.total) * 360;
+				var endAngle = startAngle + ((stage.length / $scope.total) * 360);
+				progress += stage.length;
+				$scope.conicGradient += `${$scope.colors[stage.type]} ${startAngle}deg, ${$scope.colors[stage.type]} ${endAngle}deg, `;
+			});
+			$scope.conicGradient = $scope.conicGradient.slice(0, -2)
+		}
+		$scope.calc();
+
+		$scope.getStage = (time) => {
+			return $scope.currentStage = $scope.stages.find(stage => time >= stage.start && time < stage.end);
+		}
+
+		$scope.tick = () => {
+			console.log("TICK")
+			var now = new Date();
+			$scope.progress = Math.floor((now - $scope.startTime) / 1000);
+			$scope.getStage($scope.progress);
+			$scope.stageProgress = $scope.progress - $scope.currentStage.start;
+			$scope.safeApply();
+		}
+
+		$scope.start = () => {
+			$scope.startTime = new Date();
+			$scope.interval = setInterval($scope.tick, 1000);
+		}
+
+		window.$scope = $scope;
+	}]).filter("time", () => {
+		return (input, $scope) => {
+			if (input == undefined) { return }
+			var m = Math.floor(input / 60);
+			var s = input - (m * 60);
+			var ss = ("0" + s).substr(-2);
+			return `${m}:${ss}`;
+		}
+	}).filter("percent", () => {
+		return (input, $scope) => {
+			if (input == undefined) { return }
+			return `${Math.floor(input * 100)}%`;
+		}
+	})
+</script>
+
+<body ng-app="app">
+	<div ng-controller="mainCtrl" class="mainCtrl">
+		<table>
+			<tr>
+				<td>Warmup</td>
+				<td> <input ng-model="Warmup" type="number" min="0" step="30" ng-change="calc()"> s</td>
+			</tr>
+			<tr>
+				<td>Run</td>
+				<td><input ng-model="Run" type="number" min="30" step="30" ng-change="calc()"> s</td>
+			</tr>
+			<br>
+			<tr>
+				<td>Walk</td>
+				<td><input ng-model="Walk" type="number" min="30" step="30" ng-change="calc()"> s</td>
+			</tr>
+			<br>
+			<tr>
+				<td>Count</td>
+				<td><input ng-model="Count" type="number" min="1" step="30" ng-change="calc()"></td>
+			</tr>
+			<br>
+			<tr>
+				<td>Cooldown</td>
+				<td><input ng-model="Cooldown" type="number" min="0" step="30" ng-change="calc()"> s</td>
+			</tr>
+		</table>
+		<br>
+		<button ng-click="start()">Start</button>
+		<br>
+		<br>
+		<div id="outer" style="background: conic-gradient({{conicGradient}});">
+			<div id="inner" style="background: {{colors[currentStage.type]}} ">
+				<div id="marker" style="transform: translate(-50%, -50%) rotate({{360 * progress / total}}deg);"></div>
+				<div id="currentStats">
+					{{currentStage.type}}
+					<br>
+					{{stageProgress | time}} / {{currentStage.length | time}}
+					<br>
+					{{stageProgress / currentStage.length | percent}}
+				</div>
+			</div>
+		</div>
+		<br>
+		<div id="totalStats">
+			{{progress | time}} / {{total | time}} {{progress / total | percent}}
+		</div>
+	</div>
+</body>

@@ -1,0 +1,414 @@
+<title>Risk of Rain 2</title>
+<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.js'></script>
+<style>
+	body {
+		background: black;
+		color: white;
+	}
+
+	#controller {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		grid-template-rows: 405px 375px auto;
+	}
+
+	.container {
+		display: inline-block;
+		border-width: 1px;
+		border-style: solid;
+		border-color: var(--color);
+		text-align: center;
+	}
+
+	.container>span {
+		font-size: 25px;
+		color: var(--color);
+	}
+
+	.container.common {
+		grid-column: 1;
+		grid-row: 1 span 3;
+	}
+
+	.container.uncommon {
+		grid-column: 2;
+		grid-row: 1 span 3;
+	}
+
+	.container.legendary {
+		grid-column: 3;
+		grid-row: 1 span 3;
+	}
+
+	.container.boss {
+		grid-column: 4;
+		grid-row: 1;
+	}
+
+	.container.equipment {
+		grid-column: 4;
+		grid-row: 2 span 3;
+	}
+
+	.container.void1 {
+		grid-column: 1;
+		grid-row: 3;
+	}
+
+	.container.void2 {
+		grid-column: 2;
+		grid-row: 3;
+	}
+
+	.container.void3 {
+		grid-column: 3;
+		grid-row: 3;
+	}
+
+	.itemList {
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		text-align: center;
+	}
+
+	.common {
+		--color: #ffffff;
+		--dark: #202020;
+		--hl: #404040;
+	}
+
+	.uncommon {
+		--color: #00ff00;
+		--dark: #002000;
+		--hl: #004000;
+	}
+
+	.legendary {
+		--color: #ff0000;
+		--dark: #200000;
+		--hl: #400000;
+	}
+
+	.boss {
+		--color: #ffff00;
+		--dark: #202000;
+		--hl: #404000;
+	}
+
+	.equipment {
+		--color: #ff8000;
+		--dark: #201000;
+		--hl: #402000;
+	}
+
+	.void {
+		--color: #ff00ff;
+		--dark: #200020;
+		--hl: #400040;
+	}
+
+	.item {
+		border-color: var(--color);
+		background-color: var(--dark);
+		border-width: 1px;
+		border-style: solid;
+		height: 125px;
+		width: 125px;
+		padding: 10px;
+		box-sizing: border-box;
+		position: relative;
+	}
+
+	.item.hltrue {
+		background-color: var(--hl);
+	}
+
+	.item.corruptable span {
+		text-decoration: underline wavy #ff00ff;
+	}
+
+	.item span {
+		display: block;
+		margin-top: 5px;
+	}
+
+	.item img {
+		height: 50px;
+		width: 50px;
+	}
+
+	.item img.sotv {
+		position: absolute;
+		height: 25px;
+		width: 25px;
+		top: 0;
+		left: 0;
+	}
+
+	.item .description {
+		/* display: none; */
+		position: absolute;
+		left: 50%;
+		top: 100%;
+		transform: translateX(-50%);
+		min-width: 250px;
+		max-width: 500px;
+		background: white;
+		border: 1px solid black;
+		color: black;
+		z-index: 2;
+	}
+
+	.item:hover .description {
+		/* display: block; */
+	}
+
+	.item:nth-child(5n+1) .description {
+		left: 100%;
+	}
+
+	.item:nth-child(5n) .description {
+		left: auto;
+		right: -100%;
+	}
+</style>
+<script>
+	var app = angular.module('app', []);
+	app.controller('Controller', ['$scope', '$http', async function ($scope, $http) {
+		$scope.safeApply = function (fn) {
+			var phase = this.$root.$$phase;
+			if (phase == '$apply' || phase == '$digest') {
+				if (fn && (typeof (fn) === 'function')) { fn() }
+			} else { this.$apply(fn) }
+		};
+
+		$scope.hovered = { name: "", match: [""] };
+		$scope.hover = (item) => {
+			$scope.hovered = item;
+		}
+		$scope.hl = (item) => {
+			return item.name == $scope.hovered.name || $scope.hovered.match?.includes(item.name);
+		}
+
+		$scope.items = {
+			common: [
+				{ name: "Repulsion Armor Plate", img: "Repulsion_Armor_Plate.webp", description: "Reduce all incoming damage by 5 (+5 per stack). Cannot be reduced below 1" },
+				{ name: "Mocha", img: "Mocha.webp", sotv: true, description: "Increases attack speed by 7.5% (+7.5 per stack) and movement speed by 7% (+7% per stack)" },
+				{ name: "Topaz Brooch", img: "Topaz_Brooch.webp", description: "Gain a temporary barrier on kill for 15 health (+15 per stack)" },
+				{ name: "Tougher Times", img: "Tougher_Times.webp", description: "15% (+15% per stack) chance to block incoming damage. Unaffected by luck", match: ["Safer Spaces"] },
+				{ name: "Tri-Tip Dagger", img: "Tri-Tip_Dagger.webp", description: "10% (+10% per stack) chance to bleed an enemy for 240% base damage", match: ["Needletick"] },
+				{ name: "Armor-Piercing Rounds", img: "Armor-Piercing_Rounds.png", description: "Deal an additional 20% damage (+20% per stack) to bosses" },
+				{ name: "Lens-Maker's Glasses", img: "Lens-Makers_Glasses.webp", description: "Your attacks have a 10% (+10% per stack) chance to 'Critically Strike', dealing double damage", match: ["Lost Seer's Lenses"] },
+				{ name: "Crowbar", img: "Crowbar.webp", description: "Deal +75% (+75% per stack) damage to enemies above 90% health" },
+				{ name: "Bundle of Fireworks", img: "Bundle_of_Fireworks.webp", description: "Activating an interactable launches 8 (+4 per stack) fireworks that deal 300% base damage" },
+				{ name: "Bison Steak", img: "Bison_Steak.webp", description: "Increases maximum health by 25 (+25 per stack)" },
+				{ name: "Delicate Watch", img: "Delicate_Watch.webp", sotv: true, description: "Increase damage by 20% (+20% per stack). Taking damage to below 25% health breaks this item" },
+				{ name: "Roll of Pennies", img: "Roll_of_Pennies.webp", sotv: true, description: "Gain 3 (+3 per stack) gold on taking damage from an enemy. Scales over time" },
+				{ name: "Cautious Slug", img: "Cautious_Slug.webp", description: "Increases base health regeneration by +3 hp/s (+3 hp/s per stack) while outside of combat" },
+				{ name: "Power Elixir", img: "Power_Elixir.webp", sotv: true, description: "Taking damage to below 25% health consumes this item, healing you for 75% of maximum health" },
+				{ name: "Paul's Goat Hoof", img: "Pauls_Goat_Hoof.webp", description: "Increases movement speed by 14% (+14% per stack)" },
+				{ name: "Gasoline", img: "Gasoline.webp", description: "Killing an enemy ignites all enemies within 12m (+4m per stack) for 150% base damage. Additionally, enemies burn for 150% (+75% per stack) base damage" },
+				{ name: "Medkit", img: "Medkit.webp", description: "2 seconds after getting hurt, heal for 20 plus an additional 5% (+5% per stack) of maximum health" },
+				{ name: "Bustling Fungus", img: "Bustling_Fungus.webp", description: "After standing still for 1 second, create a zone that heals for 4.5% (+2.25% per stack) of your health every second to all allies within 3m (+1.5m per stack)", match: ["Weeping Fungus"] },
+				{ name: "Focus Crystal", img: "Focus_Crystal.webp", description: "Increase damage to enemies within 13m by 20% (+20% per stack)" },
+				{ name: "Oddly-shaped Opal", img: "Oddly-shaped_Opal.webp", sotv: true, description: "Increase armor by 100 (+100 per stack) while out of danger" },
+				{ name: "Personal Shield Generator", img: "Personal_Shield_Generator.webp", description: "Gain a shield equal to 8% (+8% per stack) of your maximum health. Recharges outside of danger" },
+				{ name: "Backup Magazine", img: "Backup_Magazine.webp", description: "Add +1 (+1 per stack) charge of your Secondary skill" },
+				{ name: "Energy Drink", img: "Energy_Drink.webp", description: "Sprint speed is improved by 25% (+25% per stack)" },
+				{ name: "Sticky Bomb", img: "Sticky_Bomb.webp", description: "5% (+5% per stack) chance on hit to attach a bomb to an enemy, detonating for 180% TOTAL damage" },
+				{ name: "Stun Grenade", img: "Stun_Grenade.webp", description: "5% (+5% on stack) chance on hit to stun enemies for 2 seconds" },
+				{ name: "Soldier's Syringe", img: "Soldiers_Syringe.webp", description: "Increases attack speed by 15% (+15% per stack)" },
+				{ name: "Monster Tooth", img: "Monster_Tooth.webp", description: "Killing an enemy spawns a healing orb that heals for 8 plus an additional 2% (+2% per stack) of maximum health" },
+				{ name: "Rusted Key", img: "Rusted_Key.webp", description: "A hidden cache containing an item (80%/20%) will appear in a random location on each stage. Opening the cache consumes this item", match: ["Encrusted Key"] },
+				{ name: "Warbanner", img: "Warbanner.webp", description: "On level up or starting the Teleporter event, drop a banner that strengthens all allies within 16m (+8m per stack). Raise attack and movement speed by 30%" },
+			],
+			uncommon: [
+				{ name: "Predatory Instincts", img: "Predatory_Instincts.webp", description: "Gain 5% critical chance. Critical strikes increase attack speed by 12%. Maximum cap of 36% (+24% per stack) attack speed" },
+				{ name: "Bandolier", img: "Bandolier.webp", description: "18% (+10% per stack) chance on kill to drop an ammo pack that resets all skill cooldowns" },
+				{ name: "Ghor's Tome", img: "Ghors_Tome.webp", description: "4% (+4% on stack) chance on kill to drop a treasure worth $25. Scales over time" },
+				{ name: "Ukulele", img: "Ukulele.webp", description: "25% chance to fire chain lightning for 80% TOTAL damage on up to 3 (+2 per stack) targets within 20m (+2m per stack)", match: ["Polylute"] },
+				{ name: "Death Mark", img: "Death_Mark.webp", description: "Enemies with 4 or more debuffs are marked for death, increasing damage taken by 50% from all sources for 7 (+7 per stack) seconds" },
+				{ name: "War Horn", img: "War_Horn.webp", description: "Activating your Equipment gives you +70% attack speed for 8s (+4s per stack)" },
+				{ name: "Fuel Cell", img: "Fuel_Cell.webp", description: "Hold an additional equipment charge (+1 per stack). Reduce equipment cooldown by 15% (+15% per stack)", match: ["Lysate Cell"] },
+				{ name: "Old Guillotine", img: "Old_Guillotine.webp", description: "Instantly kill Elite monsters below 13% (+13% per stack) health" },
+				{ name: "Will-o'-the-wisp", img: "Will-o-the-wisp.webp", description: "On killing an enemy, spawn a lava pillar in a 12m (+2.4m per stack) radius for 350% (+280% per stack) base damage", match: ["Voidsent Flame"] },
+				{ name: "Hopoo Feather", img: "Hopoo_Feather.webp", description: "Gain +1 (+1 per stack) maximum jump count" },
+				{ name: "Kjaro's Band", img: "Kjaros_Band.webp", description: "Hits that deal more than 400% damage also blasts enemies with a runic flame tornado, dealing 300% (+300% per stack) TOTAL damage over time. Recharges every 10 seconds", match: ["Singularity Band"] },
+				{ name: "Shipping Request Form", img: "Shipping_Request_Form.webp", sotv: true, description: "A delivery containing 2 items (79%/20%/1%) will appear in a random location on each stage. (Increases rarity chances of the items per stack)" },
+				{ name: "Harvester's Scythe", img: "Harvesters_Scythe.webp", description: "Gain 5% critical chance. Critical strikes heal for 8 (+4 per stack) health" },
+				{ name: "Runald's Band", img: "Runalds_Band.webp", description: "Hits that deal more than 400% damage also blasts enemies with a runic ice blast, slowing them by 80% for 3s (+3s per stack) and dealing 250% (+250% per stack) TOTAL damage. Recharges every 10 seconds", match: ["Singularity Band"] },
+				{ name: "Infusion", img: "Infusion.webp", description: "Killing an enemy increases your health permanently by 1 (+1 per stack), up to a maximum of 100 (+100 per stack) health" },
+				{ name: "Wax Quail", img: "Wax_Quail.webp", description: "Jumping while sprinting boosts you forward by 10m (+10m per stack)" },
+				{ name: "AtG Missile Mk. 1", img: "AtG_Missile_Mk._1.webp", description: "10% chance to fire a missile that deals 300% (+300% per stack) TOTAL damage", match: ["Plasma Shrimp"] },
+				{ name: "Hunter's Harpoon", img: "Hunters_Harpoon.webp", sotv: true, description: "Killing an enemy increases movement speed by 125%, fading over 1 (+0.5 per stack) seconds" },
+				{ name: "Old War Stealthkit", img: "Old_War_Stealthkit.webp", description: "Falling below 25% health causes you to gain 40% movement speed and invisibility for 5s. Recharges every 30 seconds (-50% per stack)" },
+				{ name: "Shuriken", img: "Shuriken.webp", sotv: true, description: "Activating your Primary skill also throws a shuriken that deals 400% (+100% per stack) base damage. You can hold up to 3 (+1 per stack) shurikens which all reload over 10 seconds" },
+				{ name: "Regenerating Scrap", img: "Regenerating_Scrap.webp", sotv: true, description: "Does nothing. Prioritized when used with Uncommon 3D Printers. At the start of each stage, it regenerates" },
+				{ name: "Leeching Seed", img: "Leeching_Seed.webp", description: "Dealing damage heals you for 1 (+1 per stack) health" },
+				{ name: "Chronobauble", img: "Chronobauble.webp", description: "Slow enemies on hit for -60% movement speed for 2s (+2s per stack)", match: ["Tentabauble"] },
+				{ name: "Rose Buckler", img: "Rose_Buckler.webp", description: "Increase armor by 30 (+30 per stack) while sprinting" },
+				{ name: "Red Whip", img: "Red_Whip.webp", description: "Leaving combat boosts your movement speed by 30% (+30% per stack)" },
+				{ name: "Squid Polyp", img: "Squid_Polyp.webp", description: "Activating an interactable summons a Squid Turret that attacks nearby enemies at 100% (+100% per stack) attack speed. Lasts 30 seconds" },
+				{ name: "Ignition Tank", img: "Ignition_Tank.webp", sotv: true, description: "Ignite effects deal +300% (+300% per stack) more damage over time" },
+				{ name: "Lepton Daisy", img: "Lepton_Daisy.webp", description: "Release a healing nova during the Teleporter event, healing all nearby allies for 50% of their maximum health. Occurs 1 (+1 per stack) times" },
+				{ name: "Razorwire", img: "Razorwire.webp", description: "Getting hit causes you to explode in a burst of razors, dealing 160% damage. Hits up to 5 (+2 per stack) targets in a 25m (+10m per stack) radius" },
+				{ name: "Berzerker's Pauldron", img: "Berzerkers_Pauldron.webp", description: "Killing 4 enemies within 1 second sends you into a frenzy for 6s (+4s per stack). Increases movement speed by 50% and attack speed by 100%" },
+			],
+			legendary: [
+				{ name: "Alien Head", img: "Alien_Head.webp", description: "Reduce skill cooldowns by 25% (+25% per stack)" },
+				{ name: "Shattering Justice", img: "Shattering_Justice.webp", description: "After hitting an enemy 5 times, reduce their armor by 60 for 8 (+8 per stack) seconds" },
+				{ name: "Aegis", img: "Aegis.webp", description: "Healing past full grants you a temporary barrier for 50% (+50% per stack) of the amount you healed" },
+				{ name: "Brilliant Behemoth", img: "Brilliant_Behemoth.webp", description: "All your attacks explode in a 4m (+2.5m per stack) radius for a bonus 60% TOTAL damage to nearby enemies" },
+				{ name: "Sentient Meat Hook", img: "Sentient_Meat_Hook.webp", description: "20% (+20% per stack) chance on hit to fire homing hooks at up to 10 (+5 per stack) enemies for 100% TOTAL damage" },
+				{ name: "57 Leaf Clover", img: "57_Leaf_Clover.webp", description: "All random effects are rolled +1 (+1 per stack) times for a favorable outcome", match: ["Benthic Bloom"] },
+				{ name: "Laser Scope", img: "Laser_Scope.webp", sotv: true, description: "Critical Strikes deal an additional 100% damage (+100% per stack)" },
+				{ name: "Ceremonial Dagger", img: "Ceremonial_Dagger.webp", description: "Killing an enemy fires out 3 homing daggers that deal 150% (+150% per stack) base damage" },
+				{ name: "Spare Drone Parts", img: "Spare_Drone_Parts.webp", sotv: true, description: "Gain Col. Droneman. Drones gain +50% (+50% per stack) attack speed and cooldown reduction. Drones gain 10% chance to fire a missile on hit, dealing 300% TOTAL damage. Drones gain an automatic chain gun that deals 6x100% damage, bouncing to 2 enemies" },
+				{ name: "Dio's Best Friend", img: "Dios_Best_Friend.webp", description: "Upon death, this item will be consumed and you will return to life with 3 seconds of invulnerability", match: ["Pluripotent Larva"] },
+				{ name: "H3AD-5T v2", img: "H3AD-5T_v2.webp", description: "Increase jump height. Creates a 5m-100m radius kinetic explosion on hitting the ground, dealing 1000%-10000% base damage that scales up with fall distance. Recharges in 10 (-50% per stack) seconds" },
+				{ name: "Happiest Mask", img: "Happiest_Mask.webp", description: "Killing enemies has a 7% chance to spawn a ghost of the killed enemy with 1500% damage. Lasts 30s (+30s per stack)" },
+				{ name: "Wake of Vultures", img: "Wake_of_Vultures.webp", description: "Gain the power of any killed elite monster for 8s (+5s per stack)" },
+				{ name: "Frost Relic", img: "Frost_Relic.webp", description: "Killing an enemy surrounds you with an ice storm that deals 1200% damage per second and slows enemies by 80% for 1.5s. The storm grows with every kill, increasing its radius by 2m. Stacks up to 18m (+12m per stack)" },
+				{ name: "Ben's Raincoat", img: "Bens_Raincoat.webp", sotv: true, description: "Prevents 1 (+1 per stack) debuff and instead grants a temporary barrier for 10% of maximum health. Recharges every 5 seconds" },
+				{ name: "Rejuvenation Rack", img: "Rejuvenation_Rack.webp", description: "Heal +100% (+100% per stack) more" },
+				{ name: "Brainstalks", img: "Brainstalks.webp", description: "Upon killing an elite monster, enter a frenzy for 4s (+4s per stack) where skills have 0.5s cooldowns" },
+				{ name: "Resonance Disc", img: "Resonance_Disc.webp", description: "Killing 4 enemies in 7 seconds charges the Resonance Disc. The disc launches itself toward a target for 300% base damage (+300% per stack), piercing all enemies it doesn't kill, and then explodes for 1000% base damage (+1000% per stack). Returns to the user, striking all enemies along the way for 300% base damage (+300% per stack)" },
+				{ name: "Pocket I.C.B.M.", img: "Pocket_I.C.B.M..webp", sotv: true, description: "All missile items and equipment fire an additional 2 missiles. Increase missile damage by 0% (+50% per stack)" },
+				{ name: "N'kuhanas Opinion", img: "Nkuhanas_Opinion.webp", description: "Store 100% (+100% per stack) of healing as Soul Energy. After your Soul Energy reaches 10% of your maximum health, fire a skull that deals 250% of your Soul Energy as damage" },
+				{ name: "Symbiotic Scorpion", img: "Symbiotic_Scorpion.webp", sotv: true, description: "100% chance on hit to reduce armor by 2 (+2 per stack) permanently" },
+				{ name: "Interstellar Desk Plant", img: "Interstellar_Desk_Plant.webp", description: "On kill, plant a healing fruit seed that grows into a plant after 5 seconds. The plant heals for 5% of maximum health every 0.5 second to all allies within 10m (+5.0m per stack). Lasts 10 seconds" },
+				{ name: "Bottled Chaos", img: "Bottled_Chaos.webp", sotv: true, description: "Trigger a random equipment effect 1 (+1 per stack) time(s)" },
+				{ name: "Unstable Tesla Coil", img: "Unstable_Tesla_Coil.webp", description: "Fire out lightning that hits 3 (+2 per stack) enemies for 200% base damage every 0.5s. The Tesla Coil switches off every 10 seconds" },
+				{ name: "Soulbound Catalyst", img: "Soulbound_Catalyst.webp", description: "Kills reduce equipment cooldown by 4s (+2s per stack)" },
+				{ name: "Hardlight Afterburner", img: "Hardlight_Afterburner.webp", description: "Add +2 (+2 per stack) charges of your Utility skill. Reduces Utility skill cooldown by 33%" },
+			],
+			boss: [
+				{ name: "Queen's Gland", img: "Queens_Gland.webp", description: "Every 30 seconds, summon a Beetle Guard with bonus 300% damage and 100% health. Can have up to 1 (+1 per stack) Guards at a time" },
+				{ name: "Shatterspleen", img: "Shatterspleen.webp", description: "Gain 5% critical chance. Critical Strikes bleed enemies for 240% base damage. Bleeding enemies explode on death for 400% (+400% per stack) damage, plus an additional 15% (+15% per stack) of their maximum health" },
+				{ name: "Molten Perforator", img: "Molten_Perforator.webp", description: "10% chance on hit to call forth 3 magma balls from an enemy, dealing 300% (+300% per stack) damage each" },
+				{ name: "Titanic Knurl", img: "Titanic_Knurl.webp", description: "Increase maximum health by 40 (+40 per stack) and base health regeneration by +1.6 hp/s (+1.6 hp/s per stack)" },
+				{ name: "Charged Perforator", img: "Charged_Perforator.webp", description: "10% chance on hit to down a lightning strike, dealing 500% (+500% per stack) damage" },
+				{ name: "Defense Nucleus", img: "Defense_Nucleus.webp", sotv: true, description: "Killing elite monsters spawns an Alpha Construct with bonus 300% damage and 300% health. Limited to 4 (+4 per stack)" },
+				{ name: "Genesis Loop", img: "Genesis_Loop.webp", description: "Falling below 25% health causes you to explode, dealing 6000% base damage. Recharges every 30 / (2 +1 per stack) seconds " },
+				{ name: "Planula", img: "Planula.webp", description: "Heal from incoming damage for 15 (+15 per stack)" },
+				{ name: "Empathy Cores", img: "Empathy_Cores.webp", description: "Every 30 seconds, summon two Solus Probes that gain +100% (+100% per stack) damage per ally on your team" },
+				{ name: "Mired Urn", img: "Mired_Urn.webp", description: "While in combat, the nearest 1 (+1 per stack) enemies to you within 13m will be 'tethered' to you, dealing 100% damage per second, applying tar, and healing you for 100% of the damage dealt" },
+				{ name: "Little Disciple", img: "Little_Disciple.webp", description: "Fire a tracking wisp for 300% (+300% per stack) damage. Fires every 1.6 seconds while sprinting. Fire rate increases with movement speed" },
+			],
+			equipment: [
+				{ name: "Preon Accumulator", img: "Preon_Accumulator.webp", description: "Fires preon tendrils, zapping enemies within 35m for up to 600% damage/second. On contact, detonate in an enormous 20m explosion for 4000% damage" },
+				{ name: "Primordial Cube", img: "Primordial_Cube.webp", description: "Fire a black hole that draws enemies within 30m into its center. Lasts 10 seconds" },
+				{ name: "Trophy Hunter's Tricorn", img: "Trophy_Hunters_Tricorn.webp", sotv: true, description: "Execute any enemy capable of spawning a unique reward, and it will drop that item. Equipment is consumed on use" },
+				{ name: "Blast Shower", img: "Blast_Shower.webp", description: "Cleanse all negative effects. Includes debuffs, damage over time, and nearby projectiles" },
+				{ name: "Disposable Missile Launcher", img: "Disposable_Missile_Launcher.webp", description: "Fire a swarm of 12 missiles that deal 12x300% damage" },
+				{ name: "Ocular HUD", img: "Ocular_HUD.webp", description: "Gain +100% Critical Strike Chance for 8 seconds" },
+				{ name: "Forgive Me Please", img: "Forgive_Me_Please.webp", description: "Throw a cursed doll out that triggers any On-Kill effects you have every 1 second for 8 seconds" },
+				{ name: "The Back-up", img: "The_Back-up.webp", description: "Call 4 Strike Drones to fight for you. Lasts 25 seconds" },
+				{ name: "Volcanic Egg", img: "Volcanic_Egg.webp", description: "Turn into a draconic fireball for 5 seconds. Deal 500% damage on impact. Detonates at the end for 800% damage" },
+				{ name: "Foreign Fruit", img: "Foreign_Fruit.webp", description: "Instantly heal for 50% of your maximum health" },
+				{ name: "Jade Elephant", img: "Jade_Elephant.webp", description: "Gain 500 armor for 5 seconds" },
+				{ name: "Eccentric Vase", img: "Eccentric_Vase.webp", description: "Create a quantum tunnel of up to 1000m in length. Lasts 30 seconds" },
+				{ name: "The Crowdfunder", img: "The_Crowdfunder.webp", description: "Fires a continuous barrage that deals 100% damage per bullet. Costs $1 per bullet. Cost increases over time" },
+				{ name: "Goobo Jr.", img: "Goobo_Jr..webp", sotv: true, description: "Spawn a gummy clone that has 300% damage and 300% health. Expires in 30 seconds" },
+				{ name: "Milky Chrysalis", img: "Milky_Chrysalis.webp", description: "Sprout wings and fly for 15 seconds. Gain +20% movement speed for the duration" },
+				{ name: "Super Massive Leech", img: "Super_Massive_Leech.webp", description: "Heal for 20% of the damage you deal. Lasts 8 seconds" },
+				{ name: "Royal Capacitor", img: "Royal_Capacitor.webp", description: "Call down a lightning strike on a targeted monster, dealing 3000% damage and stunning nearby monsters" },
+				{ name: "Molotov (6-Pack)", img: "Molotov_29.webp", sotv: true, description: "Throw 6 molotov cocktails that ignites enemies for 500% base damage. Each molotov leaves a burning area for 200% damage per second" },
+				{ name: "Executive Card", img: "Executive_Card.webp", sotv: true, description: "Whenever you make a gold purchase, get 10% of the spent gold back. If the purchase is a multishop terminal, the other terminals will remain open" },
+				{ name: "Gnarled Woodsprite", img: "Gnarled_Woodsprite.webp", description: "Gain a Woodsprite follower that heals for 1.5% of your maximum health/second. Can be sent to an ally to heal them for 10% of their maximum health" },
+				{ name: "Recycler", img: "Recycler.webp", description: "Transform an Item or Equipment into a different one. Can only be converted into the same tier one time" },
+				{ name: "Sawmerang", img: "Sawmerang.webp", description: "Throw three large saw blades that slice through enemies for 3x400% damage. Also deals an additional 3x100% damage per second while bleeding enemies. Can strike enemies again on the way back" },
+				{ name: "Radar Scanner", img: "Radar_Scanner.webp", description: "Reveal all interactables within 500m for 10 seconds" },
+				{ name: "Gorag's Opus", img: "Gorags_Opus.webp", description: "All allies enter a frenzy for 7 seconds. Increases movement speed by 50% and attack speed by 100%" },
+				{ name: "Remote Caffeinator", img: "Remote_Caffeinator.webp", sotv: true, description: "Request an Eclipse Zero Vending Machine from the UES Safe Travels. Delivery guaranteed in 5 seconds, dealing 2000% damage. Heal up to 3 targets for 25% of their maximum health" },
+			],
+			void1: [
+				{ name: "Safer Spaces", img: "Safer_Spaces.webp", sotv: true, description: "Blocks incoming damage once. Recharges after 15 seconds (-10% per stack) Corrupts all Tougher Times", match: ["Tougher Times"] },
+				{ name: "Needletick", img: "Needletick.webp", sotv: true, description: "10% (+10% per stack) chance to collapse an enemy for 400% base damage. Corrupts all Tri-Tip Daggers", match: ["Tri-Tip Dagger"] },
+				{ name: "Lost Seer's Lenses", img: "Lost_Seers_Lenses.webp", sotv: true, description: "Your attacks have a 0.5% (+0.5% per stack) chance to instantly kill a non-Boss enemy. Corrupts all Lens-Maker's Glasses", match: ["Lens-Maker's Glasses"] },
+				{ name: "Weeping Fungus", img: "Weeping_Fungus.webp", sotv: true, description: "Heals for 2% (+2% per stack) of your health every second while sprinting. Corrupts all Bustling Fungi", match: ["Bustling Fungus"] },
+				{ name: "Encrusted Key", img: "Encrusted_Key.webp", sotv: true, description: "A hidden cache containing an item (60%/30%/10%) will appear in a random location on each stage. Opening the cache consumes this item. Corrupts all Rusted Keys", match: ["Rusted Key"] },
+			],
+			void2: [
+				{ name: "Polylute", img: "Polylute.webp", sotv: true, description: "25% chance to fire lightning for 60% TOTAL damage up to 3 (+3 per stack) times. Corrupts all Ukuleles", match: ["Ukulele"] },
+				{ name: "Singularity Band", img: "Singularity_Band.webp", sotv: true, description: "Hits that deal more than 400% damage also fire a black hole that draws enemies within 15m into its center. Lasts 5 seconds before collapsing, dealing 100% (+100% per stack) TOTAL damage. Recharges every 20 seconds. Corrupts all Runald's and Kjaro's Bands", match: ["Runald's Band", "Kjaro's Band"] },
+				{ name: "Lysate Cell", img: "Lysate_Cell.webp", sotv: true, description: "Add +1 (+1 per stack) charge of your Special skill. Reduces Special skill cooldown by 33%. Corrupts all Fuel Cells", match: ["Fuel Cell"] },
+				{ name: "Voidsent Flame", img: "Voidsent_Flame.webp", sotv: true, description: "Upon hitting an enemy at full health, spawn a lava pillar in a 12m (+2.4m per stack) radius for 260% (+156% per stack) base damage. Corrupts all Will-o'-the-wisps", match: ["Will-o'-the-wisp"] },
+				{ name: "Plasma Shrimp", img: "Plasma_Shrimp.webp", sotv: true, description: "Gain a shield equal to 10% of your maximum health. While you have a shield, hitting an enemy fires a missile that deals 40% (+40% per stack) TOTAL damage. Corrupts all AtG Missile Mk. 1s", match: ["AtG Missile Mk. 1"] },
+				{ name: "Tentabauble", img: "Tentabauble.webp", sotv: true, description: "5% (+5% per stack) chance on hit to root enemies for 1s (+1s per stack). Corrupts all Chronobaubles", match: ["Chronobauble"] },
+			],
+			void3: [
+				{ name: "Benthic Bloom", img: "Benthic_Bloom.webp", sotv: true, description: "Upgrades 3 (+3 per stack) random items to items of the next higher rarity at the start of each stage. Corrupts all 57 Leaf Clovers", match: ["57 Leaf Clover"] },
+				{ name: "Pluripotent Larva", img: "Pluripotent_Larva.webp", sotv: true, description: "Upon death, this item will be consumed and you will return to life with 3 seconds of invulnerability, and all of your items that can be corrupted will be. Corrupts all Dio's Best Friends", match: ["Dio's Best Friend"] },
+				// { name: "Newly Hatched Zoea", img: "Newly_Hatched_Zoea.webp" ,description:"Every 60 (-50% per stack) seconds, gain a random Void ally. Can have up to 1 (+1 per stack) allies at a time. Corrupts all yellow items."},
+			]
+		}
+
+		window.$scope = $scope;
+	}])
+		.directive('item', function () {
+			return {
+				template: function (elem, attr) {
+					return `
+					<img ng-src="./items/${attr.rarity}/{{item.img}}">
+					<br>
+					<span>{{item.name}}</span>
+					<img ng-if="item.sotv" ng-src="./items/SotV_Icon.png" class="sotv" title="Survivors of the Void DLC">
+					<div class="description" ng-if="hl(item)">{{item.description}}</div>`
+				}
+			};
+		});
+</script>
+
+<body ng-app='app'>
+	<div ng-controller='Controller' id="controller"">
+		<div class="container common">
+			<span>Common</span>
+			<div class="itemList">
+				<div item class="item common hl{{hl(item)}} {{item.match != undefined ? 'corruptable' : ''}}" ng-repeat="item in items.common" rarity="common" ng-mouseover="hover(item)"></div>
+			</div>
+		</div>
+		<div class="container uncommon">
+			<span>Uncommon</span>
+			<div class="itemList">
+				<div item class="item uncommon hl{{hl(item)}} {{item.match != undefined ? 'corruptable' : ''}}" ng-repeat="item in items.uncommon" rarity="uncommon" ng-mouseover="hover(item)"></div>
+			</div>
+		</div>
+		<div class="container legendary">
+			<span>Legendary</span>
+			<div class="itemList">
+				<div item class="item legendary hl{{hl(item)}} {{item.match != undefined ? 'corruptable' : ''}}" ng-repeat="item in items.legendary" rarity="legendary" ng-mouseover="hover(item)"></div>
+			</div>
+		</div>
+		<div class="container boss">
+			<span>Boss</span>
+			<div class="itemList">
+				<div item class="item boss hl{{hl(item)}} {{item.match != undefined ? 'corruptable' : ''}}" ng-repeat="item in items.boss" rarity="boss" ng-mouseover="hover(item)"></div>
+			</div>
+		</div>
+		<div class="container equipment">
+			<span>Equipment</span>
+			<div class="itemList">
+				<div item class="item equipment hl{{hl(item)}} {{item.match != undefined ? 'corruptable' : ''}}" ng-repeat="item in items.equipment" rarity="equipment" ng-mouseover="hover(item)"></div>
+			</div>
+		</div>
+		<div class="container void void1">
+			<span>Tier 1 Void</span>
+			<div class="itemList">
+				<div item class="item void hl{{hl(item)}} {{item.match != undefined ? 'corruptable' : ''}}" ng-repeat="item in items.void1" rarity="void" ng-mouseover="hover(item)"></div>
+			</div>
+		</div>
+		<div class="container void void2">
+			<span>Tier 2 Void</span>
+			<div class="itemList">
+				<div item class="item void hl{{hl(item)}} {{item.match != undefined ? 'corruptable' : ''}}" ng-repeat="item in items.void2" rarity="void" ng-mouseover="hover(item)"></div>
+			</div>
+		</div>
+		<div class="container void void3">
+			<span>Tier 3 Void</span>
+			<div class="itemList">
+				<div item class="item void hl{{hl(item)}} {{item.match != undefined ? 'corruptable' : ''}}" ng-repeat="item in items.void3" rarity="void" ng-mouseover="hover(item)"></div>
+			</div>
+		</div>
+	</div>
+</body>
