@@ -1,9 +1,15 @@
 <title>C25K</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.0/angular.min.js"></script>
 <style>
-	body {
-		text-align: center;
+	* {
+		font-family: sans-serif;
+		font-weight: bold;
+	}
 
+	body,
+	input {
+		text-align: center;
+		margin: 0;
 	}
 
 	table,
@@ -12,18 +18,21 @@
 	#currentStats,
 	#totalStats {
 		font-size: 100px;
-
 	}
 
 	table {
-		display: inline-block;
+		width: 100%;
+	}
+
+	table button {
+		font-size: 90px;
 	}
 
 	input {
 		width: 200px;
 	}
 
-	button {
+	button#start {
 		width: 100%;
 	}
 
@@ -33,7 +42,8 @@
 		border-radius: 50%;
 		height: 800px;
 		width: 800px;
-		/* background: conic-gradient(red, blue); */
+		margin-top: 50px;
+		margin-bottom: 50px;
 		position: relative;
 	}
 
@@ -46,7 +56,6 @@
 		left: 50%;
 		top: 50%;
 		transform: translate(-50%, -50%);
-		background: white;
 	}
 
 	#marker {
@@ -70,6 +79,28 @@
 		transform: translate(-50%, -50%);
 		text-align: center;
 		vertical-align: middle;
+	}
+
+	.Warmup {
+		background: #ff8080;
+	}
+
+	.Run {
+		background: #ffff80;
+	}
+
+	.Walk {
+		background: #80ff80;
+	}
+
+	.Cooldown {
+		background: #8080ff;
+	}
+
+	#totalStats span {
+		border: 1px solid black;
+		border-radius: 25px;
+		padding: 25px;
 	}
 </style>
 <script>
@@ -123,7 +154,9 @@
 				progress += stage.length;
 				$scope.conicGradient += `${$scope.colors[stage.type]} ${startAngle}deg, ${$scope.colors[stage.type]} ${endAngle}deg, `;
 			});
-			$scope.conicGradient = $scope.conicGradient.slice(0, -2)
+			$scope.conicGradient = $scope.conicGradient.slice(0, -2);
+			$scope.stages.push({ type: "Done", start: $scope.total, end: Infinity });
+
 		}
 		$scope.calc();
 
@@ -137,12 +170,22 @@
 			$scope.progress = Math.floor((now - $scope.startTime) / 1000);
 			$scope.getStage($scope.progress);
 			$scope.stageProgress = $scope.progress - $scope.currentStage.start;
+
+			if ($scope.progress >= $scope.total) {
+				console.log("Done");
+				clearInterval($scope.interval);
+			}
 			$scope.safeApply();
 		}
 
 		$scope.start = () => {
 			$scope.startTime = new Date();
 			$scope.interval = setInterval($scope.tick, 1000);
+		}
+
+		$scope.increment = (key, amount) => {
+			$scope[key] += amount;
+			$scope.calc();
 		}
 
 		window.$scope = $scope;
@@ -164,57 +207,56 @@
 
 <body ng-app="app">
 	<div ng-controller="mainCtrl" class="mainCtrl">
-		<table cellspacing="10px">
-			<tr>
+		<table cellpadding="0" cellspacing="0">
+			<tr class="Warmup">
 				<td>Warmup</td>
-				<td> <input ng-model="Warmup" type="number" min="0" step="30" ng-change="calc()"> s</td>
+				<td><button ng-click="increment('Warmup',-30)">⮜</button></td>
+				<td><input ng-model="Warmup" type="number" min="0" ng-change="calc()"></td>
+				<td><button ng-click="increment('Warmup',30)">⮞</button></td>
 			</tr>
-			<tr>
+			<tr class="Run">
 				<td>Run</td>
-				<td><input ng-model="Run" type="number" min="30" step="30" ng-change="calc()"> s</td>
+				<td><button ng-click="increment('Run',-30)">⮜</button></td>
+				<td><input ng-model="Run" type="number" min="0" ng-change="calc()"></td>
+				<td><button ng-click="increment('Run',30)">⮞</button></td>
 			</tr>
-			<br>
-			<tr>
+			<tr class="Walk">
 				<td>Walk</td>
-				<td><input ng-model="Walk" type="number" min="30" step="30" ng-change="calc()"> s</td>
+				<td><button ng-click="increment('Walk',-30)">⮜</button></td>
+				<td><input ng-model="Walk" type="number" min="0" ng-change="calc()"></td>
+				<td><button ng-click="increment('Walk',30)">⮞</button></td>
 			</tr>
-			<br>
 			<tr>
-				<td>Count</td>
-				<td><input ng-model="Count" type="number" min="1" step="30" ng-change="calc()"></td>
+				<td>Cycle Count</td>
+				<td><button ng-click="increment('Count',-1)">⮜</button></td>
+				<td><input ng-model="Count" type="number" min="0" ng-change="calc()"></td>
+				<td><button ng-click="increment('Count',1)">⮞</button></td>
 			</tr>
-			<br>
-			<tr>
+			<tr class="Cooldown">
 				<td>Cooldown</td>
-				<td><input ng-model="Cooldown" type="number" min="0" step="30" ng-change="calc()"> s</td>
+				<td><button ng-click="increment('Cooldown',-30)">⮜</button></td>
+				<td><input ng-model="Cooldown" type="number" min="0" ng-change="calc()"></td>
+				<td><button ng-click="increment('Cooldown',30)">⮞</button></td>
 			</tr>
 		</table>
-		<br>
-		<br>
-		<br>
-		<button ng-click="start()">Start</button>
-		<br>
-		<br>
-		<br>
-		<br>
+		<button ng-click="start()" id="start">Start</button>
 		<div id="outer" style="background: conic-gradient({{conicGradient}});">
-			<div id="inner" style="background: {{colors[currentStage.type]}} ">
+			<div id="inner" class="{{currentStage.type}}">
 				<div id="marker" style="transform: translate(-50%, -50%) rotate({{360 * progress / total}}deg);"></div>
 				<div id="currentStats">
 					{{currentStage.type}}
 					<br>
-					{{stageProgress | time}} / {{currentStage.length | time}}
-					<br>
-					{{stageProgress / currentStage.length | percent}}
+					<span ng-if="currentStage.type != 'Done'">
+						{{stageProgress | time}} / {{currentStage.length | time}}
+						<br>
+						{{stageProgress / currentStage.length | percent}}
+					</span>
 				</div>
 			</div>
 		</div>
-		<br>
-		<br>
 		<div id="totalStats">
-			{{progress | time}} / {{total | time}}
-			<br>
-			{{progress / total | percent}}
+			<span>{{progress | time}} / {{total | time}}</span>
+			<span>{{progress / total | percent}}</span>
 		</div>
 	</div>
 </body>
