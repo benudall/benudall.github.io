@@ -170,8 +170,10 @@
 
 		$scope.getStage = (time) => {
 			var newStage = $scope.stages.find(stage => time >= stage.start && time < stage.end);
-			if (newStage.type == "Run") { navigator.vibrate([100, 100, 100, 100, 100]) }
-			else { navigator.vibrate([500, 100, 500, 100, 500]) }
+			if ($scope.currentStage.type != newStage.type) {
+				if (newStage.type == "Run") { navigator.vibrate([100, 100, 100, 100, 100]) }
+				else { navigator.vibrate([500, 100, 500, 100, 500]) }
+			}
 			return $scope.currentStage = newStage;
 		}
 
