@@ -1,4 +1,4 @@
-<title></title>
+<title>LOCKDOWN Protocol</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.0/angular.min.js"></script>
 <style>
 	body {
@@ -17,7 +17,7 @@
 		height: 200px;
 		display: inline-block;
 		line-height: 50px;
-		width: 400px;
+		width: 450px;
 		font-weight: bold;
 		font-family: Arial, Helvetica, sans-serif;
 		color: white;
@@ -60,28 +60,28 @@
 		<table cellspacing="0" cellpadding="0">
 			<tr>
 				<td>
-					<label for="alimentations" style="background: #ff00ff;">
+					<label for="alimentations" style="background:#{{alimentations ? 'ff00ff' : '808080'}};">
 						<br>
 						<input id="alimentations" type="checkbox" ng-model="alimentations">
 						<br>
 						ALIMENTATIONS
 					</label>
 					<br>
-					<label for="delivery" style="background: #ff6000;">
+					<label for="delivery" style="background:#{{delivery ? 'ff6000' : '808080'}};">
 						<br>
 						<input id="delivery" type="checkbox" ng-model="delivery">
 						<br>
 						DELIVERY
 					</label>
 					<br>
-					<label for="vents" style="background: #0000ff;">
+					<label for="vents" style="background:#{{vents ? '0000ff' : '808080'}};">
 						<br>
 						<input id="vents" type="checkbox" ng-model="vents">
 						<br>
 						VENTS
 					</label>
 					<br>
-					<label for="computers" style="background: #ff0000;">
+					<label for="computers" style="background:#{{computers ? 'ff0000' : '808080'}};">
 						<br>
 						<input id="computers" type="checkbox" ng-model="computers">
 						<br>
