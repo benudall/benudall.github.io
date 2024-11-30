@@ -1,0 +1,487 @@
+<title></title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.0/angular.min.js"></script>
+<style>
+	body {
+		margin: 0;
+	}
+
+	table {
+		height: 100%;
+		width: 100%;
+		font-size: 50px;
+		text-align: center;
+	}
+
+	label {
+		border: 1px solid black;
+		height: 200px;
+		display: inline-block;
+		line-height: 50px;
+		width: 400px;
+		font-weight: bold;
+		font-family: Arial, Helvetica, sans-serif;
+		color: white;
+	}
+
+	.col {
+		border-radius: 100%;
+		display: inline-block;
+		height: 1em;
+		width: 1em;
+		vertical-align: text-bottom;
+	}
+</style>
+<script>
+	var app = angular.module('app', []);
+	app.controller('mainCtrl', ['$scope', '$http', function ($scope, $http) {
+
+		$scope.safeApply = function (fn) {
+			var phase = this.$root.$$phase;
+			if (phase == '$apply' || phase == '$digest') {
+				if (fn && (typeof (fn) === 'function')) { fn() }
+			} else { this.$apply(fn) }
+		};
+
+		$scope.analysis = true;
+		$scope.scanner = true;
+		$scope.alimentations = true;
+		$scope.delivery = true;
+		$scope.vents = true;
+		$scope.pressure = true;
+		$scope.computers = true;
+		$scope.pizzushi = true;
+
+		window.$scope = $scope;
+	}]);
+</script>
+
+<body ng-app="app">
+	<div ng-controller="mainCtrl" class="mainCtrl">
+		<table cellspacing="0" cellpadding="0">
+			<tr>
+				<td>
+					<label for="alimentations" style="background: #ff00ff;">
+						<br>
+						<input id="alimentations" type="checkbox" ng-model="alimentations">
+						<br>
+						ALIMENTATIONS
+					</label>
+					<br>
+					<label for="delivery" style="background: #ff6000;">
+						<br>
+						<input id="delivery" type="checkbox" ng-model="delivery">
+						<br>
+						DELIVERY
+					</label>
+					<br>
+					<label for="vents" style="background: #0000ff;">
+						<br>
+						<input id="vents" type="checkbox" ng-model="vents">
+						<br>
+						VENTS
+					</label>
+					<br>
+					<label for="computers" style="background: #ff0000;">
+						<br>
+						<input id="computers" type="checkbox" ng-model="computers">
+						<br>
+						COMPUTERS
+					</label>
+					<br>
+				</td>
+				<td>
+					<svg height="900px" width="900px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<g class="map">
+							<g class="hallway" fill="#e0dddd">
+								<rect x="0" y="0" width="100" height="100" fill="black" />
+								<rect x="32" y="11" width="6" height="69" fill="black" />
+								<rect x="33" y="12" width="4" height="67" />
+
+								<rect x="5" y="37" width="28" height="6" fill="black" />
+								<rect x="6" y="38" width="27" height="4" />
+
+								<rect x="52" y="18" width="30" height="28" fill="black" />
+								<rect x="53" y="19" width="28" height="26" />
+
+								<rect x="37" y="27" width="16" height="10" fill="black" />
+								<rect x="38" y="28" width="15" height="8" />
+								<rect x="37" y="30" width="1" height="4" />
+
+								<rect x="52" y="3" width="20" height="16" fill="black" />
+								<rect x="53" y="4" width="18" height="15" />
+
+								<rect x="81" y="27" width="16" height="10" fill="black" />
+								<rect x="81" y="28" width="15" height="8" />
+
+								<rect x="60" y="54" width="12" height="9" fill="black" />
+								<rect x="61" y="55" width="10" height="7" />
+
+								<rect x="62" y="45" width="10" height="10" fill="black" />
+								<rect x="63" y="45" width="8" height="10" />
+
+								<rect x="62" y="62" width="10" height="26" fill="black" />
+								<rect x="63" y="63" width="8" height="24" />
+
+								<rect x="71" y="62" width="11" height="6" fill="black" />
+								<rect x="71" y="63" width="10" height="4" />
+							</g>
+							<g class="botanical" fill="#ccffcc">
+								<rect x="2" y="7" width="22" height="31" fill="black" />
+								<rect x="3" y="8" width="20" height="29" />
+								<rect x="18" y="18" width="5" height="1" fill="black" />
+
+								<rect x="23" y="20" width="10" height="18" fill="black" />
+								<rect x="24" y="21" width="8" height="16" />
+								<rect x="28" y="28" width="4" height="1" fill="black" />
+								<rect x="28" y="32" width="4" height="1" fill="black" />
+
+								<rect x="15" y="42" width="11" height="9" fill="black" />
+								<rect x="16" y="43" width="9" height="7" />
+
+								<rect x="15" y="37" width="4" height="1" />
+								<rect x="32" y="23" width="1" height="3" />
+								<rect x="21" y="42" width="2" height="1" />
+
+								<g class="detail" fill="#aaccaa">
+									<rect x="3" y="10" width="1" height="27" />
+									<rect x="7" y="13" width="2" height="2" />
+									<rect x="7" y="17" width="2" height="11" />
+									<rect x="8" y="28" width="1" height="1" />
+									<rect x="7" y="32" width="2" height="4" />
+									<rect x="3" y="36" width="9" height="1" />
+									<rect x="10" y="9" width="5" height="2" />
+									<rect x="12" y="11" width="3" height="1" />
+									<rect x="18" y="9" width="2" height="2" />
+									<rect x="22" y="9" width="1" height="4" />
+									<rect x="18" y="14" width="2" height="4" />
+									<rect x="20" y="17" width="3" height="1" />
+									<rect x="12" y="16" width="1" height="21" />
+									<rect x="13" y="18" width="1" height="10" />
+									<rect x="13" y="30" width="1" height="7" />
+									<rect x="17" y="23" width="3" height="3" />
+									<rect x="17" y="26" width="2" height="1" />
+									<rect x="18" y="27" width="1" height="1" />
+									<rect x="20" y="19" width="3" height="1" />
+									<rect x="22" y="31" width="1" height="2" />
+									<rect x="20" y="36" width="3" height="1" />
+
+									<rect x="24" y="21" width="8" height="1" />
+									<rect x="24" y="22" width="1" height="14" />
+									<rect x="24" y="36" width="8" height="1" />
+									<rect x="31" y="29" width="1" height="3" />
+
+									<rect x="16" y="43" width="4" height="1" />
+									<rect x="19" y="44" width="1" height="3" />
+									<rect x="24" y="43" width="1" height="7" />
+								</g>
+							</g>
+							<g class="office" fill="#ffffcc">
+								<rect x="37" y="4" width="16" height="24" fill="black" />
+								<rect x="38" y="5" width="14" height="22" />
+
+								<rect x="37" y="4" width="9" height="9" fill="black" />
+								<rect x="38" y="5" width="7" height="7" />
+
+								<rect x="45" y="4" width="8" height="8" fill="black" />
+								<rect x="46" y="5" width="6" height="6" />
+								<rect x="47" y="4" width="4" height="1" />
+
+								<rect x="45" y="11" width="8" height="9" fill="black" />
+								<rect x="46" y="12" width="6" height="7" />
+
+								<rect x="45" y="19" width="8" height="9" fill="black" />
+								<rect x="46" y="20" width="6" height="7" />
+
+								<rect x="37" y="36" width="16" height="10" fill="black" />
+								<rect x="38" y="37" width="14" height="8" />
+								<rect x="45" y="36" width="1" height="6" fill="black" />
+
+								<rect x="40" y="27" width="3" height="1" />
+								<rect x="41" y="12" width="2" height="1" />
+								<rect x="45" y="6" width="1" height="2" />
+								<rect x="45" y="16" width="1" height="2" />
+								<rect x="45" y="21" width="1" height="2" />
+
+								<rect x="52" y="41" width="1" height="2" />
+
+								<g class="detail" fill="#ccccaa">
+									<rect x="39" y="5" width="4" height="1" />
+									<rect x="44" y="9" width="1" height="2" />
+
+									<rect x="46" y="9" width="1" height="2" />
+									<rect x="51" y="7" width="1" height="4" />
+
+									<rect x="38" y="14" width="1" height="5" />
+									<rect x="38" y="21" width="1" height="5" />
+									<rect x="44" y="24" width="1" height="2" />
+
+									<rect x="46" y="13" width="1" height="2" />
+									<rect x="51" y="14" width="1" height="3" />
+
+									<rect x="47" y="26" width="2" height="1" />
+									<rect x="51" y="21" width="1" height="5" />
+
+									<rect x="38" y="37" width="1" height="4" />
+									<rect x="44" y="37" width="1" height="4" />
+									<rect x="40" y="44" width="2" height="1" />
+
+									<rect x="46" y="39" width="1" height="2" />
+									<rect x="48" y="37" width="4" height="1" />
+									<rect x="49" y="44" width="3" height="1" />
+								</g>
+							</g>
+							<g class="restaurant" fill="#aaaaaa">
+								<rect x="25" y="42" width="8" height="10" fill="black" />
+								<rect x="26" y="43" width="6" height="8" />
+
+								<rect x="37" y="45" width="24" height="18" fill="black" />
+								<rect x="38" y="46" width="22" height="16" />
+
+								<rect x="37" y="45" width="8" height="10" fill="black" />
+								<rect x="38" y="46" width="6" height="8" />
+
+								<rect x="47" y="46" width="1" height="1" fill="black" />
+								<rect x="54" y="46" width="1" height="5" fill="black" />
+								<rect x="54" y="54" width="1" height="1" fill="black" />
+								<rect x="54" y="60" width="1" height="2" fill="black" />
+								<rect x="38" y="60" width="5" height="2" fill="black" />
+
+								<rect x="60" y="45" width="3" height="10" fill="black" />
+								<rect x="60" y="46" width="2" height="8" />
+
+								<rect x="32" y="47" width="1" height="2" />
+								<rect x="44" y="47" width="1" height="2" />
+								<rect x="37" y="56" width="1" height="4" />
+
+
+								<g class="detail" fill="#888888">
+									<rect x="26" y="43" width="2" height="1" />
+									<rect x="26" y="46" width="1" height="2" />
+									<rect x="26" y="50" width="6" height="1" />
+									<rect x="31" y="43" width="1" height="4" />
+									<rect x="30" y="45" width="1" height="2" />
+
+									<rect x="38" y="46" width="1" height="8" />
+									<rect x="39" y="46" width="5" height="1" />
+									<rect x="39" y="53" width="5" height="1" />
+
+									<rect x="45" y="49" width="1" height="6" />
+									<rect x="48" y="46" width="6" height="1" />
+									<rect x="48" y="47" width="2" height="6" />
+									<rect x="51" y="47" width="2" height="3" />
+
+									<rect x="56" y="46" width="2" height="5" />
+									<rect x="60" y="48" width="2" height="2" />
+									<rect x="60" y="52" width="2" height="2" />
+									<rect x="51" y="54" width="2" height="2" />
+									<rect x="51" y="58" width="2" height="2" />
+									<rect x="47" y="57" width="2" height="2" />
+
+									<rect x="38" y="60" width="3" height="1" />
+									<rect x="43" y="61" width="11" height="1" />
+								</g>
+							</g>
+							<g class="medical" fill="#ccffff">
+								<rect x="14" y="51" width="19" height="29" fill="black" />
+								<rect x="15" y="52" width="17" height="27" />
+
+								<rect x="11" y="51" width="4" height="5" fill="black" />
+								<rect x="12" y="52" width="4" height="3" />
+
+								<rect x="19" y="51" width="14" height="9" fill="black" />
+								<rect x="20" y="52" width="12" height="7" />
+
+								<rect x="14" y="73" width="10" height="7" fill="black" />
+								<rect x="15" y="74" width="8" height="5" />
+
+								<rect x=" 23" y="73" width="10" height="7" fill="black" />
+								<rect x="24" y="74" width="8" height="5" />
+
+								<rect x="32" y="62" width="1" height="4" />
+								<rect x="19" y="54" width="1" height="2" />
+								<rect x="17" y="73" width="2" height="1" />
+								<rect x="28" y="73" width="2" height="1" />
+
+								<g class="detail" fill="#aacccc">
+									<rect x="12" y="52" width="1" height="3" />
+									<rect x="20" y="52" width="4" height="1" />
+									<rect x="20" y="56" width="4" height="1" />
+									<rect x="15" y="56" width="1" height="3" />
+									<rect x="15" y="62" width="1" height="4" />
+									<rect x="22" y="60" width="2" height="1" />
+									<rect x="29" y="60" width="3" height="1" />
+									<rect x="21" y="63" width="3" height="2" />
+									<rect x="19" y="70" width="1" height="3" />
+									<rect x="19" y="69" width="9" height="1" />
+									<rect x="27" y="70" width="1" height="1" />
+									<rect x="31" y="67" width="1" height="3" />
+
+									<rect x="15" y="75" width="1" height="3" />
+									<rect x="15" y="78" width="4" height="1" />
+									<rect x="22" y="75" width="1" height="3" />
+									<rect x="19" y="74" width="1" height="1" />
+
+									<rect x="24" y="74" width="4" height="1" />
+									<rect x="27" y="75" width="1" height="2" />
+									<rect x="31" y="74" width="1" height="5" />
+								</g>
+							</g>
+							<g class="storage" fill="#ffeecc">
+								<rect x="37" y="68" width="26" height="29" fill="black" />
+								<rect x="38" y="69" width="24" height="27" />
+
+								<rect x="37" y="70" width="1" height="4" />
+								<rect x="62" y="70" width="1" height="4" />
+
+								<g class="detail" fill="#eeccaa">
+									<rect x="38" y="69" width="24" height="1" />
+									<rect x="38" y="75" width="1" height="8" />
+									<rect x="43" y="75" width="2" height="8" />
+									<rect x="49" y="75" width="2" height="10" />
+									<rect x="55" y="75" width="2" height="8" />
+									<rect x="61" y="75" width="1" height="8" />
+
+									<rect x="50" y="85" width="3" height="1" />
+									<rect x="51" y="83" width="2" height="2" />
+									<rect x="53" y="82" width="2" height="2" />
+
+									<rect x="38" y="86" width="1" height="2" />
+									<rect x="43" y="89" width="2" height="7" />
+									<rect x="49" y="89" width="2" height="7" />
+									<rect x="55" y="89" width="2" height="7" />
+								</g>
+							</g>
+							<g class="mechanical" fill="#aaaaff">
+								<rect x="71" y="67" width="19" height="26" fill="black" />
+								<rect x="72" y="68" width="17" height="24" />
+								<rect x="76" y="74" width="14" height="1" fill="black" />
+
+								<rect x="89" y="67" width="6" height="13" fill="black" />
+								<rect x="90" y="68" width="4" height="11" />
+
+								<rect x="71" y="76" width="1" height="4" />
+								<rect x="89" y="71" width="1" height="3" />
+								<rect x="89" y="75" width="1" height="4" />
+
+								<g class="detail" fill="#8888ff">
+									<rect x="76" y="68" width="3" height="1" />
+									<rect x="90" y="68" width="4" height="1" />
+									<rect x="93" y="74" width="1" height="5" />
+
+									<rect x="72" y="81" width="3" height="8" />
+									<rect x="79" y="81" width="3" height="8" />
+									<rect x="86" y="81" width="3" height="8" />
+									<rect x="72" y="89" width="1" height="3" />
+									<rect x="88" y="89" width="1" height="3" />
+								</g>
+							</g>
+							<g class="camera" fill="#ffcccc">
+								<rect x="81" y="18" width="16" height="10" fill="black" />
+								<rect x="82" y="19" width="14" height="8" />
+
+								<rect x="91" y="18" width="6" height="10" fill="black" />
+								<rect x="92" y="19" width="4" height="8" />
+
+								<rect x="81" y="36" width="15" height="10" fill="black" />
+								<rect x="82" y="37" width="13" height="8" />
+
+								<rect x="89" y="27" width="2" height="1" />
+								<rect x="91" y="19" width="1" height="2" />
+								<rect x="89" y="36" width="2" height="1" />
+
+								<g class="detail" fill="#ffaaaa">
+									<rect x="82" y="19" width="1" height="5" />
+									<rect x="83" y="19" width="3" height="1" />
+									<rect x="86" y="19" width="1" height="5" />
+									<rect x="82" y="26" width="7" height="1" />
+
+									<rect x="82" y="37" width="6" height="1" />
+									<rect x="86" y="38" width="2" height="3" />
+									<rect x="82" y="38" width="1" height="3" />
+									<rect x="82" y="43" width="1" height="2" />
+									<rect x="86" y="43" width="2" height="2" />
+									<rect x="88" y="45" width="6" height="1" />
+									<rect x="94" y="37" width="1" height="8" />
+								</g>
+							</g>
+						</g>
+						<g class="icons">
+							<g class="alimentations" fill="#ff00ff" opacity="{{alimentations?1:0}}">
+								<circle cx="22" cy="15" r="1"></circle>
+								<circle cx="39" cy="9" r="1"></circle>
+								<circle cx="27" cy="49" r="1"></circle>
+								<circle cx="13" cy="54" r="1"></circle>
+								<circle cx="40.5" cy="95" r="1"></circle>
+								<circle cx="80.5" cy="69" r="1"></circle>
+								<circle cx="90" cy="20" r="1"></circle>
+							</g>
+							<g class="delivery" fill="#ff6000" opacity="{{delivery?1:0}}">
+								<circle cx="22" cy="34" r="1"></circle>
+								<circle cx="34" cy="27" r="1"></circle>
+								<circle cx="22" cy="49" r="1"></circle>
+
+								<circle cx="39.5" cy="11" r="1"></circle>
+								<circle cx="44" cy="8.5" r="1"></circle>
+								<circle cx="40" cy="14" r="1"></circle>
+								<circle cx="44" cy="19" r="1"></circle>
+								<circle cx="44" cy="24" r="1"></circle>
+								<circle cx="43.5" cy="44" r="1"></circle>
+								<circle cx="47.5" cy="44" r="1"></circle>
+
+								<circle cx="29" cy="44" r="1"></circle>
+								<circle cx="42.5" cy="47" r="1"></circle>
+
+								<circle cx="18" cy="53" r="1"></circle>
+								<circle cx="21.5" cy="72" r="1"></circle>
+								<circle cx="20" cy="78" r="1"></circle>
+								<circle cx="26" cy="78" r="1"></circle>
+
+								<circle cx="73" cy="75" r="1"></circle>
+
+								<circle cx="88" cy="20" r="1"></circle>
+							</g>
+							<g class="vents" fill="#0000ff" opacity="{{vents?1:0}}">
+								<circle cx="31" cy="34" r="1"></circle>
+								<circle cx="17" cy="49" r="1"></circle>
+
+								<circle cx="39" cy="20" r="1"></circle>
+								<circle cx="45.5" cy="43" r="1"></circle>
+
+								<circle cx="46" cy="47" r="1"></circle>
+								<circle cx="42" cy="56" r="1"></circle>
+
+								<circle cx="21" cy="58" r="1"></circle>
+								<circle cx="20" cy="61" r="1"></circle>
+
+								<circle cx="45" cy="70" r="1"></circle>
+								<circle cx="55" cy="70" r="1"></circle>
+								<circle cx="61" cy="84.5" r="1"></circle>
+								<circle cx="53" cy="95" r="1"></circle>
+								<circle cx="39" cy="84.5" r="1"></circle>
+
+								<circle cx="75.5" cy="91" r="1"></circle>
+								<circle cx="93" cy="71" r="1"></circle>
+
+								<circle cx="83" cy="25" r="1"></circle>
+								<circle cx="95" cy="22" r="1"></circle>
+							</g>
+							<g class="computers" fill="#ff0000" opacity="{{computers?1:0}}">
+								<circle cx="31" cy="30.5" r="1"></circle>
+								<circle cx="51" cy="8" r="1"></circle>
+								<circle cx="51" cy="16" r="1"></circle>
+								<circle cx="51" cy="23" r="1"></circle>
+								<circle cx="39" cy="40" r="1"></circle>
+								<circle cx="49.5" cy="38" r="1"></circle>
+								<circle cx="21" cy="70" r="1"></circle>
+								<circle cx="46" cy="54" r="1"></circle>
+								<circle cx="61" cy="88" r="1"></circle>
+								<circle cx="75" cy="69" r="1"></circle>
+								<circle cx="86" cy="22" r="1"></circle>
+							</g>
+						</g>
+					</svg>
+				</td>
+			</tr>
+		</table>
+	</div>
+</body>
