@@ -1,0 +1,752 @@
+<title>Riichi Mahjong Cheatsheet</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.0/angular.min.js"></script>
+<style>
+	body {
+		background: darkgreen;
+		color: white;
+		font-size: 24px;
+		margin: 1px;
+	}
+
+	.hand {
+		white-space: nowrap;
+	}
+
+	.tile {
+		position: relative;
+		display: inline-block;
+		height: 40px;
+		width: 30px;
+		text-align: left;
+	}
+
+	.tile img {
+		position: absolute;
+		height: 40px;
+		width: 30px;
+	}
+
+	table {
+		text-align: center;
+		vertical-align: middle;
+		-webkit-border-horizontal-spacing: 0px;
+		-webkit-border-vertical-spacing: 0px;
+	}
+
+	table,
+	th {
+		border: 1px solid white;
+	}
+
+	p {
+		white-space: pre-line;
+	}
+
+	abbr {
+		text-decoration-style: wavy;
+	}
+
+	.yakuTable {
+		font-size: 16px;
+	}
+
+	.yaku {
+		position: relative;
+		height: 54px;
+		margin: 10px;
+		border: 1px solid white;
+		padding: 2px;
+		border-radius: 5px;
+		min-width: 180px;
+	}
+
+	.stars {
+		display: inline-flex;
+	}
+
+	.zer0 {
+		border-color: red;
+	}
+
+	.zer0 .open {
+		color: red;
+	}
+
+	.maX {
+		background: #808000;
+	}
+
+	.yakuTable td {
+		border-width: 1px;
+		border-color: white;
+	}
+
+	.yakuTable td:nth-child(2n+1) {
+		border-left-style: solid;
+		border-top-style: solid;
+		border-bottom-style: solid;
+	}
+
+	.yakuTable td:nth-child(2n) {
+		border-right-style: solid;
+		border-top-style: solid;
+		border-bottom-style: solid;
+	}
+</style>
+<script>
+	var app = angular.module('app', []);
+	app.controller('mainCtrl', ['$scope', '$http', function ($scope, $http) {
+
+		$scope.safeApply = function (fn) {
+			var phase = this.$root.$$phase;
+			if (phase == '$apply' || phase == '$digest') {
+				if (fn && (typeof (fn) === 'function')) { fn() }
+			} else { this.$apply(fn) }
+		};
+
+		$scope.lib = {
+			tiles: {
+				"Back": { id: "Back", type: "none", suit: "man", number: "0", name: "" },
+				"Blank": { id: "Blank", type: "none", suit: "man", number: "0", name: "" },
+
+				"Man1": { id: "Man1", type: "simple", suit: "man", number: "1" },
+				"Man2": { id: "Man2", type: "simple", suit: "man", number: "2" },
+				"Man3": { id: "Man3", type: "simple", suit: "man", number: "3" },
+				"Man4": { id: "Man4", type: "simple", suit: "man", number: "4" },
+				"Man5-Dora": { id: "Man5-Dora", type: "simple", suit: "man", number: "5" },
+				"Man5": { id: "Man5", type: "simple", suit: "man", number: "5" },
+				"Man6": { id: "Man6", type: "simple", suit: "man", number: "6" },
+				"Man7": { id: "Man7", type: "simple", suit: "man", number: "7" },
+				"Man8": { id: "Man8", type: "simple", suit: "man", number: "8" },
+				"Man9": { id: "Man9", type: "simple", suit: "man", number: "9" },
+
+				"Pin1": { id: "Pin1", type: "simple", suit: "pin", number: "1" },
+				"Pin2": { id: "Pin2", type: "simple", suit: "pin", number: "2" },
+				"Pin3": { id: "Pin3", type: "simple", suit: "pin", number: "3" },
+				"Pin4": { id: "Pin4", type: "simple", suit: "pin", number: "4" },
+				"Pin5-Dora": { id: "Pin5-Dora", type: "simple", suit: "pin", number: "5" },
+				"Pin5": { id: "Pin5", type: "simple", suit: "pin", number: "5" },
+				"Pin6": { id: "Pin6", type: "simple", suit: "pin", number: "6" },
+				"Pin7": { id: "Pin7", type: "simple", suit: "pin", number: "7" },
+				"Pin8": { id: "Pin8", type: "simple", suit: "pin", number: "8" },
+				"Pin9": { id: "Pin9", type: "simple", suit: "pin", number: "9" },
+
+				"Sou1": { id: "Sou1", type: "simple", suit: "sou", number: "1" },
+				"Sou2": { id: "Sou2", type: "simple", suit: "sou", number: "2" },
+				"Sou3": { id: "Sou3", type: "simple", suit: "sou", number: "3" },
+				"Sou4": { id: "Sou4", type: "simple", suit: "sou", number: "4" },
+				"Sou5-Dora": { id: "Sou5-Dora", type: "simple", suit: "sou", number: "5" },
+				"Sou5": { id: "Sou5", type: "simple", suit: "sou", number: "5" },
+				"Sou6": { id: "Sou6", type: "simple", suit: "sou", number: "6" },
+				"Sou7": { id: "Sou7", type: "simple", suit: "sou", number: "7" },
+				"Sou8": { id: "Sou8", type: "simple", suit: "sou", number: "8" },
+				"Sou9": { id: "Sou9", type: "simple", suit: "sou", number: "9" },
+
+				"Ton": { id: "Ton", type: "honor", suit: "man", number: "0", name: "East" },
+				"Nan": { id: "Nan", type: "honor", suit: "man", number: "0", name: "South" },
+				"Shaa": { id: "Shaa", type: "honor", suit: "man", number: "0", name: "West" },
+				"Pei": { id: "Pei", type: "honor", suit: "man", number: "0", name: "North" },
+				"Haku": { id: "Haku", type: "honor", suit: "man", number: "0", name: "White Dragon" },
+				"Hatsu": { id: "Hatsu", type: "honor", suit: "man", number: "0", name: "Green Dragon" },
+				"Chun": { id: "Chun", type: "honor", suit: "man", number: "0", name: "Red Dragon" },
+			},
+			yaku: {}
+		}
+
+		$scope.yaku = [
+			{
+				name: "Ready Hand", japanese: "Riichi", open: "0", closed: "1", type: "special",
+				description: "Any closed hand that reaches _Tenpai_ can declare 'Riichi'\nBet 1000 points and cannot take any further action other than drawing and discarding tiles until someone wins.",
+				summary: "Closed Tenpai",
+				example: []
+			}, {
+				name: "Self draw", japanese: "Menzenchin tsumohou", open: "0", closed: "1", type: "luck",
+				description: "Any closed hand that wins by _Tsumo_",
+				summary: "Closed Tsumo",
+				example: []
+			}, {
+				name: "One Shot", japanese: "Ippatsu", open: "0", closed: "1", type: "luck",
+				description: "Declare 'Riichi' then win by your next tile draw",
+				summary: "Riichi then quick win",
+				example: []
+			}, {
+				name: "Minimum fu", japanese: "Pinfu", open: "0", closed: "1", type: "sequence",
+				description: "Closed hand that has only sequences, no Honor tiles and has a _Ryanmen_ wait at _Tenpai_",
+				summary: "Only sequences, no honor",
+				example: []
+			}, {
+				name: "Identical Sequences", japanese: "Iipeikou", open: "0", closed: "1", type: "sequence",
+				description: "A hand with two identical sequences",
+				summary: "Twin sequences",
+				example: []
+			}, {
+				name: "Win by last draw", japanese: "Haitei raoyue", open: "1", closed: "1", type: "luck",
+				description: "Win by drawing the last tile from the live wall",
+				summary: "Last tile Tsumo",
+				example: []
+			}, {
+				name: "Win by last discard", japanese: "Houtei raoyui", open: "1", closed: "1", type: "luck",
+				description: "Win with the very last discarded tile",
+				summary: "Last tile Ron",
+				example: []
+			}, {
+				name: "Win by dead wall draw", japanese: "Rinshan kaihou", open: "1", closed: "1", type: "luck",
+				description: "Win with a tile from the dead wall, i.e. win by the tile drawn after a kan",
+				summary: "Last tile dead wall",
+				example: []
+			}, {
+				name: "Robbing a kan", japanese: "Chankan", open: "1", closed: "1", type: "luck",
+				description: "Win by stealing a tile used for an opponent's added kan",
+				summary: "Kan Ron",
+				example: []
+			}, {
+				name: "All simples", japanese: "Tanyao", open: "1", closed: "1", type: "terminal/honor",
+				description: "All simple tiles 2-8, no 1s, 9s or honors",
+				summary: "Only 2-8 tiles",
+				example: []
+			}, {
+				name: "Value tiles", japanese: "Yakuhai", open: "1", closed: "1", type: "honor",
+				description: "At least one group of Dragons, Seat Wind, or Round Wind. Each group is worth 1 han",
+				summary: "3x dragon, seat or round",
+				example: []
+			}, {
+				name: "Double ready", japanese: "Double riichi", open: "0", closed: "2", type: "luck",
+				description: "Declare Riichi before your first discard and before any player makes a tile call",
+				summary: "Early Riichi",
+				example: []
+			}, {
+				name: "Terminal or honor in each group", japanese: "Chantaiyao", open: "1", closed: "2", type: "terminal/honor",
+				description: "All groups including the pair contain at least 1 _Terminal_ or Honor",
+				summary: "All groups have 1/9/honor",
+				example: []
+			}, {
+				name: "Three-colored straight", japanese: "Sanshoku doujun", open: "1", closed: "2", type: "sequence",
+				description: "Three of the same sequence across all three suits",
+				summary: "3x xyz sequence",
+				example: []
+			}, {
+				name: "Straight", japanese: "Ittsu", open: "1", closed: "2", type: "sequence",
+				description: "Have sequences of 123, 456 and 789 from the same suit",
+				summary: "1-9 Straight",
+				example: []
+			}, {
+				name: "All triplets", japanese: "Toitoi", open: "2", closed: "2", type: "triplet",
+				description: "All groups are triplets (and/or quads)",
+				summary: "4x triplets",
+				example: []
+			}, {
+				name: "Three closed triplets", japanese: "Sanankou", open: "2", closed: "2", type: "triplet",
+				description: "Three closed triplets, remaining group can be open",
+				summary: "3x closed triplets",
+				example: []
+			}, {
+				name: "Three-colored triplets", japanese: "Sanshoku doukou", open: "2", closed: "2", type: "triplet",
+				description: "Three triplets (and/or quads) of the same number",
+				summary: "3x xyz triplets",
+				example: []
+			}, {
+				name: "Three kans", japanese: "Sankantsu", open: "2", closed: "2", type: "triplet",
+				description: "Three quads of any type",
+				summary: "3x kans",
+				example: []
+			}, {
+				name: "Seven pairs", japanese: "Chiitoitsu", open: "0", closed: "2", type: "special",
+				description: "Seven unique pairs instead of 4 groups and a pair",
+				summary: "Seven pairs",
+				example: []
+			}, {
+				name: "Terminals and honors", japanese: "Honroutou", open: "2", closed: "2", type: "terminal/honor",
+				description: "Every tile is a _Terminal_ or Honor\nEssentially 4 Han as it will also contain Toitoi or Chiitoitsu",
+				summary: "Only 1/9/honors tiles",
+				example: []
+			}, {
+				name: "Small three dragons", japanese: "Shousangen", open: "2", closed: "2", type: "honor",
+				description: "Two triplets (and/or quads) of dragons and a pair of the third dragon\nEssentially 4 Han as it will also contain two Yakuhai",
+				summary: "2x dragon triplets + pair",
+				example: []
+			}, {
+				name: "Half flush", japanese: "Honitsu", open: "2", closed: "3", type: "suit",
+				description: "Every tile is the same suit, mixed with Honor tiles",
+				summary: "Single suit + honors",
+				example: []
+			}, {
+				name: "Terminal in each meld", japanese: "Junchan", open: "2", closed: "3", type: "terminal",
+				description: "All groups and pair contain at least one _Terminal_",
+				summary: "All groups have 1 or 9",
+				example: []
+			}, {
+				name: "Two sets of identical sequences", japanese: "Ryanpeikou", open: "0", closed: "3", type: "sequence",
+				description: "Two sets of _Iipeikou_",
+				summary: "Double twin sequences",
+				example: []
+			}, {
+				name: "Flush", japanese: "Chinitsu", open: "5", closed: "6", type: "suit",
+				description: "Every tile is the same suit",
+				summary: "Single suit",
+				example: []
+			}, {
+				name: "Counted yakuman", japanese: "Kazoe yakuman", open: "X", closed: "X", type: "yakuman",
+				description: "Any hand that scores 13+ han via regular yaku and dora",
+				summary: "Any 13+ han (dora)",
+				example: []
+			}, {
+				name: "Thirteen orphans", japanese: "Kokushi musou", open: "0", closed: "X", type: "terminal/honor",
+				description: "One of every _Terminal_ and honor tile plus one copy",
+				summary: "Every 1/9/honor + one copy",
+				example: []
+			}, {
+				name: "Four closed triplets", japanese: "Suuankou", open: "0", closed: "X", type: "triplet",
+				description: "4 closed triplets (and/or quads)",
+				summary: "4x closed triplets",
+				example: []
+			}, {
+				name: "Big three dragons", japanese: "Daisangen", open: "X", closed: "X", type: "honor",
+				description: "3 triplets (and/or quads) of all the dragons",
+				summary: "3x dragon triplets",
+				example: []
+			}, {
+				name: "Small winds", japanese: "Sousuushii", open: "X", closed: "X", type: "honor",
+				description: "3 triplets (and/or quads) of winds, plus a pair of the fourth kind",
+				summary: "3x winds triplets + pair",
+				example: []
+			}, {
+				name: "Big winds", japanese: "Daisuushii", open: "X", closed: "X", type: "honor",
+				description: "4 triplets (and/or quads) of winds",
+				summary: "4x winds triplets",
+				example: []
+			}, {
+				name: "All honors", japanese: "Tsuuiisou", open: "X", closed: "X", type: "honor",
+				description: "Every tile is an honor tile",
+				summary: "Only honors",
+				example: []
+			}, {
+				name: "All terminals", japanese: "Chinroutou", open: "X", closed: "X", type: "terminal",
+				description: "Every tile is a _Terminal_",
+				summary: "Only 1/9 tiles",
+				example: []
+			}, {
+				name: "All green", japanese: "Ryuuiisou", open: "X", closed: "X", type: "yakuman",
+				description: "Every tile is a 'green' tile, which includes 2, 3, 4, 6 and 8 Sou and Hatsu",
+				summary: "Only green",
+				example: []
+			}, {
+				name: "Nine gates", japanese: "Chuuren poutou", open: "0", closed: "X", type: "yakuman",
+				description: "Hand consisting of 1112345678999 of the same suit, plus any one tile of the same suit",
+				summary: "1112345678999+x",
+				example: []
+			}, {
+				name: "Four kans", japanese: "Suukantsu", open: "X", closed: "X", type: "triplet",
+				description: "Any hand with four kans",
+				summary: "4x kans",
+				example: []
+			}, {
+				name: "Heavenly hand", japanese: "Tenhou", open: "0", closed: "X", type: "luck",
+				description: "Dealer has winning hand by their first draw",
+				summary: "Instant dealer win",
+				example: []
+			}, {
+				name: "Earthly hand", japanese: "Chiihou", open: "0", closed: "X", type: "luck",
+				description: "Non-dealer has a winning hand by their first draw with no other player making calls before then",
+				summary: "Instant non-dealer win",
+				example: []
+			}, {
+				name: "Terminal honor discards", japanese: "Nagashi mangan", open: "0", closed: "X", type: "special",
+				description: "Round goes to _Ryuukyoku_ with all discards being terminals and honors and none were called by other players",
+				summary: "Full honor discards",
+				example: []
+			}
+		]
+		$scope.yaku.forEach(yaku => {
+			$scope.lib.yaku[yaku.japanese] = yaku;
+		})
+
+
+		$scope.definitions = [
+			{ key: "Tenpai", def: "Need only one more tile to complete" },
+			{ key: "Tsumo", def: "Win by drawing a tile" },
+			{ key: "Ryanmen", def: "'Open Wait' where you wait for 1 of 2 tiles to complete a sequence" },
+			{ key: "Terminal", def: "1 or 9" },
+			{ key: "Iipeikou", def: "Two identical sequences" },
+			{ key: "Ryuukyoku", def: "'Exhaustive draw' all tiles drawn before a winner" },
+		]
+
+		$scope.setSort = key => {
+			if ($scope.sortKey == key) {
+				if ($scope.sortReverse == false) {
+					$scope.sortReverse = true;
+				} else {
+					$scope.sortKey = null;
+					$scope.sortReverse = false;
+				}
+			}
+			else {
+				$scope.sortKey = key;
+				$scope.sortReverse = false;
+			}
+		}
+
+		$scope.stars = (o, c) => {
+			if (c == undefined) {
+				if (o == "X") { return Array(13) }
+				return Array(Number(o))
+			}
+			if (o == c) { return [] }
+			if (c == "X") { return Array(13) }
+			return Array(Number(c) - Number(o));
+		}
+
+		window.$scope = $scope;
+	}])
+		.directive('tile', function () {
+			return {
+				scope: { data: "=" },
+				template: function (elem, attr) {
+					return `
+						<div class="tile" title="{{data.name}}">
+							<img src="tiles/Front.svg">
+							<img src="tiles/{{data.id}}.svg">
+						</div>
+					`
+				}
+			}
+		}).directive('yaku', function () {
+			return {
+				scope: { data: "=", count: "&" },
+				template: function (elem, attr) {
+					return `
+							<div class="yaku zer{{data.open}} ma{{data.closed}}">
+								<span>{{data.summary}}</span>
+								<br>
+								<span>{{data.japanese}}</span>
+								<br>
+								<div class="stars">
+									<span ng-repeat="x in count({o:data.open}) track by $index">☆</span>
+									<span ng-repeat="x in count({o:data.open,c:data.closed}) track by $index">★</span>
+								</div>
+							</div>
+						`
+				}
+			}
+		}).filter("define", ($sce) => {
+			return (input) => {
+				var output = input
+				$scope.definitions.forEach(d => {
+					regex = RegExp(`_${d.key}_`)
+					if (input.match(regex)) {
+						output = output.replace(regex, `<abbr title="${d.def}">${d.key}</abbr>`)
+					} else {
+						output = output
+					}
+				})
+				return $sce.trustAsHtml(output);
+			}
+		})
+</script>
+
+<body ng-app="app">
+	<div ng-controller="mainCtrl" class="mainCtrl">
+		<table class="yakuTable">
+			<tr>
+				<th colspan="2">Sequences</th>
+				<th colspan="2">Triplets</th>
+				<th colspan="2">Suit</th>
+			</tr>
+			<tr>
+				<td>
+					<yaku data="lib.yaku['Ittsu']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Sanshoku doujun']" count="stars(o,c)"></yaku>
+				</td>
+				<td>
+					<yaku data="lib.yaku['Pinfu']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Iipeikou']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Ryanpeikou']" count="stars(o,c)"></yaku>
+				</td>
+				<td>
+					<yaku data="lib.yaku['Sanankou']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Sanshoku doukou']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Toitoi']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Sankantsu']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Suukantsu']" count="stars(o,c)"></yaku>
+				</td>
+				<td>
+					<yaku data="lib.yaku['Suuankou']" count="stars(o,c)"></yaku>
+				</td>
+				<td>
+					<yaku data="lib.yaku['Honitsu']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Chinitsu']" count="stars(o,c)"></yaku>
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<th colspan="2">Terminal</th>
+				<th colspan="2">Terminal/Honor</th>
+				<th colspan="2">Honor</th>
+			</tr>
+			<tr>
+				<td>
+					<yaku data="lib.yaku['Junchan']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Chinroutou']" count="stars(o,c)"></yaku>
+				</td>
+				<td></td>
+				<td>
+					<yaku data="lib.yaku['Tanyao']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Chantaiyao']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Honroutou']" count="stars(o,c)"></yaku>
+				</td>
+				<td>
+					<yaku data="lib.yaku['Kokushi musou']" count="stars(o,c)"></yaku>
+				</td>
+				<td>
+					<yaku data="lib.yaku['Yakuhai']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Shousangen']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Daisangen']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Sousuushii']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Daisuushii']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Tsuuiisou']" count="stars(o,c)"></yaku>
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<th colspan="2">Luck</th>
+				<th colspan="2">Yakuhai</th>
+				<th colspan="2">Special</th>
+			</tr>
+			<tr>
+				<td>
+					<yaku data="lib.yaku['Haitei raoyue']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Houtei raoyui']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Rinshan kaihou']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Chankan']" count="stars(o,c)"></yaku>
+				</td>
+				<td>
+					<yaku data="lib.yaku['Double riichi']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Menzenchin tsumohou']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Ippatsu']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Tenhou']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Chiihou']" count="stars(o,c)"></yaku>
+				</td>
+				<td>
+					<yaku data="lib.yaku['Ryuuiisou']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Kazoe yakuman']" count="stars(o,c)"></yaku>
+				</td>
+				<td>
+					<yaku data="lib.yaku['Chuuren poutou']" count="stars(o,c)"></yaku>
+				</td>
+				<td></td>
+				<td>
+					<yaku data="lib.yaku['Riichi']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Chiitoitsu']" count="stars(o,c)"></yaku>
+					<yaku data="lib.yaku['Nagashi mangan']" count="stars(o,c)"></yaku>
+				</td>
+			</tr>
+		</table>
+		<table cellpadding="5px">
+			<tr>
+				<th colspan="8">Simple Tiles</th>
+				<th>5-Dora</th>
+			</tr>
+			<tr>
+				<td>
+					Dots / Circles
+					<br>
+					筒
+					<br>
+					Pin
+				</td>
+				<td colspan="7">
+					<tile data="lib.tiles.Pin1"></tile>
+					<tile data="lib.tiles.Pin2"></tile>
+					<tile data="lib.tiles.Pin3"></tile>
+					<tile data="lib.tiles.Pin4"></tile>
+					<tile data="lib.tiles.Pin5"></tile>
+					<tile data="lib.tiles.Pin6"></tile>
+					<tile data="lib.tiles.Pin7"></tile>
+					<tile data="lib.tiles.Pin8"></tile>
+					<tile data="lib.tiles.Pin9"></tile>
+				</td>
+				<td>
+					<tile data="lib.tiles['Pin5-Dora']"></tile>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Bamboo / Sticks
+					<br>
+					索
+					<br>
+					Sou
+				</td>
+				<td colspan="7">
+					<tile data="lib.tiles.Sou1"></tile>
+					<tile data="lib.tiles.Sou2"></tile>
+					<tile data="lib.tiles.Sou3"></tile>
+					<tile data="lib.tiles.Sou4"></tile>
+					<tile data="lib.tiles.Sou5"></tile>
+					<tile data="lib.tiles.Sou6"></tile>
+					<tile data="lib.tiles.Sou7"></tile>
+					<tile data="lib.tiles.Sou8"></tile>
+					<tile data="lib.tiles.Sou9"></tile>
+				</td>
+				<td>
+					<tile data="lib.tiles['Sou5-Dora']"></tile>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Characters
+					<br>
+					萬
+					<br>
+					Man / Wan
+				</td>
+				<td colspan="7">
+					<tile data="lib.tiles.Man1"></tile>
+					<tile data="lib.tiles.Man2"></tile>
+					<tile data="lib.tiles.Man3"></tile>
+					<tile data="lib.tiles.Man4"></tile>
+					<tile data="lib.tiles.Man5"></tile>
+					<tile data="lib.tiles.Man6"></tile>
+					<tile data="lib.tiles.Man7"></tile>
+					<tile data="lib.tiles.Man8"></tile>
+					<tile data="lib.tiles.Man9"></tile>
+				</td>
+				<td>
+					<tile data="lib.tiles['Man5-Dora']"></tile>
+				</td>
+			</tr>
+			<tr>
+				<th colspan="9">
+					Honor Tiles
+					<br>
+					Jihai
+				</th>
+			</tr>
+			<tr>
+				<td>Winds</td>
+				<td>
+					East
+					<br>
+					東
+					<br>
+					Ton
+				</td>
+				<td>
+					<tile data="lib.tiles.Ton"></tile>
+				</td>
+				<td>
+					South
+					<br>
+					南
+					<br>
+					Nan
+				</td>
+				<td>
+					<tile data="lib.tiles.Nan"></tile>
+				</td>
+				<td>
+					West
+					<br>
+					西
+					<br>
+					Shaa
+				</td>
+				<td>
+					<tile data="lib.tiles.Shaa"></tile>
+				</td>
+				<td>
+					North
+					<br>
+					北
+					<br>
+					Pei
+				</td>
+				<td>
+					<tile data="lib.tiles.Pei"></tile>
+				</td>
+			</tr>
+			<tr>
+				<td>Dragons</td>
+				<td>
+					White
+					<br>
+					白
+					<br>
+					Haku
+				</td>
+				<td>
+					<tile data="lib.tiles.Haku"></tile>
+				</td>
+				<td>
+					Green
+					<br>
+					發
+					<br>
+					Hatsu
+				</td>
+				<td>
+					<tile data="lib.tiles.Hatsu"></tile>
+				</td>
+				<td>
+					Red
+					<br>
+					中
+					<br>
+					Chun
+				</td>
+				<td>
+					<tile data="lib.tiles.Chun"></tile>
+				</td>
+			</tr>
+		</table>
+		<summary>Yaku Table</summary>
+		<table border>
+			<tr>
+				<th></th>
+				<th colspan="2">Han</th>
+				<th colspan="3"></th>
+			</tr>
+			<tr>
+				<th ng-click="setSort('name')">
+					Yaku
+					<span ng-if="sortKey!='name'">△</span>
+					<span ng-if="sortKey=='name' && !sortReverse">▲</span>
+					<span ng-if="sortKey=='name' && sortReverse">▼</span>
+				</th>
+				<th ng-click="setSort('open')">
+					Open
+					<span ng-if="sortKey!='open'">△</span>
+					<span ng-if="sortKey=='open' && !sortReverse">▲</span>
+					<span ng-if="sortKey=='open' && sortReverse">▼</span>
+				</th>
+				<th ng-click="setSort('closed')">
+					Closed
+					<span ng-if="sortKey!='closed'">△</span>
+					<span ng-if="sortKey=='closed' && !sortReverse">▲</span>
+					<span ng-if="sortKey=='closed' && sortReverse">▼</span>
+				</th>
+				<th>Description</th>
+				<th ng-click="setSort('type')">
+					Type
+					<span ng-if="sortKey!='type'">△</span>
+					<span ng-if="sortKey=='type' && !sortReverse">▲</span>
+					<span ng-if="sortKey=='type' && sortReverse">▼</span>
+				</th>
+				<th>Example</th>
+			</tr>
+			<tr ng-repeat="y in yaku | orderBy:sortKey:sortReverse">
+				<td>
+					{{y.name}}
+					<br>
+					{{y.japanese}}
+				</td>
+				<td>{{y.open}}</td>
+				<td>{{y.closed}}</td>
+				<td>
+					<p ng-bind-html="y.description | define"></p>
+				</td>
+				<td>{{y.type}}</td>
+				<td>{{y.example}}</td>
+			</tr>
+		</table>
+	</div>
+</body>
