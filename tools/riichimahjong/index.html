@@ -92,6 +92,10 @@
 		border-top-style: solid;
 		border-bottom-style: solid;
 	}
+
+	button{
+		width: 200px
+	}
 </style>
 <script>
 	var app = angular.module('app', []);
@@ -360,6 +364,52 @@
 			$scope.lib.yaku[yaku.japanese] = yaku;
 		})
 
+		$scope.score = {
+			han1: {
+				fu30: { parent: { tsumo: 500, ron: 1500 }, child: { tsumo: { parent: 500, child: 300 }, ron: 1000 } },
+				fu40: { parent: { tsumo: 700, ron: 2000 }, child: { tsumo: { parent: 700, child: 400 }, ron: 1300 } },
+				fu50: { parent: { tsumo: 800, ron: 2400 }, child: { tsumo: { parent: 800, child: 400 }, ron: 1600 } },
+				fu60: { parent: { tsumo: 1000, ron: 2900 }, child: { tsumo: { parent: 1000, child: 500 }, ron: 2000 } },
+				fu70: { parent: { tsumo: 1200, ron: 3400 }, child: { tsumo: { parent: 1200, child: 600 }, ron: 2300 } },
+				fu80: { parent: { tsumo: 1300, ron: 3900 }, child: { tsumo: { parent: 1300, child: 700 }, ron: 2600 } },
+				fu90: { parent: { tsumo: 1500, ron: 4400 }, child: { tsumo: { parent: 1500, child: 800 }, ron: 2900 } },
+				fu100: { parent: { tsumo: 1600, ron: 4800 }, child: { tsumo: { parent: 1600, child: 800 }, ron: 3200 } },
+				fu110: { parent: { tsumo: 1800, ron: 5300 }, child: { tsumo: { parent: 1800, child: 900 }, ron: 3600 } },
+			},
+			han2: {
+				fu20: { parent: { tsumo: 700, ron: 0 }, child: { tsumo: { parent: 700, child: 0 }, ron: 0 } },
+				fu25: { parent: { tsumo: 0, ron: 2400 }, child: { tsumo: { parent: 0, child: 1600 }, ron: 1600 } },
+				fu30: { parent: { tsumo: 1000, ron: 2900 }, child: { tsumo: { parent: 1000, child: 2000 }, ron: 2000 } },
+				fu40: { parent: { tsumo: 1300, ron: 3900 }, child: { tsumo: { parent: 1300, child: 2600 }, ron: 2600 } },
+				fu50: { parent: { tsumo: 1600, ron: 4800 }, child: { tsumo: { parent: 1600, child: 3200 }, ron: 3200 } },
+				fu60: { parent: { tsumo: 2000, ron: 5800 }, child: { tsumo: { parent: 2000, child: 3900 }, ron: 3900 } },
+				fu70: { parent: { tsumo: 2300, ron: 6800 }, child: { tsumo: { parent: 2300, child: 4500 }, ron: 4500 } },
+				fu80: { parent: { tsumo: 2600, ron: 7700 }, child: { tsumo: { parent: 2600, child: 5200 }, ron: 5200 } },
+				fu90: { parent: { tsumo: 2900, ron: 8700 }, child: { tsumo: { parent: 2900, child: 5800 }, ron: 5800 } },
+				fu100: { parent: { tsumo: 3200, ron: 9600 }, child: { tsumo: { parent: 3200, child: 6400 }, ron: 6400 } },
+				fu110: { parent: { tsumo: 3600, ron: 10600 }, child: { tsumo: { parent: 3600, child: 7100 }, ron: 7100 } },
+			},
+			han3: {
+				fu20: { parent: { tsumo: 1300, ron: 0 }, child: { tsumo: { parent: 1300, child: 700 }, ron: 0 } },
+				fu25: { parent: { tsumo: 1600, ron: 4800 }, child: { tsumo: { parent: 1600, child: 800 }, ron: 3200 } },
+				fu30: { parent: { tsumo: 2000, ron: 5800 }, child: { tsumo: { parent: 2000, child: 1000 }, ron: 3900 } },
+				fu40: { parent: { tsumo: 2600, ron: 7700 }, child: { tsumo: { parent: 2600, child: 1300 }, ron: 5200 } },
+				fu50: { parent: { tsumo: 3200, ron: 9600 }, child: { tsumo: { parent: 3200, child: 1600 }, ron: 6400 } },
+				fu60: { parent: { tsumo: 3900, ron: 11600 }, child: { tsumo: { parent: 3900, child: 2000 }, ron: 7700 } },
+				fu70: { parent: { tsumo: 4000, ron: 12000 }, child: { tsumo: { parent: 4000, child: 2000 }, ron: 8000 } },
+			},
+			han4: {
+				fu20: { parent: { tsumo: 2600, ron: 0 }, child: { tsumo: { parent: 2600, child: 1300 }, ron: 0 } },
+				fu25: { parent: { tsumo: 3200, ron: 9600 }, child: { tsumo: { parent: 3200, child: 1600 }, ron: 6400 } },
+				fu30: { parent: { tsumo: 3900, ron: 11600 }, child: { tsumo: { parent: 3900, child: 2000 }, ron: 7700 } },
+				fu40: { parent: { tsumo: 4000, ron: 12000 }, child: { tsumo: { parent: 4000, child: 2000 }, ron: 8000 } },
+			},
+			han5: { parent: { tsumo: 4000, ron: 12000 }, child: { tsumo: { parent: 4000, child: 2000 }, ron: 8000 } },
+			han6: { parent: { tsumo: 6000, ron: 18000 }, child: { tsumo: { parent: 6000, child: 3000 }, ron: 12000 } },
+			han8: { parent: { tsumo: 8000, ron: 24000 }, child: { tsumo: { parent: 8000, child: 4000 }, ron: 16000 } },
+			han11: { parent: { tsumo: 12000, ron: 36000 }, child: { tsumo: { parent: 12000, child: 6000 }, ron: 24000 } },
+			han13: { parent: { tsumo: 16000, ron: 48000 }, child: { tsumo: { parent: 16000, child: 8000 }, ron: 36000 } },
+		}
 
 		$scope.definitions = [
 			{ key: "Tenpai", def: "Need only one more tile to complete" },
@@ -395,6 +445,9 @@
 			return Array(Number(c) - Number(o));
 		}
 
+		$scope.seat = "parent";
+		$scope.setSeat = (seat) => { $scope.seat = seat }
+
 		window.$scope = $scope;
 	}])
 		.directive('tile', function () {
@@ -414,17 +467,37 @@
 				scope: { data: "=", count: "&" },
 				template: function (elem, attr) {
 					return `
-							<div class="yaku zer{{data.open}} ma{{data.closed}}">
-								<span>{{data.summary}}</span>
-								<br>
-								<span>{{data.japanese}}</span>
-								<br>
-								<div class="stars">
-									<span ng-repeat="x in count({o:data.open}) track by $index">☆</span>
-									<span ng-repeat="x in count({o:data.open,c:data.closed}) track by $index">★</span>
-								</div>
+						<div class="yaku zer{{data.open}} ma{{data.closed}}">
+							<span>{{data.summary}}</span>
+							<br>
+							<span>{{data.japanese}}</span>
+							<br>
+							<div class="stars">
+								<span ng-repeat="x in count({o:data.open}) track by $index">☆</span>
+								<span ng-repeat="x in count({o:data.open,c:data.closed}) track by $index">★</span>
 							</div>
-						`
+						</div>
+					`
+				}
+			}
+		}).directive('score', function () {
+			return {
+				scope: { data: "=" },
+				template: function (elem, attr) {
+					return `
+						<div class="score">
+							<span>{{data.ron}}</span>
+							<br>
+							<div ng-if="data.tsumo.parent != undefined">
+								<span>{{data.tsumo.parent}}</span>
+								/
+								<span>{{data.tsumo.child}}</span>
+							</div>
+							<div ng-if="data.tsumo.parent == undefined">
+								<span>{{data.tsumo}}</span>
+							</div>
+						</div>
+					`
 				}
 			}
 		}).filter("define", ($sce) => {
@@ -698,7 +771,6 @@
 				</td>
 			</tr>
 		</table>
-		<summary>Yaku Table</summary>
 		<table border>
 			<tr>
 				<th></th>
@@ -746,6 +818,198 @@
 				</td>
 				<td>{{y.type}}</td>
 				<td>{{y.example}}</td>
+			</tr>
+		</table>
+
+		<button ng-click="setSeat('parent')">Parent</button>
+		<button ng-click="setSeat('child')">Child</button>
+		<table border>
+			<tr>
+				<th colspan="2">Score Table</th>
+				<th colspan="11">Fu</th>
+			</tr>
+			<tr>
+				<th></th>
+				<th>Han</th>
+				<th>20</th>
+				<th>25</th>
+				<th>30</th>
+				<th>40</th>
+				<th>50</th>
+				<th>60</th>
+				<th>70</th>
+				<th>80</th>
+				<th>90</th>
+				<th>100</th>
+				<th>110</th>
+			</tr>
+			<tr>
+				<td></td>
+				<td>1</td>
+				<td></td>
+				<td></td>
+				<td>
+					<score data="score.han1.fu30[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han1.fu40[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han1.fu50[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han1.fu60[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han1.fu70[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han1.fu80[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han1.fu90[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han1.fu100[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han1.fu110[seat]"></score>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>2</td>
+				<td>
+					<score data="score.han2.fu20[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu25[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu30[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu40[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu50[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu60[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu70[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu80[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu90[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu100[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu110[seat]"></score>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>3</td>
+				<td>
+					<score data="score.han3.fu20[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han3.fu25[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han3.fu30[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han3.fu40[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han3.fu50[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han3.fu60[seat]"></score>
+				</td>
+				<td colspan="5">
+					<score data="score.han3.fu70[seat]"></score>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>4</td>
+				<td>
+					<score data="score.han4.fu20[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han4.fu25[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han4.fu30[seat]"></score>
+				</td>
+				<td colspan="8">
+					<score data="score.han4.fu40[seat]"></score>
+				</td>
+			</tr>
+			<tr>
+				<td>Mangan</td>
+				<td>5</td>
+				<td colspan="11">
+					<score data="score.han5[seat]"></score>
+				</td>
+			</tr>
+			<tr>
+				<td rowspan="2">Haneman</td>
+				<td>6</td>
+				<td rowspan="2" colspan="11">
+					<score data="score.han6[seat]"></score>
+				</td>
+			</tr>
+			<tr>
+				<td>7</td>
+			</tr>
+			<tr>
+				<td rowspan="3">Baiman</td>
+				<td>8</td>
+				<td rowspan="3" colspan="11">
+					<score data="score.han8[seat]"></score>
+				</td>
+			</tr>
+			<tr>
+				<td>9</td>
+			</tr>
+			<tr>
+				<td>10</td>
+			</tr>
+			<tr>
+				<td rowspan="2">Sanbaiman</td>
+				<td>11</td>
+				<td rowspan="2" colspan="11">
+					<score data="score.han11[seat]"></score>
+				</td>
+			</tr>
+			<tr>
+				<td>12</td>
+			</tr>
+			<tr>
+				<td rowspan="2">Yakuman</td>
+				<td>13</td>
+				<td rowspan="2" colspan="11">
+					<score data="score.han13[seat]"></score>
+				</td>
+				<td ng-if="seat=='parent'">
+					(Ron)
+					<br>
+					(Tsumo)
+				</td>
+				<td ng-if="seat=='child'">
+					(Ron)
+					<br>
+					(Tsumo)(Parent/Child)
+				</td>
 			</tr>
 		</table>
 	</div>
