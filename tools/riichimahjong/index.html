@@ -93,7 +93,7 @@
 		border-bottom-style: solid;
 	}
 
-	button{
+	button {
 		width: 200px
 	}
 </style>
@@ -613,6 +613,197 @@
 				</td>
 			</tr>
 		</table>
+		<button ng-click="setSeat('parent')">Parent</button>
+		<button ng-click="setSeat('child')">Child</button>
+		<table border>
+			<tr>
+				<th colspan="2">Score Table</th>
+				<th colspan="11">Fu</th>
+			</tr>
+			<tr>
+				<th></th>
+				<th>Han</th>
+				<th>20</th>
+				<th>25</th>
+				<th>30</th>
+				<th>40</th>
+				<th>50</th>
+				<th>60</th>
+				<th>70</th>
+				<th>80</th>
+				<th>90</th>
+				<th>100</th>
+				<th>110</th>
+			</tr>
+			<tr>
+				<td></td>
+				<td>1</td>
+				<td></td>
+				<td></td>
+				<td>
+					<score data="score.han1.fu30[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han1.fu40[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han1.fu50[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han1.fu60[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han1.fu70[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han1.fu80[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han1.fu90[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han1.fu100[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han1.fu110[seat]"></score>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>2</td>
+				<td>
+					<score data="score.han2.fu20[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu25[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu30[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu40[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu50[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu60[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu70[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu80[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu90[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu100[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han2.fu110[seat]"></score>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>3</td>
+				<td>
+					<score data="score.han3.fu20[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han3.fu25[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han3.fu30[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han3.fu40[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han3.fu50[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han3.fu60[seat]"></score>
+				</td>
+				<td colspan="5">
+					<score data="score.han3.fu70[seat]"></score>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>4</td>
+				<td>
+					<score data="score.han4.fu20[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han4.fu25[seat]"></score>
+				</td>
+				<td>
+					<score data="score.han4.fu30[seat]"></score>
+				</td>
+				<td colspan="8">
+					<score data="score.han4.fu40[seat]"></score>
+				</td>
+			</tr>
+			<tr>
+				<td>Mangan</td>
+				<td>5</td>
+				<td colspan="11">
+					<score data="score.han5[seat]"></score>
+				</td>
+			</tr>
+			<tr>
+				<td rowspan="2">Haneman</td>
+				<td>6</td>
+				<td rowspan="2" colspan="11">
+					<score data="score.han6[seat]"></score>
+				</td>
+			</tr>
+			<tr>
+				<td>7</td>
+			</tr>
+			<tr>
+				<td rowspan="3">Baiman</td>
+				<td>8</td>
+				<td rowspan="3" colspan="11">
+					<score data="score.han8[seat]"></score>
+				</td>
+			</tr>
+			<tr>
+				<td>9</td>
+			</tr>
+			<tr>
+				<td>10</td>
+			</tr>
+			<tr>
+				<td rowspan="2">Sanbaiman</td>
+				<td>11</td>
+				<td rowspan="2" colspan="11">
+					<score data="score.han11[seat]"></score>
+				</td>
+			</tr>
+			<tr>
+				<td>12</td>
+			</tr>
+			<tr>
+				<td rowspan="2">Yakuman</td>
+				<td>13</td>
+				<td rowspan="2" colspan="11">
+					<score data="score.han13[seat]"></score>
+				</td>
+				<td ng-if="seat=='parent'">
+					(Ron)
+					<br>
+					(Tsumo)
+				</td>
+				<td ng-if="seat=='child'">
+					(Ron)
+					<br>
+					(Tsumo)(Parent/Child)
+				</td>
+			</tr>
+		</table>
 		<table cellpadding="5px">
 			<tr>
 				<th colspan="8">Simple Tiles</th>
@@ -821,196 +1012,5 @@
 			</tr>
 		</table>
 
-		<button ng-click="setSeat('parent')">Parent</button>
-		<button ng-click="setSeat('child')">Child</button>
-		<table border>
-			<tr>
-				<th colspan="2">Score Table</th>
-				<th colspan="11">Fu</th>
-			</tr>
-			<tr>
-				<th></th>
-				<th>Han</th>
-				<th>20</th>
-				<th>25</th>
-				<th>30</th>
-				<th>40</th>
-				<th>50</th>
-				<th>60</th>
-				<th>70</th>
-				<th>80</th>
-				<th>90</th>
-				<th>100</th>
-				<th>110</th>
-			</tr>
-			<tr>
-				<td></td>
-				<td>1</td>
-				<td></td>
-				<td></td>
-				<td>
-					<score data="score.han1.fu30[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han1.fu40[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han1.fu50[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han1.fu60[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han1.fu70[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han1.fu80[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han1.fu90[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han1.fu100[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han1.fu110[seat]"></score>
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>2</td>
-				<td>
-					<score data="score.han2.fu20[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han2.fu25[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han2.fu30[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han2.fu40[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han2.fu50[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han2.fu60[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han2.fu70[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han2.fu80[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han2.fu90[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han2.fu100[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han2.fu110[seat]"></score>
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>3</td>
-				<td>
-					<score data="score.han3.fu20[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han3.fu25[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han3.fu30[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han3.fu40[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han3.fu50[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han3.fu60[seat]"></score>
-				</td>
-				<td colspan="5">
-					<score data="score.han3.fu70[seat]"></score>
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>4</td>
-				<td>
-					<score data="score.han4.fu20[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han4.fu25[seat]"></score>
-				</td>
-				<td>
-					<score data="score.han4.fu30[seat]"></score>
-				</td>
-				<td colspan="8">
-					<score data="score.han4.fu40[seat]"></score>
-				</td>
-			</tr>
-			<tr>
-				<td>Mangan</td>
-				<td>5</td>
-				<td colspan="11">
-					<score data="score.han5[seat]"></score>
-				</td>
-			</tr>
-			<tr>
-				<td rowspan="2">Haneman</td>
-				<td>6</td>
-				<td rowspan="2" colspan="11">
-					<score data="score.han6[seat]"></score>
-				</td>
-			</tr>
-			<tr>
-				<td>7</td>
-			</tr>
-			<tr>
-				<td rowspan="3">Baiman</td>
-				<td>8</td>
-				<td rowspan="3" colspan="11">
-					<score data="score.han8[seat]"></score>
-				</td>
-			</tr>
-			<tr>
-				<td>9</td>
-			</tr>
-			<tr>
-				<td>10</td>
-			</tr>
-			<tr>
-				<td rowspan="2">Sanbaiman</td>
-				<td>11</td>
-				<td rowspan="2" colspan="11">
-					<score data="score.han11[seat]"></score>
-				</td>
-			</tr>
-			<tr>
-				<td>12</td>
-			</tr>
-			<tr>
-				<td rowspan="2">Yakuman</td>
-				<td>13</td>
-				<td rowspan="2" colspan="11">
-					<score data="score.han13[seat]"></score>
-				</td>
-				<td ng-if="seat=='parent'">
-					(Ron)
-					<br>
-					(Tsumo)
-				</td>
-				<td ng-if="seat=='child'">
-					(Ron)
-					<br>
-					(Tsumo)(Parent/Child)
-				</td>
-			</tr>
-		</table>
 	</div>
 </body>
